@@ -1,0 +1,77 @@
+/* .collection-double-image {
+  margin: 15px 0px 0px 0px;
+}
+
+.image-item {
+    padding: 0px 0 0px 15px;
+}
+.image-item img {
+  border-radius: 5px;
+}
+
+
+.collection-image-item{
+  padding: 0px 0 0px 15px;
+}
+
+.jw-error.jw-reset {
+  display: none;
+}
+h1.home-headings {
+  margin: 50px 0px;
+}
+
+.top-image {
+  margin-bottom: 15px;
+}
+div#MyPlayer {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+}
+div#MyPlayer .jw-aspect.jw-reset {
+  padding: 3% !important;
+}
+
+.searchBody .MuiPaper-root.MuiPaper-elevation24.MuiDialog-paper.MuiDialog-paperScrollPaper.MuiDialog-paperWidthSm.MuiDialog-paperFullScreen.MuiPaper-rounded{
+  background-color: #e9ecef
+}
+
+div#MyPlayer video.jw-video.jw-reset{
+  background-color: white !important
+}
+div#MyPlayer .jw-controls-backdrop {
+ 
+  background: linear-gradient(to bottom, transparent, rgba(255, 255, 255, 0.4) 77%, rgba(0,0,0,0.4) 100%) 100% 100% / 100% 240px no-repeat transparent !important;
+ 
+}
+
+div#MyPlayer .jw-reset.jw-button-container {
+  padding: 0 48px 0px !important;
+}
+.jw-breakpoint-7 .jw-controlbar .jw-button-container .jw-icon-volume .jw-overlay{
+  background-color: #213A94
+  
+}
+div#MyPlayer .jw-breakpoint-7 .jw-controlbar .jw-button-container .jw-icon-volume {
+  height: 40px;
+  width: 60px;
+}
+
+div#MyPlayer .jw-breakpoint-7 .jw-controlbar {
+  max-height: 100px;
+}
+@media (min-width: 1200px){
+  .container {
+    max-width: 1400px;
+}
+}
+
+@media (min-width: 960px){
+  .alphabet-test {
+    
+    min-width: 50px !important;
+}
+}
+ */

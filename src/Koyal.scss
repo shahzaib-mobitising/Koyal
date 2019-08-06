@@ -1,0 +1,933 @@
+@import url("https://fonts.googleapis.com/css?family=Poppins:400,700&display=swap");
+
+// Globals
+
+$primaryColor: #273d93;
+$secondaryColor: #ec297b;
+$artistName: #868e96;
+$fontFamily: "Poppins", sans-serif;
+
+.testBG {
+  background-color: $artistName;
+  height: 580px;
+  width: 100%;
+}
+
+h1,
+.h1,
+h2,
+.h2,
+h3,
+.h3,
+h4,
+.h4,
+h5,
+.h5,
+h6,
+.h6 {
+  color: #252525;
+  font-family: $fontFamily;
+}
+
+h2,
+.h2 {
+  font-size: 1.86875rem;
+  font-weight: 700;
+}
+h6,
+.h6 {
+  font-size: 0.8750625rem;
+  font-weight: 500;
+}
+
+body {
+  font-size: 14px;
+  line-height: 1.6;
+  background: #fff;
+  //background: #efefef;
+  margin: 0px;
+  font-family: $fontFamily;
+}
+
+.header-spacer {
+  margin-bottom: 50px;
+}
+
+// Track Main Page
+.trackMainContainer {
+  .trackShare,
+  .trackLike {
+    display: inline-block;
+    width: 30px;
+    padding-left: 3px;
+  }
+
+  .about_album {
+    font-family: $fontFamily;
+  }
+  .about_album h6,
+  .about_album p {
+    font-family: $fontFamily;
+  }
+
+  .album-title {
+    font-size: 2.250625rem;
+    font-weight: 700;
+    color: #252525;
+    font-family: $fontFamily;
+  }
+  .albumImageContainer .album_side,
+  .albumImageContainer .sideTracks {
+    width: 85%;
+    margin: 0 auto;
+    background: transparent;
+    box-shadow: none;
+  }
+  .album_side h2,
+  .album_side p {
+    font-family: $fontFamily;
+  }
+  .album_side .MuiCardActionArea-root:hover .MuiCardActionArea-focusHighlight {
+    opacity: 0;
+  }
+
+  .shareBox {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+
+    img {
+      height: 35px;
+      cursor: pointer;
+    }
+    .MuiSpeedDial-directionUp {
+      flex-direction: initial;
+    }
+    .MuiSpeedDial-fab.MuiFab-primary {
+      background: transparent;
+      height: 0px;
+      width: 0px;
+    }
+    .react-sharing-button__link {
+      display: flex;
+      align-items: center;
+    }
+    .MuiSpeedDial-actions.MuiSpeedDial-directionUp {
+      margin-bottom: 0px;
+      padding-bottom: 0px;
+      position: absolute;
+      top: 100px;
+      left: 145px;
+    }
+    img.albumShareIcon {
+      position: relative;
+      margin-left: 40px;
+    }
+    .MuiSpeedDialAction-button {
+      margin: 0px 30px 0px 0px;
+      background-color: transparent;
+      box-shadow: none;
+    }
+    .trackShareHead {
+      margin-left: 40px;
+    }
+  }
+
+  .singleTrackList a {
+    text-decoration: none;
+  }
+  .singleTrackList span {
+    color: black;
+    font-size: 13px;
+    font-family: $fontFamily;
+  }
+
+  // For Track Side
+  .track_side {
+    position: relative;
+    top: 40px;
+    h1,
+    h2,
+    h3,
+    h4,
+    h5,
+    h6,
+    p,
+    span {
+      font-family: $fontFamily;
+    }
+
+    .album-head-title {
+      text-transform: uppercase;
+    }
+
+    .MuiPaper-root {
+      background: transparent;
+      border: none !important;
+      box-shadow: none;
+    }
+
+    .MuiTableCell-body,
+    .MuiTableCell-body a {
+      color: rgba(0, 0, 0, 0.87);
+      font-weight: 400;
+      text-decoration: none;
+    }
+
+    // .span.react-sharing-button__text{
+    //   display: none;
+    // }
+
+    .trackListTable {
+      tr th,
+      tr td {
+        padding: 9px;
+        font-family: $fontFamily;
+        border-bottom: 1px solid rgba(0, 0, 0, 0.15);
+      }
+      tr.MuiTableRow-root {
+        // transition: all 0.3s ease;
+        height: 55px;
+      }
+
+      span.react-sharing-button__text {
+        display: NONE;
+      }
+
+      tr.MuiTableRow-root:hover {
+        // background: rgba(255, 255, 255, 0.73);
+        //transition: 0.5s;
+        -webkit-transition: all 0.8s;
+        transition: all 0.8s;
+        -moz-transition: all 0.8s;
+        -o-transition: all 0.8s;
+        -ms-transition: all 0.8s;
+        height: 55px;
+        cursor: pointer;
+        // transition: all 0.3s ease;
+        background: #fff;
+        // background: -moz-linear-gradient(-45deg, #91a5f4 0%, #b08cf9 86%);
+        // background: -webkit-linear-gradient(-45deg, #91a5f4 0%, #b08cf9 86%);
+        // background: linear-gradient(135deg, #91a5f4 0%, #b08cf9 86%);
+        // filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#91a5f4', endColorstr='#b08cf9',GradientType=1 );
+      }
+
+      .onHoverPlayIcon,
+      .ringtoneOnHover,
+      .trackMenuOnHover {
+        display: none;
+      }
+      .noHoverPauseIcon {
+        font-size: 30px;
+      }
+      .trackMenuOnHover button {
+        padding: 0px;
+      }
+
+      tr.MuiTableRow-root:hover .onHoverPlayIcon {
+        display: block;
+        width: 36px;
+        float: left;
+      }
+
+      tr.MuiTableRow-root:hover .ringtoneOnHover,
+      tr.MuiTableRow-root:hover .trackMenuOnHover {
+        display: block;
+      }
+
+      tr.MuiTableRow-root:hover .noHoverPauseIcon,
+      tr.MuiTableRow-root:hover .noHoverAlbumIcon,
+      tr.MuiTableRow-root:hover .genreOnHover {
+        display: none;
+      }
+
+      .iconImages img {
+        width: 60px;
+        box-sizing: border-box;
+        padding-right: 30px;
+        height: 31px;
+      }
+    }
+
+    hr {
+      margin: 40px 0px 0px 0px;
+      border-bottom: 0.1px solid rgba(0, 0, 0, 0.15);
+      color: rgba(0, 0, 0, 0.15);
+    }
+
+    img.trackImageIcon {
+      width: 36px;
+    }
+    .noHoverPauseIcon,
+    img.trackImageIcon {
+      float: left;
+    }
+  }
+
+  .track_side h6 {
+    font-size: 14px;
+  }
+  .homeMainClass {
+    margin-top: 100px;
+  }
+
+  .dummy-img {
+    height: auto;
+    position: absolute;
+    background: #fff;
+    width: 81%;
+    float: right;
+  }
+  .divImage {
+    position: absolute;
+    width: 100%;
+    background-size: cover;
+    // filter: blur(330px);
+    // height: 300px;
+    filter: blur(330px);
+    height: 150px;
+
+    background-position: 200px -180px;
+  }
+}
+
+// Search Section
+.searchDialogueBody {
+  .searchField {
+    width: 100%;
+  }
+  .searchField::before,
+  .searchField::after {
+    display: none;
+  }
+  .MuiToolbar-regular {
+    padding: 0px 120px 0px;
+  }
+  .searchResultContainer {
+    margin-top: 170px;
+    padding: 0px 120px 0px;
+  }
+
+  .searchResultContainer .MuiAppBar-colorPrimary {
+    color: #252525;
+    background-color: #e9ecef;
+    box-shadow: none;
+  }
+  .MuiDialog-paperFullScreen {
+    background-color: #e9ecef;
+  }
+  .searchAppBar,
+  .MuiToolbar-regular {
+    background: white;
+  }
+  .MuiTabs-root button {
+    font-size: 1.250438rem;
+    font-family: "Poppins", sans-serif !important;
+    text-transform: capitalize;
+  }
+  .searchField input {
+    font-size: 7vw;
+    line-height: 1;
+    display: inline-block;
+    padding: 0 0 0.1em 0;
+    color: #343a40;
+    border: 0;
+    border-bottom: 0;
+    background: transparent;
+    border-radius: 0;
+    font-family: $fontFamily;
+  }
+  .trackListView:hover {
+    background: white;
+    //  opacity: 0.6;
+    transition: 0.5s;
+    // background: -moz-linear-gradient(39deg, #91a5f4 0%, #b08cf9 86%);
+    // background: -webkit-linear-gradient(39deg, #91a5f4 0%, #b08cf9 86%);
+    // background: linear-gradient(39deg, #91a5f4 0%, #b08cf9 86%);
+    // filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#91a5f4', endColorstr='#b08cf9',GradientType=1 );
+    border-radius: 5px;
+    // transition: opacity 0.3s;
+    box-shadow: 0px 2px 4px -1px rgba(0, 0, 0, 0.2), 0px 4px 5px 0px rgba(0, 0, 0, 0.14),
+      0px 1px 10px 0px rgba(0, 0, 0, 0.12);
+  }
+  .album_grid {
+    padding-bottom: 0px !important;
+  }
+  .MuiAvatar-root {
+    width: 50px;
+    border-radius: 5px;
+    height: 50px;
+  }
+  .MuiDivider-root {
+    height: 0px;
+  }
+  .viewMoreBox a {
+    text-decoration: none;
+  }
+
+  .viewMoreBox {
+    background: transparent;
+    box-shadow: none;
+  }
+
+  .MuiCardContent-root {
+    padding: 0px;
+  }
+
+  .viewMoreBox a h6 {
+    text-decoration: none;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+    font-family: $fontFamily;
+  }
+
+  .trackListView a {
+    text-decoration: none;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+  }
+
+  .trackListView a span {
+    color: black;
+    font-family: $fontFamily;
+  }
+
+  .viewMoreBox a img {
+    object-fit: fill;
+  }
+}
+
+// Alphabet Bar
+.alphabetBar {
+  // .MuiPaper-root {
+  //   background: #333 !important;
+  //   color: white !important;
+  // }
+  // .alphabetBar a {
+  //   color: white;
+  // }
+  .MuiTab-textColorPrimary.Mui-selected {
+    color: $secondaryColor;
+  }
+  .PrivateTabIndicator-colorPrimary-213 {
+    background-color: $secondaryColor;
+  }
+  .PrivateTabIndicator-root-212 {
+    width: 90px;
+  }
+
+  @media (min-width: 960px) {
+    .MuiTab-root {
+      min-width: 90px;
+    }
+  }
+}
+
+// Alphabet View More
+.viewMoreAlphabet {
+  .infinite-scroll-component {
+    height: initial !important;
+    overflow: hidden !important;
+    margin: 40px 0px 0px 0px;
+  }
+
+  .viewMoreBox a {
+    text-decoration: none;
+  }
+
+  .viewMoreBox a h6 {
+    text-decoration: none;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+    font-family: $fontFamily;
+  }
+
+  .viewMoreBox a img {
+    object-fit: fill;
+  }
+
+  .endMessageViewMore {
+    text-align: center;
+  }
+  .MuiCardContent-root {
+    padding: 0px;
+  }
+  .MuiGrid-root {
+    padding-bottom: 0px;
+  }
+
+  .viewMoreBox {
+    background: transparent;
+    box-shadow: none;
+  }
+}
+
+// Homepage
+.homeMainClass {
+  .sliderBox li {
+    margin: 0px 0px 0px 0px;
+  }
+
+  .alice-carousel__prev-btn {
+    position: absolute;
+    left: -35px;
+    text-align: left;
+    top: 40px;
+    //background: white;
+    width: 4%;
+  }
+  .alice-carousel__next-btn {
+    position: absolute;
+    right: -20px;
+    text-align: right;
+    top: 40px;
+    //background: white;
+    width: 4%;
+  }
+
+  // Bhand
+
+  //  .sliderSection_1.grenre_section .alice-carousel__prev-btn,
+  //  .sliderSection_1.grenre_section .alice-carousel__next-btn {
+  //    top : 0px;
+  //  }
+
+  // Bhand
+
+  .sliderBox .alice-carousel__prev-btn {
+    top: 60px;
+    left: -35px;
+  }
+
+  .sliderBox .alice-carousel__next-btn {
+    top: 60px;
+    right: -20px;
+  }
+
+  .artist_section .alice-carousel__prev-btn,
+  .artist_section .alice-carousel__next-btn {
+    top: 20px;
+  }
+
+  .new-section-slider .alice-carousel__prev-btn,
+  .new-section-slider .alice-carousel__next-btn {
+    top: 175px;
+  }
+
+  p.alice-carousel__prev-btn-item {
+    background: url(/assets/prev_icon.png);
+    padding: 25px;
+    background-repeat: no-repeat;
+    font-size: 0px;
+    background-size: 50px;
+  }
+
+  p.alice-carousel__next-btn-item {
+    background: url(/assets/next_icon.png);
+    padding: 25px;
+    background-repeat: no-repeat;
+    font-size: 0px;
+    background-size: 50px;
+  }
+
+  .sliderBox li a img {
+    border-radius: 5px;
+    // width: 333px !important;
+    padding: 2px;
+    box-sizing: border-box;
+  }
+
+  .sliderSection_1 {
+    .artist-name {
+      color: $artistName;
+      width: 120px !important;
+    }
+    .genre-name {
+      color: #000;
+      text-align: center;
+    }
+
+    .new-1 {
+      margin-bottom: 40px;
+      position: relative;
+    }
+
+    .slider_subheading {
+      color: $secondaryColor;
+      line-height: 1;
+      margin: 0px;
+    }
+
+    .slider_subheading i.material-icons {
+      position: relative;
+      top: 7px;
+      font-size: 22px;
+    }
+
+    .slider_heading {
+      margin: 0px;
+    }
+
+    .alice-carousel__stage-item a {
+      text-decoration: none;
+    }
+
+    .alice-carousel__stage-item a img {
+      border-radius: 5px;
+      // width: 165px !important;
+      box-sizing: border-box;
+      padding: 2px;
+    }
+
+    &.grenre_section .alice-carousel__stage-item a img {
+      width: 90px !important;
+    }
+
+    .alice-carousel__stage-item a h6 {
+      text-overflow: ellipsis;
+      overflow: hidden;
+      // width: 150px;
+      margin: 5px 0px 5px 0px;
+      white-space: nowrap;
+      font-weight: 400;
+    }
+
+    a.see_all {
+      text-decoration: none;
+      width: 100%;
+      text-align: right;
+    }
+
+    .slider-side1 {
+      display: flex;
+      height: 70px;
+      align-items: center;
+    }
+    .slider-side2 {
+      display: flex;
+      height: 70px;
+      align-items: center;
+    }
+
+    .slider-header {
+      margin-bottom: 5px;
+    }
+  }
+
+  .play-icon {
+    position: absolute;
+    bottom: 40px;
+    right: 7px;
+    border-radius: 30px;
+    cursor: pointer;
+    text-align: right;
+  }
+
+  .play-icon img,
+  .play-icon-1 img {
+    width: 24%;
+  }
+
+  .play-icon i.material-icons {
+    color: #ec297b;
+  }
+
+  .play-icon-1 {
+    position: absolute;
+    bottom: 6px;
+    right: 10px;
+    cursor: pointer;
+    border-radius: 30px;
+    text-align: right;
+  }
+
+  .play-icon-1 i.material-icons {
+    color: #ec297b;
+  }
+
+  .divider {
+    border-top-color: #e9ecef;
+    margin: 30px 0px 10px 0px;
+    border: 0;
+    border-top: 1px solid rgba(0, 0, 0, 0.1);
+  }
+
+  .divider2 {
+    border-top-color: #e9ecef;
+    margin: 30px 0px 10px 0px;
+    border: 0;
+    border-top: 1px solid rgba(0, 0, 0, 0.1);
+  }
+
+  .alice-carousel__dots-item {
+    background-color: $primaryColor;
+  }
+  .alice-carousel__dots-item.__active {
+    background-color: $secondaryColor;
+  }
+}
+
+// Header
+
+.header-parent {
+  header {
+    box-sizing: border-box;
+    padding: 2px 0px;
+    border: none;
+    height: 61px;
+  }
+  img.logo {
+    width: 50%;
+  }
+
+  .desktop-nav,
+  .searchBox {
+    display: flex;
+    height: 55px;
+    align-items: center;
+  }
+
+  .desktop-menu-item {
+    padding: 0.3rem 1.1rem;
+    font-size: 15px;
+    font-weight: 500;
+  }
+
+  .first-item {
+    padding-left: 0px !important;
+  }
+
+  .desktop-menu-item a {
+    color: black;
+    text-decoration: none;
+  }
+
+  .searchBox button {
+    background-color: $secondaryColor;
+  }
+
+  .searchBox {
+    float: right;
+  }
+  .searchBox h5 {
+    padding-right: 20px;
+    position: relative;
+    top: -4px;
+  }
+
+  .searchBox .android_icon {
+    position: relative;
+    top: 7px;
+    left: 5px;
+  }
+}
+
+// Language Bar
+.languageBar {
+  padding-bottom: 25px;
+  .MuiTabs-flexContainer a {
+    background: #273d93;
+    /* margin-right: 2px; */
+    border-radius: 3px;
+    color: white;
+    text-transform: capitalize;
+    font-size: 16px;
+    width: 189px;
+    letter-spacing: 0px;
+    font-weight: 100;
+    margin: 0px 0px 0px 1px !important;
+    padding: 0px 0px 0px 0px !important;
+  }
+
+  .MuiTabs-flexContainer .Mui-selected {
+    background-color: $secondaryColor;
+  }
+
+  .MuiTabs-flexContainer a span {
+    font-family: $fontFamily;
+  }
+
+  .MuiAppBar-colorDefault {
+    background-color: transparent;
+    box-shadow: none;
+  }
+  .PrivateTabIndicator-colorPrimary-213 {
+    background-color: transparent;
+  }
+}
+
+.myAudioPlayer {
+  position: relative;
+  // div#MyPlayer video.jw-video.jw-reset {
+  //   background-color: white !important;
+  // }
+  // div#MyPlayer .jw-controls-backdrop {
+  //   background: linear-gradient(to bottom, transparent, rgba(255, 255, 255, 0.4) 77%, rgba(0, 0, 0, 0.4) 100%) 100% 100% /
+  //     100% 240px no-repeat transparent !important;
+  // }
+
+  div#MyPlayer .jw-reset.jw-button-container {
+    padding: 0 48px 0px;
+    //box-sizing: border-box;
+  }
+  // .jw-breakpoint-7 .jw-controlbar .jw-button-container .jw-icon-volume .jw-overlay {
+  //   background-color: #213a94;
+  // }
+  // div#MyPlayer .jw-breakpoint-7 .jw-controlbar .jw-button-container .jw-icon-volume {
+  //   height: 50px;
+  //   width: 60px;
+  // }
+
+  // div#MyPlayer .jw-breakpoint-7 .jw-controlbar {
+  //   max-height: 100px;
+  // }
+  div#MyPlayer {
+    position: fixed;
+    bottom: 0;
+  }
+  div#MyPlayer .jw-aspect.jw-reset {
+    padding: 84px 0px 0px 0px !important;
+  }
+  .jw-error.jw-reset {
+    display: none;
+  }
+  .jw-breakpoint-7 .jw-controlbar .jw-button-container .jw-icon-volume .jw-overlay {
+    padding-bottom: 0px;
+    left: 60px;
+    bottom: -10px;
+
+    // -moz-transform: rotate(90deg);
+    // -webkit-transform: rotate(90deg);
+    // -o-transform: rotate(90deg);
+    // -ms-transform: rotate(90deg);
+    //  transform: rotate(90deg);
+  }
+  .jw-volume-tip {
+    padding: 0px;
+  }
+  .jw-breakpoint-7 .jw-nextup-container,
+  .jw-media.jw-reset,
+  .jw-top.jw-reset {
+    display: none;
+  }
+  .jw-controlbar.jw-reset {
+    box-sizing: border-box;
+    padding-left: 14%;
+  }
+  .jw-breakpoint-7 .jw-controlbar .jw-button-container .jw-icon-inline,
+  .jw-breakpoint-7 .jw-controlbar .jw-button-container .jw-icon-volume {
+    height: 50px;
+    width: 50px;
+  }
+
+  // .jw-breakpoint-7 .jw-controlbar .jw-slider-time {
+  //   padding: 0;
+  //   height: initial;
+  //   position: relative;
+  //   top: 6px;
+  // }
+  // .jw-breakpoint-7 .jw-nextup-container {
+  //   padding: 0px;
+  // }
+  // .jw-breakpoint-7 .jw-controlbar {
+  //   max-height: 70px;
+  // }
+
+  .audioPlayerImage {
+    display: flex;
+    align-items: center;
+    color: white;
+  }
+
+  .audioPlayerImage {
+    position: fixed;
+    bottom: 0px;
+    width: 15%;
+    height: 80px;
+    left: 50px;
+  }
+  .audioPlayerImage img {
+    width: 32%;
+    box-sizing: border-box;
+    padding: 5px;
+  }
+
+  .audioPlayerImage p {
+    margin: 0px;
+    font-size: 11.5px;
+  }
+
+  .jw-related-btn,
+  .jw-icon-settings,
+  .jw-icon-fullscreen {
+    display: none;
+  }
+}
+
+// Ringtone Screen
+.ringtoneScreen {
+  .mainHeadingRingtone {
+    font-size: 1.3rem;
+    color: white;
+    flex: 1;
+    font-family: $fontFamily;
+  }
+  .yourNumberHeading {
+    flex: 1;
+    margin-top: 30px;
+    text-align: center;
+    font-family: $fontFamily;
+  }
+  .ringtoneContainer {
+    width: 45%;
+    font-family: $fontFamily;
+  }
+  .selectOperatorBox {
+    margin: 0px 0px 10px 0px;
+  }
+  .enterNumberField {
+    margin: 0px 0px 20px 0px;
+  }
+  .msgInfo {
+    text-align: center;
+    font-family: $fontFamily;
+  }
+  .sendMessageBtn {
+    width: 40%;
+    margin: 0 auto;
+    font-family: $fontFamily;
+  }
+}
+
+@media (min-width: 1280px) {
+  .main-container {
+    max-width: 1400px !important;
+  }
+}
+
+.md-18 {
+  font-size: 18px;
+}
+
+.md-24 {
+  font-size: 24px;
+}
+
+.md-36 {
+  font-size: 36px;
+}
+
+.md-48 {
+  font-size: 48px;
+}
+
+.drawer-title-div {
+  width: 100%;
+}
+
+.footerMain {
+  visibility: hidden;
+}

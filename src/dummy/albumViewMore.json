@@ -1,0 +1,87 @@
+{
+    "Response": {
+        "Albums": [
+            {
+                "Id": "1",
+                "Name": " ",
+                "ThumbnailImageWeb": "http://localhost:3000/assets/albumx150.jpg"
+            },
+            {
+                "Id": "1",
+                "Name": " ",
+                "ThumbnailImageWeb": "http://localhost:3000/assets/albumx150.jpg"
+            },
+            {
+                "Id": "1",
+                "Name": " ",
+                "ThumbnailImageWeb": "http://localhost:3000/assets/albumx150.jpg"
+            },
+            {
+                "Id": "1",
+                "Name": " ",
+                "ThumbnailImageWeb": "http://localhost:3000/assets/albumx150.jpg"
+            },
+            {
+                "Id": "1",
+                "Name": " ",
+                "ThumbnailImageWeb": "http://localhost:3000/assets/albumx150.jpg"
+            },
+            {
+                "Id": "1",
+                "Name": " ",
+                "ThumbnailImageWeb": "http://localhost:3000/assets/albumx150.jpg"
+            },
+            {
+                "Id": "1",
+                "Name": " ",
+                "ThumbnailImageWeb": "http://localhost:3000/assets/albumx150.jpg"
+            },
+            {
+                "Id": "1",
+                "Name": " ",
+                "ThumbnailImageWeb": "http://localhost:3000/assets/albumx150.jpg"
+            },
+            {
+                "Id": "1",
+                "Name": " ",
+                "ThumbnailImageWeb": "http://localhost:3000/assets/albumx150.jpg"
+            },
+            {
+                "Id": "1",
+                "Name": " ",
+                "ThumbnailImageWeb": "http://localhost:3000/assets/albumx150.jpg"
+            },
+            {
+                "Id": "1",
+                "Name": " ",
+                "ThumbnailImageWeb": "http://localhost:3000/assets/albumx150.jpg"
+            },
+            {
+                "Id": "1",
+                "Name": " ",
+                "ThumbnailImageWeb": "http://localhost:3000/assets/albumx150.jpg"
+            },
+            {
+                "Id": "1",
+                "Name": " ",
+                "ThumbnailImageWeb": "http://localhost:3000/assets/albumx150.jpg"
+            },
+            {
+                "Id": "1",
+                "Name": " ",
+                "ThumbnailImageWeb": "http://localhost:3000/assets/albumx150.jpg"
+            },
+            {
+                "Id": "1",
+                "Name": " ",
+                "ThumbnailImageWeb": "http://localhost:3000/assets/albumx150.jpg"
+            },
+            {
+                "Id": "1",
+                "Name": " ",
+                "ThumbnailImageWeb": "http://localhost:3000/assets/albumx150.jpg"
+            }
+        ],
+        "Success": true
+    }
+}

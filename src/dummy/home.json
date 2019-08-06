@@ -1,0 +1,145 @@
+{
+    "Response": {
+        "Ads": [],
+        "HomePageContent": [
+            {
+                "Name": "Slider",
+                "Type": "0",
+                "Data": [
+                    {
+                        "Id": "1",
+                        "Name": "",
+                        "SliderImageWeb": "assets/slider.jpg"
+                    },
+                    {
+                        "Id": "2",
+                        "Name": "",
+                        "SliderImageWeb": "assets/slider.jpg"
+                    },
+                    {
+                        "Id": "3",
+                        "Name": "",
+                        "SliderImageWeb": "assets/slider.jpg"
+                    },
+                    {
+                        "Id": "4",
+                        "Name": "",
+                        "SliderImageWeb": "assets/slider.jpg"
+                    }
+                ]
+            },
+            {
+                "Name": "Genre",
+                "Type": "4",
+                "Data": [
+                    {
+                        "Id": "1",
+                        "Name": "",
+                        "ThumbnailImageWeb": "assets/genre.jpg"
+                    },
+                    {
+                        "Id": "1",
+                        "Name": "",
+                        "ThumbnailImageWeb": "assets/genre.jpg"
+                    },
+                    {
+                        "Id": "1",
+                        "Name": "",
+                        "ThumbnailImageWeb": "assets/genre.jpg"
+                    },
+                    {
+                        "Id": "1",
+                        "Name": "",
+                        "ThumbnailImageWeb": "assets/genre.jpg"
+                    },
+                    {
+                        "Id": "1",
+                        "Name": "",
+                        "ThumbnailImageWeb": "assets/genre.jpg"
+                    },
+                    {
+                        "Id": "1",
+                        "Name": "",
+                        "ThumbnailImageWeb": "assets/genre.jpg"
+                    },
+                    {
+                        "Id": "1",
+                        "Name": "",
+                        "ThumbnailImageWeb": "assets/genre.jpg"
+                    },
+                    {
+                        "Id": "1",
+                        "Name": "",
+                        "ThumbnailImageWeb": "assets/genre.jpg"
+                    },
+                    {
+                        "Id": "1",
+                        "Name": "",
+                        "ThumbnailImageWeb": "assets/genre.jpg"
+                    },
+                    {
+                        "Id": "1",
+                        "Name": "",
+                        "ThumbnailImageWeb": "assets/genre.jpg"
+                    },
+                    {
+                        "Id": "1",
+                        "Name": "",
+                        "ThumbnailImageWeb": "assets/genre.jpg"
+                    },
+                    {
+                        "Id": "1",
+                        "Name": "",
+                        "ThumbnailImageWeb": "assets/genre.jpg"
+                    }
+                ]
+            },
+            {
+                "Name": "New",
+                "Type": "2",
+                "Data": [
+                    {
+                        "Id": "01",
+                        "Name": "",
+                        "ThumbnailImageWeb": "assets/album.jpg"
+                    },
+                    {
+                        "Id": "01",
+                        "Name": "",
+                        "ThumbnailImageWeb": "assets/album.jpg"
+                    },
+                    {
+                        "Id": "01",
+                        "Name": "",
+                        "ThumbnailImageWeb": "assets/album.jpg"
+                    },
+                    {
+                        "Id": "01",
+                        "Name": "",
+                        "ThumbnailImageWeb": "assets/album.jpg"
+                    },
+                    {
+                        "Id": "01",
+                        "Name": "",
+                        "ThumbnailImageWeb": "assets/album.jpg"
+                    },
+                    {
+                        "Id": "01",
+                        "Name": "",
+                        "ThumbnailImageWeb": "assets/album.jpg"
+                    },
+                    {
+                        "Id": "01",
+                        "Name": "",
+                        "ThumbnailImageWeb": "assets/album.jpg"
+                    },
+                    {
+                        "Id": "01",
+                        "Name": "",
+                        "ThumbnailImageWeb": "assets/album.jpg"
+                    }
+                ]
+            }
+        ]
+    }
+}
