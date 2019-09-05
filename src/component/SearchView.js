@@ -84,7 +84,7 @@ function SearchView() {
 
     function getInfo(param) {
 
-        axios.get(`http://www.staging.koyal.pk/musicapp/?request=search-react&keyword=${param}&limit=20`)
+        axios.get(`http://api.koyal.pk/musicapp/?request=search-react&keyword=${param}&limit=20`)
             .then(response => {
 
                 console.log(response)

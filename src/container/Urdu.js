@@ -2,14 +2,14 @@
 import React, { Component } from 'react'
 import axios from 'axios'
 import '../App.css'
-import LazyLoad from 'react-lazyload'
-import LanguageBar2 from '../component/LanguageBar2'
+import { LazyImage } from "react-lazy-images";
 import AliceCarousel from 'react-alice-carousel';
 import "react-alice-carousel/lib/alice-carousel.css";
 import { Link } from "react-router-dom";
 import Grid from '@material-ui/core/Grid';
 import homeDataDummy from '../dummy/home.json'
 import { withGlobalState } from 'react-globally'
+import LanguageBarCustom from '../component/LanguageBarCustom';
 
 
 class Urdu extends Component {
@@ -34,10 +34,8 @@ class Urdu extends Component {
 
         console.log(id)
 
-        axios.get(`http://www.staging.koyal.pk/musicapp/?request=get-tracks-react-button&id=${id}`)
+        axios.get(`http://api.koyal.pk/musicapp/?request=get-tracks-react-button&id=${id}`)
             .then(response => {
-
-                console.log(response.data.Response.Tracks)
 
                 let dataTrack = []
                 let respo = response.data.Response.Tracks
@@ -46,9 +44,16 @@ class Urdu extends Component {
                     {
                         'file': data['TrackUrl'],
                         'track_id': data['TrackId'],
-                        'trackName': data['Name']
+                        'trackName': data['Name'].split("-").join(" "),
+                        'albumId': data['AlbumId'],
+                        'albumName': data['Album'].split("_").join(" "),
+                        'thumbnailImage': data['ThumbnailImageWeb'],
+                        'rbtTelenor': data['rbtTelenor'],
+                        'albumArtist': data['AlbumArtist'],
                     }
                 ))
+
+
 
 
                 if (this.props.globalState.track_exist !== 0) {
@@ -58,6 +63,7 @@ class Urdu extends Component {
                         trackAlbumImage: respo[0].ThumbnailImageWeb,
                         trackAlbumName: respo[0].Album.split("_").join(" "),
                         trackGlobalName: respo[0].Name.split("-").join(" "),
+                        queueState: dataTrack
                     })
 
 
@@ -67,6 +73,7 @@ class Urdu extends Component {
                         trackAlbumImage: respo[0].ThumbnailImageWeb,
                         trackAlbumName: respo[0].Album.split("_").join(" "),
                         trackGlobalName: respo[0].Name.split("-").join(" "),
+                        queueState: dataTrack
                     })
 
                 }
@@ -79,8 +86,8 @@ class Urdu extends Component {
 
     getData = () => {
 
-        axios.get(`http://www.staging.koyal.pk/app_files/web/new/${this.props.match.params.language}.json`)
-            //axios.get(`http://www.staging.koyal.pk/app_files/web/new/saraiki-songs.json`)
+        axios.get(`http://api.koyal.pk/app_files/web/new/${this.props.match.params.language}.json`)
+            //axios.get(`http://api.koyal.pk/app_files/web/new/saraiki-songs.json`)
             .then(response => {
                 console.log(response)
                 this.setState({
@@ -127,7 +134,7 @@ class Urdu extends Component {
 
     responsiveSlider = {
         0: { items: 1 },
-        1024: { items: 4 },
+        1024: { items: 3 },
     }
 
     responsive2 = {
@@ -151,27 +158,30 @@ class Urdu extends Component {
 
         const { sliderSection, genreSection, newSection, newSection2, popularSection, collectionsSection, artistSection, albumSection, islamicSection } = this.state
 
-        const forSlider = sliderSection.map(data => <LazyLoad height={100} offset={[-100, 100]} key={data.Id} placeholder={<img src={`assets/slider.jpg`} alt={`dummy`} />}>
-            <Link component={Link} to={`/album/` + data.Id + `/` + data.Name}>
-                <LazyLoad once={true} placeholder={<img src={`assets/slider.jpg`} alt={`dummy`} />} > <img className="slider-image" src={data.SliderImageWeb} style={{ width: "100%", height: "100%" }} alt={data.Id} /> </LazyLoad> </Link>
-            <div className="play-icon-1"> <img src="assets/play-icon.svg" alt='play-icon'
-                onClick={() => this.playTracksDirectly(data.Id)}
-            /> </div>
-        </LazyLoad>)
+        const forSlider = sliderSection.map(data => <div className="sliderImageBox"> <Link component={Link} to={`/album/` + data.Id + `/` + data.Name}> <LazyImage src={data.SliderImageWeb} alt="A portrait of Bill Murray."
+            debounceDurationMs={1} placeholder={({ imageProps, ref }) => (<img ref={ref} src={`assets/slider.jpg`} alt={imageProps.alt} style={{ width: "100%" }} />)} actual={({ imageProps }) => (<img {...imageProps} style={{ width: "100%" }} alt={data.Id} />)} /> </Link> <div className="play-icon-1"> <img src="assets/play-icon.svg" alt='play-icon' onClick={() => this.playTracksDirectly(data.Id)} /></div> </div>)
 
-        const forGenre = genreSection.map(data => <LazyLoad height={100} offset={[-100, 100]} key={data.Id} placeholder={<img src={`assets/genre.jpg`} alt={`dummy`} />}> <Link component={Link} to={`/album/genre/` + data.Name}> <LazyLoad once={true} placeholder={<img src={`assets/genre.jpg`} alt={`dummy`} />} >  <img className="genre-image" src={data.ThumbnailImageWeb} style={{ width: "100%", height: "100%" }} alt={data.Id} /> </LazyLoad> <h6 className="genre-name">{data.Name}</h6> </Link></LazyLoad>)
+        const forGenre = genreSection.map(data => <> <Link component={Link} to={`/album/genre/` + data.Name}> <LazyImage src={data.ThumbnailImageWeb} className="genre-image" alt={data.Id}
+            debounceDurationMs={1} style={{ width: "100%", height: "100%" }} placeholder={({ imageProps, ref }) => (<img ref={ref} src={`assets/slider.jpg`} alt={imageProps.alt} style={{ width: "100%" }} />)} actual={({ imageProps }) => (<img {...imageProps} style={{ width: "100%" }} alt={data.Id} />)} /> <h6 className="genre-name">{data.Name}</h6> </Link></>)
 
-        const forNew = newSection.map((data, index) => <LazyLoad height={100} offset={[-100, 100]} key={data.Id} placeholder={<img src="/assets/album.jpg" alt={`placeholder`} />}> <div className="new-1"> <Link component={Link} to={`/album/` + data.Id + `/` + data.Name}> <LazyLoad once={true} placeholder={<img src={`/assets/album.jpg`} alt={`dummy`} />} > <img className="new1-image" src={data.ThumbnailImageWeb} style={{ width: "100%", height: "100%" }} alt={data.Id} /> </LazyLoad> <h6>{data.Name}</h6> </Link> {/* <Link component={Link} to={`/artist/` + data.ArtistId + `/` + data.Artist}> <h6 className="artist-name">{data.Artist}</h6> </Link> */} <div className="play-icon"> <img src="assets/play-icon.svg" alt='play-icon' onClick={() => this.playTracksDirectly(data.Id)} /> </div> </div> <div className="new-2"> <Link component={Link} to={`/album/` + newSection2[index].Id + `/` + newSection2[index].Name}> <LazyLoad once={true} placeholder={<img src={`assets/album.jpg`} alt={`dummy`} />} > <img className="new2-image" src={newSection2[index].ThumbnailImageWeb} style={{ width: "100%", height: "100%" }} alt={newSection2[index].Id} /> </LazyLoad> <h6>{newSection2[index].Name}</h6></Link> {/* <Link component={Link} to={`/artist/` + newSection2[index].ArtistId + `/` + newSection2[index].Artist}> <h6 className="artist-name">{newSection2[index].Artist}</h6></Link> */} <div className="play-icon"> <img src="assets/play-icon.svg" alt='play-icon' onClick={() => this.playTracksDirectly(data.Id)} /> </div> </div> </LazyLoad>)
+        const forNew = newSection.map((data, index) => <> <div className="new-1"> <Link component={Link} to={`/album/` + data.Id + `/` + data.Name}> <LazyImage src={data.ThumbnailImageWeb} alt={data.Id}
+            debounceDurationMs={1} className="new1-image" style={{ width: "100%", height: "100%" }} placeholder={({ imageProps, ref }) => (<img ref={ref} src={`assets/150.svg`} alt={imageProps.alt} style={{ width: "100%" }} />)} actual={({ imageProps }) => (<img {...imageProps} style={{ width: "100%" }} alt={data.Id} />)} /> <h6>{data.Name}</h6> </Link> <div className="play-icon"> <img src="assets/play-icon.svg" alt='play-icon' onClick={() => this.playTracksDirectly(data.Id)} /> </div> </div> <div className="new-2"> <Link component={Link} to={`/album/` + newSection2[index].Id + `/` + newSection2[index].Name}> <LazyImage src={newSection2[index].ThumbnailImageWeb} alt={newSection2[index].Id}
+                debounceDurationMs={1} className="new2-image" style={{ width: "100%", height: "100%" }} placeholder={({ imageProps, ref }) => (<img ref={ref} src={`assets/150.svg`} alt={imageProps.alt} style={{ width: "100%" }} />)} actual={({ imageProps }) => (<img {...imageProps} style={{ width: "100%" }} alt={newSection2[index].Id} />)} /> <h6>{newSection2[index].Name}</h6></Link> <div className="play-icon"> <img src="assets/play-icon.svg" alt='play-icon' onClick={() => this.playTracksDirectly(data.Id)} /> </div> </div> </>)
 
-        const forPopular = popularSection.map(data => <LazyLoad height={100} offset={[-100, 100]} key={data.Id} placeholder={<img src="assets/album.jpg" alt={`placeholder`} />}> <Link component={Link} to={`/album/` + data.Id + `/` + data.Name}> <LazyLoad once={true} placeholder={<img src={`assets/album.jpg`} alt={`dummy`} />} > <img className="popular-image" src={data.ThumbnailImageWeb} style={{ width: "100%", height: "100%" }} alt={data.Id} /> </LazyLoad> <h6>{data.Name}</h6> </Link> {/* <Link component={Link} to={`/artist/` + data.ArtistId + `/` + data.Artist}><h6 className="artist-name">{data.Artist}</h6></Link> */} <div className="play-icon"> <img src="assets/play-icon.svg" alt='play-icon' onClick={() => this.playTracksDirectly(data.Id)} /> </div></LazyLoad>)
+        const forPopular = popularSection.map(data => <> <Link component={Link} to={`/album/` + data.Id + `/` + data.Name}> <LazyImage src={data.ThumbnailImageWeb} alt={data.Id}
+            debounceDurationMs={1} className="popular-image" style={{ width: "100%", height: "100%" }} placeholder={({ imageProps, ref }) => (<img ref={ref} src={`assets/150.svg`} alt={imageProps.alt} style={{ width: "100%" }} />)} actual={({ imageProps }) => (<img {...imageProps} style={{ width: "100%" }} alt={data.Id} />)} /> <h6>{data.Name}</h6> </Link> <div className="play-icon"> <img src="assets/play-icon.svg" alt='play-icon' onClick={() => this.playTracksDirectly(data.Id)} /> </div> </>)
 
-        const forArtist = artistSection.map(data => <LazyLoad height={100} offset={[-100, 100]} key={data.Id} placeholder={<img src="assets/dummy-img.jpg" alt={`placeholder`} />}> <Link component={Link} to={`/artist/` + data.Id + `/` + data.Name}> <LazyLoad once={true} placeholder={<img src={`assets/album.jpg`} alt={`dummy`} />} > <img className="artist-image" src={data.ThumbnailImageWeb} style={{ width: "100%", height: "100%" }} alt={data.Id} /> </LazyLoad> </Link></LazyLoad>)
+        const forArtist = artistSection.map(data => <> <Link component={Link} to={`/artist/` + data.Id + `/` + data.Name}> <LazyImage src={data.ThumbnailImageWeb} style={{ width: "100%", height: "100%" }} alt={data.Id}
+            debounceDurationMs={1} placeholder={({ imageProps, ref }) => (<img ref={ref} src={`assets/album.jpg`} alt={imageProps.alt} style={{ width: "100%" }} />)} actual={({ imageProps }) => (<img {...imageProps} style={{ width: "100%" }} alt={data.Id} />)} /> </Link> </>)
 
-        const forAlbum = albumSection.map(data => <LazyLoad height={100} offset={[-100, 100]} key={data.Id} placeholder={<img src="assets/album.jpg" alt={`placeholder`} />}> <Link component={Link} to={`/album/` + data.Id + `/` + data.Name}> <LazyLoad once={true} placeholder={<img src={`assets/album.jpg`} alt={`dummy`} />} > <img className="album-image" src={data.ThumbnailImageWeb} style={{ width: "100%", height: "100%" }} alt={data.Id} /> </LazyLoad> <h6>{data.Name}</h6> </Link> {/* <Link component={Link} to={`/artist/` + data.ArtistId + `/` + data.Artist}><h6 className="artist-name">{data.Artist}</h6></Link> */} <div className="play-icon"> <img src="assets/play-icon.svg" alt='play-icon' onClick={() => this.playTracksDirectly(data.Id)} /> </div> </LazyLoad>)
+        const forAlbum = albumSection.map(data => <> <Link component={Link} to={`/album/` + data.Id + `/` + data.Name}> <LazyImage src={data.ThumbnailImageWeb} alt={data.Id}
+            debounceDurationMs={1} className="album-image" style={{ width: "100%", height: "100%" }} placeholder={({ imageProps, ref }) => (<img ref={ref} src={`assets/150.svg`} alt={imageProps.alt} style={{ width: "100%" }} />)} actual={({ imageProps }) => (<img {...imageProps} style={{ width: "100%" }} alt={data.Id} />)} /> <h6>{data.Name}</h6> </Link> <div className="play-icon"> <img src="assets/play-icon.svg" alt='play-icon' onClick={() => this.playTracksDirectly(data.Id)} /> </div> </>)
 
-        const forIslamic = islamicSection.map(data => <LazyLoad height={100} offset={[-100, 100]} key={data.Id} placeholder={<img src="assets/album.jpg" alt={`placeholder`} />}> <Link component={Link} to={`/album/` + data.Id + `/` + data.Name}> <LazyLoad once={true} placeholder={<img src={`assets/album.jpg`} alt={`dummy`} />} > <img className="islamic-image" src={data.ThumbnailImageWeb} style={{ width: "100%", height: "100%" }} alt={data.Id} /> </LazyLoad> <h6>{data.Name}</h6> </Link> {/* <Link component={Link} to={`/artist/` + data.ArtistId + `/` + data.Artist}><h6 className="artist-name">{data.Artist}</h6></Link> */} <div className="play-icon"> <img src="assets/play-icon.svg" alt='play-icon' onClick={() => this.playTracksDirectly(data.Id)} /> </div> </LazyLoad>)
+        const forIslamic = islamicSection.map(data => <> <Link component={Link} to={`/album/` + data.Id + `/` + data.Name}> <LazyImage src={data.ThumbnailImageWeb} alt={data.Id}
+            debounceDurationMs={1} className="islamic-image" style={{ width: "100%", height: "100%" }} placeholder={({ imageProps, ref }) => (<img ref={ref} src={`assets/150.svg`} alt={imageProps.alt} style={{ width: "100%" }} />)} actual={({ imageProps }) => (<img {...imageProps} style={{ width: "100%" }} alt={data.Id} />)} /> <h6>{data.Name}</h6> </Link> <div className="play-icon"> <img src="assets/play-icon.svg" alt='play-icon' onClick={() => this.playTracksDirectly(data.Id)} /> </div> </>)
 
-        const forCollection = collectionsSection.map(data => <LazyLoad height={100} offset={[-100, 100]} key={data.Id} placeholder={<img src="assets/album.jpg" alt={`placeholder`} />}> <Link component={Link} to={`/collection/` + data.Id + `/` + data.Name}> <LazyLoad once={true} placeholder={<img src={`assets/album.jpg`} alt={`dummy`} />} > <img className="collection-image" src={data.ThumbnailImageWeb} style={{ width: "100%", height: "100%" }} alt={data.Id} /> </LazyLoad> <h6>{data.Name}</h6> </Link> {/* <Link component={Link} to={`/artist/` + data.ArtistId + `/` + data.Artist}><h6 className="artist-name">{data.Artist}</h6></Link> */} <div className="play-icon"> <img src="assets/play-icon.svg" alt='play-icon' onClick={() => this.playTracksDirectly(data.Id)} /> </div> </LazyLoad>)
+        const forCollection = collectionsSection.map(data => <> <Link component={Link} to={`/collection/` + data.Id + `/` + data.Name}> <LazyImage src={data.ThumbnailImageWeb} alt={data.Id}
+            debounceDurationMs={1} className="collection-image" style={{ width: "100%", height: "100%" }} placeholder={({ imageProps, ref }) => (<img ref={ref} src={`assets/150.svg`} alt={imageProps.alt} style={{ width: "100%" }} />)} actual={({ imageProps }) => (<img {...imageProps} style={{ width: "100%" }} alt={data.Id} />)} /> <h6>{data.Name}</h6> </Link> <div className="play-icon"> <img src="assets/play-icon.svg" alt='play-icon' onClick={() => this.playTracksDirectly(data.Id)} /> </div> </>)
 
 
         let pageName = this.props.match.params.language.split("-", 1);
@@ -187,7 +197,10 @@ class Urdu extends Component {
 
             <div className="homeMainClass">
 
-                <LanguageBar2 />
+                {/* <LanguageBar2 /> */}
+
+
+                <LanguageBarCustom />
 
                 <div className="sliderBox">
                     <AliceCarousel
@@ -200,8 +213,26 @@ class Urdu extends Component {
                         disableAutoPlayOnAction={false}
                         buttonsDisabled={false}
                         dotsDisabled={true}
+                        infinite={false}
                     />
                 </div>
+
+                {forSlider.length === 0 ?
+                    <div className="extraSpaceHome">
+                        <div className="emptyItem">
+                            <img src={`assets/slider.jpg`} alt={`ok`} style={{ width: "100%" }} />
+                        </div>
+                        <div className="emptyItem">
+                            <img src={`assets/slider.jpg`} alt={`ok`} style={{ width: "100%" }} />
+                        </div>
+                        <div className="emptyItem">
+                            <img src={`assets/slider.jpg`} alt={`ok`} style={{ width: "100%" }} />
+                        </div>
+                        {/* <div className="emptyItem">
+                            <img src={`assets/slider.jpg`} alt={`ok`} style={{ width: "100%" }} />
+                        </div> */}
+                    </div>
+                    : <div></div>}
 
                 <hr className="divider" />
 
@@ -218,7 +249,7 @@ class Urdu extends Component {
                         playButtonEnabled={false}
                         disableAutoPlayOnAction={false}
                         buttonsDisabled={false}
-                        dotsDisabled={true}
+                        dotsDisabled={true} infinite={false}
                     />
                 </div>
 
@@ -236,7 +267,7 @@ class Urdu extends Component {
                         playButtonEnabled={false}
                         disableAutoPlayOnAction={false}
                         buttonsDisabled={false}
-                        dotsDisabled={true}
+                        dotsDisabled={true} infinite={false}
                     />
 
                 </div>
@@ -255,7 +286,7 @@ class Urdu extends Component {
                         playButtonEnabled={false}
                         disableAutoPlayOnAction={false}
                         buttonsDisabled={false}
-                        dotsDisabled={true}
+                        dotsDisabled={true} infinite={false}
                     />
 
                 </div>
@@ -274,7 +305,7 @@ class Urdu extends Component {
                         playButtonEnabled={false}
                         disableAutoPlayOnAction={false}
                         buttonsDisabled={false}
-                        dotsDisabled={true}
+                        dotsDisabled={true} infinite={false}
                     />
 
                 </div>
@@ -294,7 +325,7 @@ class Urdu extends Component {
                         playButtonEnabled={false}
                         disableAutoPlayOnAction={false}
                         buttonsDisabled={false}
-                        dotsDisabled={true}
+                        dotsDisabled={true} infinite={false}
                     />
                 </div>
 
@@ -311,6 +342,8 @@ class Urdu extends Component {
                         fadeOutAnimation={true}
                         playButtonEnabled={false}
                         disableAutoPlayOnAction={false}
+                        buttonsDisabled={false}
+                        dotsDisabled={true} infinite={false}
                     />
                 </div>
 
@@ -330,7 +363,7 @@ class Urdu extends Component {
                         playButtonEnabled={false}
                         disableAutoPlayOnAction={false}
                         buttonsDisabled={false}
-                        dotsDisabled={true}
+                        dotsDisabled={true} infinite={false}
                     />
                 </div>
 

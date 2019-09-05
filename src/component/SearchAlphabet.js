@@ -176,7 +176,10 @@ function SearchAlphabet(props) {
 
                         {searchWords.map(data =>
 
-                            <Tab key={data.id} className="alphabet-test" label={data.langName} component={Link} to={`/explore/sort/` + props.languageCurrent + data.url} />
+                            <Tab key={data.id} 
+                            className="alphabet-test" 
+                            label={data.langName} 
+                            component={Link} to={`/explore/sort/` + props.languageCurrent + data.url} />
 
                         )}
 

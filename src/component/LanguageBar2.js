@@ -75,32 +75,33 @@ TabContainer.propTypes = {
 //     },
 // }));
 
-const LanguageBar2 =({match}) => {
+const LanguageBar2 = ({ match }) => {
 
     //const classes = useStyles();
     const [value, setValue] = React.useState(0);
 
     function handleChange(event, newValue) {
         setValue(newValue);
+        console.log(newValue)
     }
 
     return (
         <div className="languageBar">
-      
+
             <AppBar position="static" color="default" className="languageAppBar">
                 <Tabs
                     value={value}
                     onChange={handleChange}
                     indicatorColor="primary"
-                    variant = "fullWidth"
-                    scrollButtons="auto"
+                    variant="scrollable"
+                    scrollButtons="on"
                 >
                     {languagesHTML}
                 </Tabs>
-               
+
             </AppBar>
-           
-            {/* {value === 0 && <TabContainer>Item One</TabContainer>}
+
+            {/* {value === 0 && <TabContainer>Item zer0</TabContainer>}
             {value === 1 && <TabContainer>Item Two</TabContainer>}
             {value === 2 && <TabContainer>Item Three</TabContainer>}
             {value === 3 && <TabContainer>Item Four</TabContainer>}

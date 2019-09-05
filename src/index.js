@@ -10,8 +10,10 @@ const initialState = {
   track_exist : 0,
   trackAlbumImage : '',
   trackAlbumName : '',
-  trackGlobalName : ''
+  trackGlobalName : '',
+  queueState : []
 }
+
 // ReactDOM.render(<App />, document.getElementById('root'));
 // <Provider globalState={initialState}>
 //     <App />

@@ -8,29 +8,26 @@ import IconButton from "@material-ui/core/IconButton";
 import Typography from "@material-ui/core/Typography";
 import CloseIcon from "@material-ui/icons/Close";
 import Slide from "@material-ui/core/Slide";
-
 import CssBaseline from "@material-ui/core/CssBaseline";
 import Container from "@material-ui/core/Container";
-
 import Grid from "@material-ui/core/Grid";
-
 import Input from "@material-ui/core/Input";
 import MenuItem from "@material-ui/core/MenuItem";
 import FormControl from "@material-ui/core/FormControl";
 import Select from "@material-ui/core/Select";
-
+import axios from 'axios'
 import InputAdornment from "@material-ui/core/InputAdornment";
 import AccountCircle from "@material-ui/icons/AccountCircle";
 
-import List from "@material-ui/core/List";
-import ListItem from "@material-ui/core/ListItem";
-import ListItemText from "@material-ui/core/ListItemText";
-import ListItemAvatar from "@material-ui/core/ListItemAvatar";
-import Avatar from "@material-ui/core/Avatar";
+// import List from "@material-ui/core/List";
+// import ListItem from "@material-ui/core/ListItem";
+// import ListItemText from "@material-ui/core/ListItemText";
+// import ListItemAvatar from "@material-ui/core/ListItemAvatar";
+// import Avatar from "@material-ui/core/Avatar";
 
 //import CircularProgress from '@material-ui/core/CircularProgress';
 
-import axios from 'axios'
+
 
 const useStyles2 = makeStyles(theme => ({
     root: {
@@ -192,10 +189,15 @@ const Ringtone = props => {
             confirmBoxState: true
         }));
 
-        console.log(values)
 
-        axios.post(`https://www.koyal.pk/musicapp/?request=send-verify-rbt-react`, values)
+        // var breakNum = values.msisdn.substring(1)
+        // var phoneNo = '92' + breakNum
+        // console.log(phoneNo)
+
+        axios.post(`http://api.koyal.pk/musicapp/?request=send-verify-rbt-react`, values)
             .then(response => {
+
+                console.log(response.data.Response)
 
                 setLoading(values => ({
                     ...values,
@@ -212,18 +214,25 @@ const Ringtone = props => {
 
         event.preventDefault();
 
-        axios.post(`https://www.koyal.pk/musicapp/?request=set-rbt-react`, confirmRBT)
+        axios.post(`http://api.koyal.pk/musicapp/?request=set-rbt-react`, confirmRBT)
             .then(response => {
 
-                console.log('RBT Set to the Number')
+                let verifyResp = response.data.Response.Success
 
-                setLoading(values => ({
-                    ...values,
-                    confirmationFinal: true,
-                    confirmBoxState: false
-                }));
+                if (verifyResp) {
+                    setLoading(values => ({
+                        ...values,
+                        confirmationFinal: true,
+                        confirmBoxState: false
+                    }));
+                    setTimeout(() => setOpen(false), 10000)
+                } else {
+                    alert('Incorrect RBT Verification Code.')
+                }
 
-                setTimeout(() => setOpen(false), 2000)
+
+
+
 
             })
             .catch(error => {
@@ -258,9 +267,7 @@ const Ringtone = props => {
                         <Typography variant="h6" className="mainHeadingRingtone">
                             Set your Ringtone
             </Typography>
-                        <Button color="secondary" variant="contained" onClick={handleClose}>
-                            cancel
-            </Button>
+
                     </Toolbar>
                 </AppBar>
 
@@ -304,6 +311,7 @@ const Ringtone = props => {
                                                 name="msisdn"
                                                 onChange={phoneNumberChange}
                                                 id="msisdn"
+                                                placeholder="92345xxxxxxx"
                                                 className="enterNumberField"
                                                 required
                                                 startAdornment={
@@ -352,7 +360,7 @@ const Ringtone = props => {
 
                                             <div className="sendMessageBtn"> <Button fullWidth={true} variant="contained" color="primary" type="submit"> Confirm RBT Code </Button> </div> </form>
                                     </Grid>
-                                    <Grid item xs={12}>
+                                    {/* <Grid item xs={12}>
                                         <List className={classes5.root}>
                                             <ListItem alignItems="flex-start">
                                                 <ListItemAvatar>
@@ -378,7 +386,7 @@ const Ringtone = props => {
                                                 />
                                             </ListItem>
                                         </List>
-                                    </Grid>
+                                    </Grid> */}
                                 </>
                                 : <p></p>
                             }
@@ -386,7 +394,7 @@ const Ringtone = props => {
 
                             <Grid item xs={12}>
 
-                                {loading.confirmationFinal ? <h1>You're Successfully Subscribed for {props.TrackName} Caller Tune</h1> : <p></p>}
+                                {loading.confirmationFinal ? <p className="msgInfo">You're Successfully Subscribed for {props.TrackName} Caller Tune.</p> : <p></p>}
 
                             </Grid>
                         </Grid>

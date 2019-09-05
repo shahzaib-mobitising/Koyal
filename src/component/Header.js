@@ -12,10 +12,11 @@ import Button from '@material-ui/core/Button';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
+//import Queue from './Queue';
 
 const useStyles = makeStyles({
   list: {
-   width: '100%',
+    width: '100%',
   },
   fullList: {
     width: 'auto',
@@ -25,13 +26,13 @@ const useStyles = makeStyles({
     padding: '8px 0px',
   },
 
-   alignRight: {
-     textAlign: 'right',
-   },
+  alignRight: {
+    textAlign: 'right',
+  },
 
-   drawerPaper: {
-     width: '50%',
-   },
+  drawerPaper: {
+    width: '50%',
+  },
 
 });
 
@@ -61,7 +62,7 @@ const Header = props => {
       onClick={toggleDrawer(side, false)}
       onKeyDown={toggleDrawer(side, false)}
     >
-      
+
       <Grid container spacing={0}>
         <Grid item xs={6}>
           <List>
@@ -71,11 +72,11 @@ const Header = props => {
             <ListItem button component={Link} to="/"><ListItemText>DMCA</ListItemText></ListItem>
           </List>
         </Grid>
-          <Grid item xs={6} className={classes.alignRight}>
+        <Grid item xs={6} className={classes.alignRight}>
           <Button className={classes.menuIcon} onClick={toggleDrawer('left', true)} ><i className="material-icons md-24">close</i></Button>
         </Grid>
       </Grid>
-    
+
     </div>
   );
 
@@ -83,45 +84,47 @@ const Header = props => {
   return (
     <div className="header-parent">
       <AppBar position="fixed" color="inherit">
-        <Container fixed maxWidth="lg" className="main-container">
-
+        <Container maxWidth="xl" className="main-container">
           <Box display={{ xs: 'block', md: 'none' }} >
             <Grid container spacing={0}>
-              <Grid item xs={2}>
+              <Grid item xs={1}>
                 <Button className={classes.menuIcon} onClick={toggleDrawer('left', true)} ><i className="material-icons md-36">menu</i></Button>
-                <Drawer  classes={{ paper: classes.drawerPaper,}} open={state.left} onClose={toggleDrawer('left', false)}>
+                <Drawer classes={{ paper: classes.drawerPaper, }} open={state.left} onClose={toggleDrawer('left', false)}>
                   {sideList('left')}
                 </Drawer>
               </Grid>
               <Grid item xs={6}>
+
                 <Link to="/"><img src="assets/koyal-logo.png" alt="koyal-logo" className="logo" /></Link>
               </Grid>
             </Grid>
           </Box>
 
           <Box display={{ xs: 'none', md: 'block' }} >
-          <Grid container spacing={0}>
-            <Grid item md={2}>
-              <Link to="/"><img src="assets/koyal-logo.png" alt="koyal-logo" className="logo" /></Link>
-            </Grid>
-            <Grid item md={5}>
-              <div className="desktop-nav">
-                <div className="desktop-menu-item first-item">
-                  <Link to="/">Home</Link>
+            <Grid container spacing={0}>
+              <Grid item md={1} className="logoContainer">
+                <Link to="/"><img src="assets/koyal-logo.png" alt="koyal-logo" className="logo" /></Link>
+              </Grid>
+              <Grid item md={6}>
+                <div className="desktop-nav">
+                  <div className="desktop-menu-item first-item">
+                    <Link to="/">Home</Link>
+                  </div>
+                  <div className="desktop-menu-item">
+                    <Link to="/about-us">About Us</Link></div>
+                  <div className="desktop-menu-item"> <Link to="/privacy-policy">Policy</Link></div>
+                  <div className="desktop-menu-item"> <Link to="/terms">Terms</Link></div>
+                  <div className="desktop-menu-item"> <Link to="/dmca">DMCA</Link></div>
                 </div>
-                <div className="desktop-menu-item">
-                  <Link to="/">About Us</Link></div>
-                <div className="desktop-menu-item"> <Link to="/">Contact Us</Link></div>
-                <div className="desktop-menu-item"> <Link to="/">DMCA</Link></div>
-              </div>
+              </Grid>
+              <Grid item md={5}>
+                <div className="searchBox">
+                  <h5>App Download <i className="material-icons android_icon">android</i></h5>
+
+                  <SearchView />
+                </div>
+              </Grid>
             </Grid>
-            <Grid item md={5}>
-              <div className="searchBox">
-                <h5>App Download <i className="material-icons android_icon">android</i></h5>
-                <SearchView />
-              </div>
-            </Grid>
-          </Grid>
           </Box>
         </Container>
       </AppBar>

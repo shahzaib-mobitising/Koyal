@@ -1,33 +1,11 @@
 import React, { Component } from 'react'
 import axios from 'axios'
-//import { Col, Card, CardImg, CardBody, CardSubtitle, Table } from 'reactstrap';
-import Typography from '@material-ui/core/Typography';
-import AliceCarousel from 'react-alice-carousel';
-import "react-alice-carousel/lib/alice-carousel.css";
-import MainSlider from '../component/MainSlider';
-import LazyLoad from 'react-lazyload'
 import { Link } from "react-router-dom";
 import Grid from '@material-ui/core/Grid';
-import Card from '@material-ui/core/Card';
-import CardActionArea from '@material-ui/core/CardActionArea';
-import CardContent from '@material-ui/core/CardContent';
-import CardMedia from '@material-ui/core/CardMedia';
-//import Button from '@material-ui/core/Button';
-import Table from '@material-ui/core/Table';
-import TableBody from '@material-ui/core/TableBody';
-import TableCell from '@material-ui/core/TableCell';
-//import TableHead from '@material-ui/core/TableHead';
-import TableRow from '@material-ui/core/TableRow';
-import Paper from '@material-ui/core/Paper';
-import List from '@material-ui/core/List';
-import ListItem from '@material-ui/core/ListItem';
-import Divider from '@material-ui/core/Divider';
-import ListItemText from '@material-ui/core/ListItemText';
-import ListItemAvatar from '@material-ui/core/ListItemAvatar';
-import Avatar from '@material-ui/core/Avatar';
 import ArtistLoader from '../component/ArtistLoader';
-import weeklyData from '../dummy/weekly.json'
-
+import { LazyImage } from "react-lazy-images";
+import Rating from '@material-ui/lab/Rating';
+import FavoriteIcon from '@material-ui/icons/Favorite';
 
 
 export default class SingleArtist extends Component {
@@ -43,13 +21,15 @@ export default class SingleArtist extends Component {
             TestState: [],
             loadingData: true,
         }
+
+        this.downloadTrack = this.downloadTrack.bind(this)
     }
 
     getData = () => {
 
-        axios.get(`http://www.staging.koyal.pk/app_files/web/artist/artist-${this.props.match.params.artistid}.json`)
+        axios.get(`http://api.koyal.pk/app_files/web/artist/artist-${this.props.match.params.artistid}.json`)
             .then(response => {
-                console.log(response)
+                //  console.log(response)
                 this.setState({
                     page_idd: this.props.match.params.artistid,
                     artistInfo: response.data.Response,
@@ -66,13 +46,30 @@ export default class SingleArtist extends Component {
 
     }
 
-    // testFnf() {
-    //     this.forceUpdate();
-    // }
+    downloadTrack = (TrackId, AlbumId, OrgTrackUrl) => {
+
+        let trackInfo = {
+            'track_id': TrackId,
+            'album_id': AlbumId
+        }
+
+        axios.post(`http://35.156.24.14/koyaldownload/download.php`, trackInfo)
+            .then(response => {
+
+                if (response.data.SearchResult.Success === 'Charged') {
+                    setTimeout(() => {
+                        window.location.href = OrgTrackUrl
+                    }, 100);
+                }
+            })
+            .catch(error => {
+                console.log(error)
+                this.setState({ errMsg: 'Error Post Data' })
+            })
+    }
 
     componentDidMount() {
         this.getData()
-        //this.testFnf()
     }
 
     componentDidUpdate(prevState) {
@@ -91,156 +88,193 @@ export default class SingleArtist extends Component {
     render() {
         const { artistInfo, artistAlbums, artistTracks, loadingData } = this.state
 
-        // var divStyle = {
-        //     width: '15%'
-        // };
         var bgImage = {
             backgroundImage: 'url(' + artistInfo.ThumbnailImageWeb + ')',
             WebkitTransition: 'all', // note the capital 'W' here
             msTransition: 'all' // 'ms' is the only lowercase vendor prefix
         };
 
-        const sideWeeklyTracks = weeklyData.Response.Weekly.map(data =>
-
-            <>
-                <ListItem alignItems="flex-start">
-                    <ListItemAvatar>
-                        <Avatar alt={data.Name} src={data.ThumbnailImageWeb} />
-                    </ListItemAvatar>
-                    <Link component={Link} to={`/track/` + data.TrackId + `/` + data.Name}>
-                        <ListItemText primary={data.Name} />
-                    </Link>
-                    {/* <Link component={Link} to={`/artist/` + data.ArtistId + `/` + data.Artist}>
-                        <ListItemText primary={data.Artist} />
-                    </Link> */}
-                </ListItem>
-                <Divider variant="inset" component="li" />
-            </>
-        )
-
 
         return (
 
-            <div className="trackMainContainer">
+            <div className="allTracksContainer">
                 {loadingData ? <ArtistLoader /> :
 
                     <>
                         <div className="dummy-img">
                             <div style={bgImage} className="divImage"></div>
                         </div>
+                        <Grid container spacing={0} className="trackGridMain1">
+                            <Grid item xs={2} className="pageGrid1">
 
-                        <Grid container spacing={1} className="trackContainer">
-                            <Grid item xs={3}>
-
-                                <div className="albumImageContainer">
-
-                                    <Card className="album_side">
-                                        <CardActionArea>
-                                            <LazyLoad height={100} offset={[-100, 100]} placeholder={<img src={`https://via.placeholder.com/150`} alt={`hello`} />}>
-                                                <LazyLoad once={true} placeholder={<img src={`https://via.placeholder.com/100`} alt={`hello`} />} >
-                                                    <CardMedia
-                                                        component="img"
-                                                        alt={artistInfo.Name}
-                                                        // height="200"
-                                                        image={artistInfo.ThumbnailImageWeb}
-                                                        title={artistInfo.Name}
-                                                    />
-                                                </LazyLoad>
-                                            </LazyLoad>
-
-                                            <CardContent>
-
-                                            </CardContent> </CardActionArea> </Card>
-
-                                    <div className="sideTracks">
-
-                                        <h3>Weekly Top Tracks</h3>
-                                        <hr />
-
-
-                                        <List className="singleTrackList">
-
-                                            {sideWeeklyTracks}
-
-
-
-                                        </List>
-                                    </div>
+                                <div className="albumImgBox">
+                                    <LazyImage
+                                        src={artistInfo.ThumbnailImageWeb}
+                                        alt={artistInfo.Name}
+                                        debounceDurationMs={50}
+                                        placeholder={({ imageProps, ref }) => (<img ref={ref} src={`/assets/albumx150.jpg`} alt={imageProps.alt} style={{ width: "100%" }} />)}
+                                        actual={({ imageProps }) => (<img {...imageProps} style={{ width: "100%" }} alt={artistInfo.Name} />)} />
                                 </div>
+
                             </Grid>
-                            <Grid item xs={9}>
-
-                                <div className="track_side">
-                                    <Typography className="album-head-title" variant="subtitle2" gutterBottom>
-                                        Artist
-                                </Typography>
-                                    <Typography className="album-title" gutterBottom variant="h4">
-                                        {artistInfo.Artist}
-                                    </Typography>
-                                    <Typography variant="subtitle2" gutterBottom>
-                                        By. {artistInfo.Style}
-                                    </Typography>
-                                    <Typography className="trackShare" variant="h6" gutterBottom> <i className="material-icons"> share </i>{artistInfo.Shares}  </Typography>
-                                    <Typography className="trackLike" variant="h6" gutterBottom> <i className="material-icons"> thumb_up </i> {artistInfo.Likes} </Typography>
-
-                                    <hr />
-                                    <Paper>
-                                        <Table className="trackListTable">
-                                            <TableBody>
-                                                {
-                                                    artistTracks.map((data, index) =>
-                                                        // <tr key={index}>
-                                                        <TableRow key={data.index}>
-                                                            <TableCell component="th" scope="row">
-                                                                <img className="trackImageIcon" src={data.ThumbnailImageWeb} alt={data.Name} />
-                                                            </TableCell>
-                                                            <TableCell>
-                                                                <Link component={Link} to={`/track/` + data.Id + `/` + data.Name}>
-                                                                    {data.Name.split("-").join(" ")}
-                                                                </Link>
-                                                            </TableCell>
-                                                            <TableCell>
-                                                                {artistInfo.Artist}
-                                                            </TableCell>
-                                                            <TableCell>
-                                                                {data.LanguageName}
-                                                            </TableCell>
-                                                        </TableRow>
-                                                    )
-                                                }
-                                            </TableBody>
-                                        </Table>
-                                    </Paper>
+                            <Grid item xs={10} className="pageGrid2">
+                                <div className="albumMetaBox">
+                                    <p className="short-head">Artist</p>
+                                    <h1 className="main-title">{artistInfo.Artist}</h1>
+                                    <p className="short-desc">
+                                        {artistInfo.Description}
+                                    </p>
+                                    {/* <p> 
+                                        By <span>{artistInfo.Artist}</span>
+                                        Writer <span>{artistInfo.Artist}</span>
+                                        Composer <span>{artistInfo.Artist}</span>
+                                    </p> */}
+                                    <ul className="counterList">
+                                        <li className="artistAlbumCounter">80 Albums</li>
+                                        <li className="artistSongsCounter">240 Songs</li>
+                                    </ul>
                                 </div>
 
-                                <div className="homeMainClass" >
-                                    <div className="sliderSection_1">
-                                        <Grid container spacing={3} className="slider-header">
-                                            <Grid item xs={6} className="slider-side1"><h2 className="slider_heading">Related Albums</h2></Grid>
-                                        </Grid>
-                                        <AliceCarousel
-                                            items={artistAlbums.map((data, index) => <LazyLoad height={100} offset={[-100, 100]} key={data.index} placeholder={<img src={`https://via.placeholder.com/150`} alt={`hello`} />}> <Link component={Link} to={`/album/` + data.Id + `/` + data.Name}> <MainSlider id={data.Id} image={data.ThumbnailImageWeb} /> </Link> </LazyLoad>)}
-                                            responsive={this.responsive2}
-                                            autoPlayInterval={6000}
-                                            autoPlay={false}
-                                            fadeOutAnimation={true}
-                                            playButtonEnabled={false}
-                                            disableAutoPlayOnAction={false}
-                                            buttonsDisabled={false}
-                                            dotsDisabled={true}
-                                        />
-                                    </div>
+                            </Grid>
+                        </Grid>
+                        <Grid container spacing={1} className="trackGridMain2">
+                            <Grid item xs={12} className="pageGrid3">
+                                <div className="trackTableCustom">
+                                    <ul className="trackListHeader">
+                                        <li className="trackCol1">#</li>
+                                        {/* <li className="trackCol2"></li> */}
+                                        <li className="trackCol3 atistiPageTitle">Title</li>
+                                        <li className="trackCol4">Artist</li>
+                                        <li className="artistAlbumCol">Album</li>
+                                        {/* <li className="trackCol5"><i class="material-icons">access_time </i></li> */}
+                                        <li className="trackCol6">Popularity</li>
+                                        {/* <li className="trackCol7"></li>
+                                        <li className="trackCol8"></li>
+                                        <li className="trackCol9"></li> */}
+
+                                    </ul>
+                                    {
+                                        artistTracks.map((data, index) =>
+                                            <ul className="trackListHeader trackBody" key={index}>
+                                                <li className="trackCol1 trackImg">
+                                                    <LazyImage
+                                                        src={data.ThumbnailImageWeb}
+                                                        alt={data.ThumbnailImageWeb}
+                                                        debounceDurationMs={5}
+                                                        placeholder={({ imageProps, ref }) => (<img ref={ref} src={`/assets/albumx150.jpg`} alt={imageProps.alt} style={{ width: "100%" }} />)}
+                                                        actual={({ imageProps }) => (<img {...imageProps} style={{ width: "100%" }} alt={data.ThumbnailImageWeb} />)} />
+                                                </li>
+                                                {/* <li className="trackCol2 downloadImg">
+
+                                                    <img src='/assets/download_black.png' alt="download" onClick={() => this.downloadTrack(data.Id, data.AlbumId, data.TrackUrl)} />
+                                                </li> */}
+                                                <li className="trackCol3 trackTitle atistiPageTitle">
+                                                    <Link component={Link} to={`/track/` + data.Id + `/` + data.Name}>
+                                                        {data.Name.split("-").join(" ")}
+                                                        {/* Episode 03 Zindagi Guzarne Ka Behtareen Tarika */}
+                                                    </Link>
+                                                </li>
+                                                <li className="trackCol4 trackArtist">
+
+                                                    <Link component={Link} to={`/artist/` + data.ArtistId + `/` + data.Artist}>
+                                                        {artistInfo.Artist}
+                                                    </Link>
+                                                    {/* Episode 03 Zindagi Guzarne Ka Behtareen Tarika */}
+                                                </li>
+                                                <li className="artistAlbumCol">
+                                                    <Link component={Link} to={`/album/` + data.AlbumId + `/` + data.Album}>
+                                                        {data.Album}
+                                                    </Link>
+                                                </li>
+                                                {/* <li className="trackCol5">
+                                                    5:30
+                                                </li> */}
+
+                                                <div className="trackCol6">
+                                                    <Rating
+                                                        value="2"
+                                                        readOnly
+                                                        icon={<FavoriteIcon fontSize="inherit" />}
+                                                        className="ratingTrack"
+                                                        max={3}
+                                                    />
+                                                </div>
+                                                {/* <div className="trackCol7">
+                                                    <TrackLikeOption />
+                                                </div> */}
+                                                {/* <div className="trackCol8">
+                                                    <TrackShareOptions
+                                                        albumImage={data.ThumbnailImageWeb}
+                                                        trackName={data.Name.split("-").join(" ")}
+                                                        albumName={data.Name.split("-").join(" ")}
+                                                        pageURL={window.location.href} />
+                                                </div>
+                                                <div className="trackCol9">
+                                                    <Ringtone
+                                                        TelenorCode={data.TelenorCode}
+                                                        UfoneCode={data.UfoneCode}
+                                                        MobilinkCode={data.MobilinkCode}
+                                                        ZongCode={data.ZongCode}
+                                                        RBTCodes={
+                                                            [
+                                                                {
+                                                                    'code': data.TelenorCode,
+                                                                    'name': 'Telenor'
+                                                                },
+                                                                {
+                                                                    'code': data.UfoneCode,
+                                                                    'name': 'Ufone'
+                                                                },
+                                                                {
+                                                                    'code': data.ZongCode,
+                                                                    'name': 'Zong'
+                                                                },
+                                                                {
+                                                                    'code': data.MobilinkCode,
+                                                                    'name': 'Mobilink'
+                                                                }
+                                                            ]
+                                                        }
+                                                        albumName={data.Name.split("-").join(" ")}
+                                                        ThumbnailImageWeb={data.Name.split("-").join(" ")}
+                                                        TrackName={data.Name.split("-").join(" ")}
+                                                        TrackId={data.TrackId}
+                                                    />
+                                                </div> */}
+
+                                            </ul>
+                                        )
+                                    }
                                 </div>
                             </Grid>
                         </Grid>
 
-
-
+                        <Grid container spacing={4} className="trackGridMain3">
+                            <Grid item xs={12}>
+                                <div className="relate-title">
+                                    <h2>Albums</h2>
+                                </div>
+                            </Grid>
+                            {
+                                artistAlbums.map((data, index) =>
+                                    <Grid item xs={2} className="pageGrid4" key={index}>
+                                        <div className="relatedBox">
+                                            <Link component={Link} to={`/album/` + data.Id + `/` + data.Name}>
+                                                <LazyImage
+                                                    src={data.ThumbnailImageWeb}
+                                                    alt={data.Name}
+                                                    debounceDurationMs={50}
+                                                    placeholder={({ imageProps, ref }) => (<img ref={ref} src={`/assets/albumx150.jpg`} alt={imageProps.alt} style={{ width: "100%" }} />)}
+                                                    actual={({ imageProps }) => (<img {...imageProps} style={{ width: "100%" }} alt={data.Name} />)} />
+                                                <p>{data.Name}</p>
+                                            </Link>
+                                        </div>
+                                    </Grid>
+                                )
+                            }
+                        </Grid>
                     </>
-
                 }
-
-
             </div >
 
         )
