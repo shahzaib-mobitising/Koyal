@@ -62,10 +62,15 @@ function App(props) {
             <Grid item xs={3} className="ad-container">
 
               <div className="adsSide">
-                <img src="/assets/1.jpg" className="adsLeft1" alt='ads'></img>
-                <img src="/assets/2.jpg" className="adsLeft1" alt='ads'></img>
-                <img src="/assets/3.jpg" className="adsLeft1" alt='ads'></img>
-                <img src="/assets/4.jpg" className="adsLeft1" alt='ads'></img>
+                <img src="/assets/ad1.jpg" className="adsLeft1" alt='ads'></img>
+                <img src="/assets/ad2.jpg" className="adsLeft1" alt='ads'></img>
+                <img src="/assets/ad3.jpg" className="adsLeft1" alt='ads'></img>
+                {/* <img src="/assets/ad4.jpg" className="adsLeft1" alt='ads'></img> */}
+                <img src="/assets/ad5.jpg" className="adsLeft1" alt='ads'></img>
+                <img src="/assets/ad6.jpg" className="adsLeft1" alt='ads'></img>
+                {/* <img src="/assets/ad8.jpg" className="adsLeft1" alt='ads'></img>
+                <img src="/assets/ad9.jpg" className="adsLeft1" alt='ads'></img>
+                <img src="/assets/ad10.jpg" className="adsLeft1" alt='ads'></img> */}
                
               </div>
 

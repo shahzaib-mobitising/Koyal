@@ -9,19 +9,19 @@ function Footer() {
                 <Grid item xs={12} >
                     <div className="footerTopBar">
                         <div className="topbarItem">
-                            <Link component={Link} to={`/`}>Most Popular<span>|</span></Link>
+                            <Link component={Link} to={`/explore/urdu-trend`}>Most Popular<span>|</span></Link>
                         </div>
                         <div className="topbarItem">
-                            <Link component={Link} to={`/`}>Featured Artist<span>|</span></Link>
+                            <Link component={Link} to={`/explore/urdu-artist`}>Featured Artist<span>|</span></Link>
                         </div>
                         <div className="topbarItem">
-                            <Link component={Link} to={`/`}>Trending Songs<span>|</span></Link>
+                            <Link component={Link} to={`/explore/urdu-islamic`}>Trending Songs<span>|</span></Link>
                         </div>
                         <div className="topbarItem">
-                            <Link component={Link} to={`/`}>Top Album<span>|</span></Link>
+                            <Link component={Link} to={`/explore/urdu-album`}>Top Album<span>|</span></Link>
                         </div>
                         <div className="topbarItem">
-                            <Link component={Link} to={`/`}>New Releases</Link>
+                            <Link component={Link} to={`/explore/urdu-new`}>New Releases</Link>
                         </div>
                     </div>
                     <div className="footerMiddleBar">

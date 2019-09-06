@@ -82,7 +82,7 @@ const LanguageBar2 = ({ match }) => {
 
     function handleChange(event, newValue) {
         setValue(newValue);
-        console.log(newValue)
+       
     }
 
     return (

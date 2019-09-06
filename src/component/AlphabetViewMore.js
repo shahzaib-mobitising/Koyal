@@ -40,7 +40,7 @@ export default class AlphabetViewMore extends Component {
             })
             .catch(error => {
                 console.log(error)
-                this.setState({ errMsg: 'Error Data' })
+               
             })
 
         }, 1000 );
@@ -102,7 +102,7 @@ export default class AlphabetViewMore extends Component {
 
     fetchMoreData = () => {
 
-        console.log('Fetch More Data')
+       
 
         if (this.state.items.length >= 5000) {
             this.setState({
@@ -154,7 +154,7 @@ export default class AlphabetViewMore extends Component {
                         itemsCheck: response.data.Response.Albums
                     })
 
-                    console.log(urlMore)
+                   
 
                     if ((this.state.itemsCheck.length < 24) || (this.state.itemsCheck.length === null)) {
 
@@ -167,7 +167,7 @@ export default class AlphabetViewMore extends Component {
                 })
                 .catch(error => {
                     console.log(error)
-                    this.setState({ errMsg: 'Error Data' })
+                   
                 })
         }, 10);
     }

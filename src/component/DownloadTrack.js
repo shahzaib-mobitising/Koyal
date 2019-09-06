@@ -72,16 +72,6 @@ const useStyles4 = makeStyles(theme => ({
     }
 }));
 
-const useStyles5 = makeStyles(theme => ({
-    root: {
-        width: "100%",
-        // maxWidth: 360,
-        backgroundColor: theme.palette.background.paper
-    },
-    inline: {
-        display: "inline"
-    }
-}));
 
 
 function DownloadTrack(props) {
@@ -89,7 +79,6 @@ function DownloadTrack(props) {
     const classes2 = useStyles2();
     const classes3 = useStyles3();
     const classes4 = useStyles4();
-    const classes5 = useStyles5();
 
     const [open, setOpen] = React.useState(false);
 
@@ -106,7 +95,7 @@ function DownloadTrack(props) {
         axios.post(`http://35.156.24.14/koyaldownload/charge-download-web.php`, sendData)
             .then(response => {
 
-                //console.log(response.data.Response.response)
+               
                 let checkResp = response.data.Response.response
 
                 if (checkResp === 'numbererror') {
@@ -122,14 +111,10 @@ function DownloadTrack(props) {
                     }
                 }
 
-                // setLoading(values => ({
-                //     ...values,
-                //     loader: false
-                // }));
             })
             .catch(error => {
                 console.log(error)
-                this.setState({ errMsg: 'Error Post Data' })
+              
             })
 
 
@@ -223,7 +208,7 @@ function DownloadTrack(props) {
 
         // var breakNum = values.msisdn.substring(1)
         // var phoneNo = '92' + breakNum
-        console.log(values)
+    
 
         axios.post(`http://api.koyal.pk/musicapp/?request=send-verify-rbt-react`, values)
             .then(response => {
@@ -237,7 +222,7 @@ function DownloadTrack(props) {
             })
             .catch(error => {
                 console.log(error)
-                this.setState({ errMsg: 'Error Post Data' })
+                
             })
     }
 
@@ -264,7 +249,7 @@ function DownloadTrack(props) {
             })
             .catch(error => {
                 console.log(error)
-                this.setState({ errMsg: 'Error Post Data' })
+                
             })
 
     }

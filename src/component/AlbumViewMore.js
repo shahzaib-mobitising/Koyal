@@ -30,18 +30,17 @@ export default class AlbumViewMore extends Component {
         setTimeout(() => {
             axios.get(`http://api.koyal.pk/app_files/web/seeall/${this.props.match.params.languageAlbums}.json`)
                 .then(response => {
-                    //console.log('HEllo')
-                    //console.log(response)
+                 
                     this.setState({
                         items: response.data.Response.Albums,
                         hasMore: true,
                         loadingData: false
                     })
-                    console.log(this.state.items)
+                   
                 })
                 .catch(error => {
                     console.log(error)
-                    this.setState({ errMsg: 'Error Data' })
+                   
                 })
         }, 1000);
 
@@ -158,7 +157,7 @@ export default class AlbumViewMore extends Component {
                 })
                 .catch(error => {
                     console.log(error)
-                    this.setState({ errMsg: 'Error Data' })
+                    
                 })
         }, 50);
     }

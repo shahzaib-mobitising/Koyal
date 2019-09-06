@@ -32,7 +32,7 @@ class Urdu extends Component {
 
     playTracksDirectly = (id) => {
 
-        console.log(id)
+
 
         axios.get(`http://api.koyal.pk/musicapp/?request=get-tracks-react-button&id=${id}`)
             .then(response => {
@@ -40,21 +40,25 @@ class Urdu extends Component {
                 let dataTrack = []
                 let respo = response.data.Response.Tracks
 
-                respo.map(data => dataTrack.push(
-                    {
-                        'file': data['TrackUrl'],
-                        'track_id': data['TrackId'],
-                        'trackName': data['Name'].split("-").join(" "),
-                        'albumId': data['AlbumId'],
-                        'albumName': data['Album'].split("_").join(" "),
-                        'thumbnailImage': data['ThumbnailImageWeb'],
-                        'rbtTelenor': data['rbtTelenor'],
-                        'albumArtist': data['AlbumArtist'],
-                    }
-                ))
+                let TestImage = respo[0].ThumbnailImageWeb;
+
+                respo.map(data =>
+
+                    dataTrack.push(
+                        {
+
+                            'file': data['TrackUrl'],
+                            'track_id': data['TrackId'],
+                            'trackName': data['Name'].split("-").join(" "),
+                            'albumId': data['AlbumId'],
+                            'albumName': data['Album'].split("_").join(" "),
+                            'thumbnailImage': TestImage,
+                            'rbtTelenor': data['rbtTelenor'],
+                            'albumArtist': data['AlbumArtist'],
+                        }
 
 
-
+                    ))
 
                 if (this.props.globalState.track_exist !== 0) {
 
@@ -80,7 +84,7 @@ class Urdu extends Component {
             })
             .catch(error => {
                 console.log(error)
-                this.setState({ errMsg: 'Error Data' })
+
             })
     }
 
@@ -89,7 +93,7 @@ class Urdu extends Component {
         axios.get(`http://api.koyal.pk/app_files/web/new/${this.props.match.params.language}.json`)
             //axios.get(`http://api.koyal.pk/app_files/web/new/saraiki-songs.json`)
             .then(response => {
-                console.log(response)
+
                 this.setState({
                     page_idd: this.props.match.params.language,
                     sliderSection: response.data.Response.HomePageContent[0]['Data'],
@@ -103,10 +107,71 @@ class Urdu extends Component {
                     islamicSection: response.data.Response.HomePageContent[8]['Data']
 
                 })
+
+
+                let CacheData = JSON.parse(localStorage.getItem('queuelist'))
+
+                // console.log(CacheData)
+
+                if (CacheData) {
+
+                    let dataTrack = []
+
+                    CacheData.map(data =>
+
+                        dataTrack.push(
+                            {
+
+                                'file': data['TrackUrl'],
+                                'track_id': data['TrackId'],
+                                'trackName': data['Name'],
+                                'albumId': data['AlbumId'],
+                                'albumName': data['Album'],
+                                'thumbnailImage': data['ThumbnailImageWeb'],
+                                'rbtTelenor': data['rbtTelenor']
+                            }
+
+
+                        ))
+
+                    //  console.log(dataTrack.file)
+
+                    if (dataTrack.file === undefined) {
+                        // console.log('empty')
+                    } else {
+                        if (this.props.globalState.track_exist !== 0) {
+
+                            this.props.setGlobalState({
+                                tracks: dataTrack,
+                                trackAlbumImage: CacheData[0].ThumbnailImageWeb,
+                                trackAlbumName: CacheData[0].Album,
+                                trackGlobalName: CacheData[0].Name,
+                                queueState: dataTrack
+                            })
+
+
+                        } else {
+                            console.log(456)
+                            this.props.setGlobalState({
+                                tracks: dataTrack,
+                                trackAlbumImage: CacheData[0].ThumbnailImageWeb,
+                                trackAlbumName: CacheData[0].Album,
+                                trackGlobalName: CacheData[0].Name,
+                                queueState: dataTrack
+                            })
+
+                        }
+                    }
+
+                } else {
+                    console.log(false)
+                }
+
+
             })
             .catch(error => {
                 console.log(error)
-                this.setState({ errMsg: 'Error Data' })
+
             })
 
     }
@@ -166,7 +231,7 @@ class Urdu extends Component {
 
         const forNew = newSection.map((data, index) => <> <div className="new-1"> <Link component={Link} to={`/album/` + data.Id + `/` + data.Name}> <LazyImage src={data.ThumbnailImageWeb} alt={data.Id}
             debounceDurationMs={1} className="new1-image" style={{ width: "100%", height: "100%" }} placeholder={({ imageProps, ref }) => (<img ref={ref} src={`assets/150.svg`} alt={imageProps.alt} style={{ width: "100%" }} />)} actual={({ imageProps }) => (<img {...imageProps} style={{ width: "100%" }} alt={data.Id} />)} /> <h6>{data.Name}</h6> </Link> <div className="play-icon"> <img src="assets/play-icon.svg" alt='play-icon' onClick={() => this.playTracksDirectly(data.Id)} /> </div> </div> <div className="new-2"> <Link component={Link} to={`/album/` + newSection2[index].Id + `/` + newSection2[index].Name}> <LazyImage src={newSection2[index].ThumbnailImageWeb} alt={newSection2[index].Id}
-                debounceDurationMs={1} className="new2-image" style={{ width: "100%", height: "100%" }} placeholder={({ imageProps, ref }) => (<img ref={ref} src={`assets/150.svg`} alt={imageProps.alt} style={{ width: "100%" }} />)} actual={({ imageProps }) => (<img {...imageProps} style={{ width: "100%" }} alt={newSection2[index].Id} />)} /> <h6>{newSection2[index].Name}</h6></Link> <div className="play-icon"> <img src="assets/play-icon.svg" alt='play-icon' onClick={() => this.playTracksDirectly(data.Id)} /> </div> </div> </>)
+                debounceDurationMs={1} className="new2-image" style={{ width: "100%", height: "100%" }} placeholder={({ imageProps, ref }) => (<img ref={ref} src={`assets/150.svg`} alt={imageProps.alt} style={{ width: "100%" }} />)} actual={({ imageProps }) => (<img {...imageProps} style={{ width: "100%" }} alt={newSection2[index].Id} />)} /> <h6>{newSection2[index].Name}</h6></Link> <div className="play-icon"> <img src="assets/play-icon.svg" alt='play-icon' onClick={() => this.playTracksDirectly(newSection2[index].Id)} /> </div> </div> </>)
 
         const forPopular = popularSection.map(data => <> <Link component={Link} to={`/album/` + data.Id + `/` + data.Name}> <LazyImage src={data.ThumbnailImageWeb} alt={data.Id}
             debounceDurationMs={1} className="popular-image" style={{ width: "100%", height: "100%" }} placeholder={({ imageProps, ref }) => (<img ref={ref} src={`assets/150.svg`} alt={imageProps.alt} style={{ width: "100%" }} />)} actual={({ imageProps }) => (<img {...imageProps} style={{ width: "100%" }} alt={data.Id} />)} /> <h6>{data.Name}</h6> </Link> <div className="play-icon"> <img src="assets/play-icon.svg" alt='play-icon' onClick={() => this.playTracksDirectly(data.Id)} /> </div> </>)

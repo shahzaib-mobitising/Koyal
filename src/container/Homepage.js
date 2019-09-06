@@ -83,7 +83,7 @@ class Homepage extends Component {
             })
             .catch(error => {
                 console.log(error)
-                this.setState({ errMsg: 'Error Data' })
+
             })
     }
 
@@ -106,52 +106,63 @@ class Homepage extends Component {
                     islamicSection: response.data.Response.HomePageContent[8]['Data']
                 })
 
-                // let CacheData = JSON.parse(localStorage.getItem('queuelist'))
+                let CacheData = JSON.parse(localStorage.getItem('queuelist'))
 
-                // if (CacheData) {
-                //     let dataTrack = []
+               // console.log(CacheData)
 
-                //     CacheData.map(data =>
+                if (CacheData) {
 
-                //         dataTrack.push(
-                //             {
+                    let dataTrack = []
 
-                //                 'file': data['TrackUrl'],
-                //                 'track_id': data['TrackId'],
-                //                 'trackName': data['Name'],
-                //                 'albumId': data['AlbumId'],
-                //                 'albumName': data['Album'],
-                //                 'thumbnailImage': data['ThumbnailImageWeb'],
-                //                 'rbtTelenor': data['rbtTelenor']
-                //             }
+                    CacheData.map(data =>
 
+                        dataTrack.push(
+                            {
 
-                //         ))
-
-                //     if (this.props.globalState.track_exist !== 0) {
-
-                //         this.props.setGlobalState({
-                //             tracks: dataTrack,
-                //             trackAlbumImage: CacheData[0].ThumbnailImageWeb,
-                //             trackAlbumName: CacheData[0].Album,
-                //             trackGlobalName: CacheData[0].Name,
-                //             queueState: dataTrack
-                //         })
+                                'file': data['TrackUrl'],
+                                'track_id': data['TrackId'],
+                                'trackName': data['Name'],
+                                'albumId': data['AlbumId'],
+                                'albumName': data['Album'],
+                                'thumbnailImage': data['ThumbnailImageWeb'],
+                                'rbtTelenor': data['rbtTelenor']
+                            }
 
 
-                //     } else {
-                //         this.props.setGlobalState({
-                //             tracks: dataTrack,
-                //             trackAlbumImage: CacheData[0].ThumbnailImageWeb,
-                //             trackAlbumName: CacheData[0].Album,
-                //             trackGlobalName: CacheData[0].Name,
-                //             queueState: dataTrack
-                //         })
+                        ))
 
-                //     }
-                // } else {
-                //     console.log(false)
-                // }
+                    //  console.log(dataTrack.file)
+
+                    if (dataTrack.file === undefined) {
+                       // console.log('empty')
+                    } else {
+                        if (this.props.globalState.track_exist !== 0) {
+
+                            this.props.setGlobalState({
+                                tracks: dataTrack,
+                                trackAlbumImage: CacheData[0].ThumbnailImageWeb,
+                                trackAlbumName: CacheData[0].Album,
+                                trackGlobalName: CacheData[0].Name,
+                                queueState: dataTrack
+                            })
+
+
+                        } else {
+                            console.log(456)
+                            this.props.setGlobalState({
+                                tracks: dataTrack,
+                                trackAlbumImage: CacheData[0].ThumbnailImageWeb,
+                                trackAlbumName: CacheData[0].Album,
+                                trackGlobalName: CacheData[0].Name,
+                                queueState: dataTrack
+                            })
+
+                        }
+                    }
+
+                } else {
+                    console.log(false)
+                }
 
 
 
@@ -189,23 +200,16 @@ class Homepage extends Component {
 
         const { sliderSection, genreSection, newSection, newSection2, popularSection, collectionsSection, artistSection, albumSection, islamicSection } = this.state
 
-        const forSlider = sliderSection.map(data => <div className="sliderImageBox"> <Link component={Link} to={`/album/` + data.Id + `/` + data.Name}>
-
-            <LazyImage
-                src={data.SliderImageWeb}
-                alt="A portrait of Bill Murray."
-                debounceDurationMs={1}
-                placeholder={({ imageProps, ref }) => (<img ref={ref} src={`assets/slider.jpg`} alt={imageProps.alt} style={{ width: "100%" }} />)}
-                actual={({ imageProps }) => (<img {...imageProps} style={{ width: "100%" }} alt={data.Id} />)} />
-
-        </Link> <div className="play-icon-1"> <img src="assets/play-icon.svg" alt='play-icon' onClick={() => this.playTracksDirectly(data.Id)} /></div> </div>)
+        const forSlider = sliderSection.map(data => <div className="sliderImageBox"> <Link component={Link} to={`/album/` + data.Id + `/` + data.Name}><LazyImage src={data.SliderImageWeb} alt={data.Id} debounceDurationMs={1} placeholder={({ imageProps, ref }) => (<img ref={ref} src={`assets/slider.jpg`} alt={imageProps.alt} style={{ width: "100%" }} />)} actual={({ imageProps }) => (<img {...imageProps} style={{ width: "100%" }} alt={data.Id} />)} /></Link> <div className="play-icon-1"> <img src="assets/play-icon.svg" alt='play-icon' onClick={() => this.playTracksDirectly(data.Id)} /></div> </div>)
 
         const forGenre = genreSection.map(data => <> <Link component={Link} to={`/album/genre/` + data.Name}> <LazyImage src={data.ThumbnailImageWeb} className="genre-image" alt={data.Id}
             debounceDurationMs={1} style={{ width: "100%", height: "100%" }} placeholder={({ imageProps, ref }) => (<img ref={ref} src={`assets/slider.jpg`} alt={imageProps.alt} style={{ width: "100%" }} />)} actual={({ imageProps }) => (<img {...imageProps} style={{ width: "100%" }} alt={data.Id} />)} /> <h6 className="genre-name">{data.Name}</h6> </Link></>)
 
-        const forNew = newSection.map((data, index) => <> <div className="new-1"> <Link component={Link} to={`/album/` + data.Id + `/` + data.Name}> <LazyImage src={data.ThumbnailImageWeb} alt={data.Id}
-            debounceDurationMs={1} className="new1-image" style={{ width: "100%", height: "100%" }} placeholder={({ imageProps, ref }) => (<img ref={ref} src={`assets/150.svg`} alt={imageProps.alt} style={{ width: "100%" }} />)} actual={({ imageProps }) => (<img {...imageProps} style={{ width: "100%" }} alt={data.Id} />)} /> <h6>{data.Name}</h6> </Link> <div className="play-icon"> <img src="assets/play-icon.svg" alt='play-icon' onClick={() => this.playTracksDirectly(data.Id)} /> </div> </div> <div className="new-2"> <Link component={Link} to={`/album/` + newSection2[index].Id + `/` + newSection2[index].Name}> <LazyImage src={newSection2[index].ThumbnailImageWeb} alt={newSection2[index].Id}
-                debounceDurationMs={1} className="new2-image" style={{ width: "100%", height: "100%" }} placeholder={({ imageProps, ref }) => (<img ref={ref} src={`assets/150.svg`} alt={imageProps.alt} style={{ width: "100%" }} />)} actual={({ imageProps }) => (<img {...imageProps} style={{ width: "100%" }} alt={newSection2[index].Id} />)} /> <h6>{newSection2[index].Name}</h6></Link> <div className="play-icon"> <img src="assets/play-icon.svg" alt='play-icon' onClick={() => this.playTracksDirectly(data.Id)} /> </div> </div> </>)
+        const forNew = newSection.map((data, index) => <> 
+        <div className="new-1"> 
+        <Link component={Link} to={`/album/` + data.Id + `/` + data.Name}> 
+        <LazyImage src={data.ThumbnailImageWeb} alt={data.Id} debounceDurationMs={1} className="new1-image" style={{ width: "100%", height: "100%" }} placeholder={({ imageProps, ref }) => (<img ref={ref} src={`assets/150.svg`} alt={imageProps.alt} style={{ width: "100%" }} />)} actual={({ imageProps }) => (<img {...imageProps} style={{ width: "100%" }} alt={data.Id} />)} /> <h6>{data.Name}</h6> </Link> <div className="play-icon"> <img src="assets/play-icon.svg" alt='play-icon' onClick={() => this.playTracksDirectly(data.Id)} /> </div> </div> <div className="new-2"> <Link component={Link} to={`/album/` + newSection2[index].Id + `/` + newSection2[index].Name}>
+        <LazyImage src={newSection2[index].ThumbnailImageWeb} alt={newSection2[index].Id} debounceDurationMs={1} className="new2-image" style={{ width: "100%", height: "100%" }} placeholder={({ imageProps, ref }) => (<img ref={ref} src={`assets/150.svg`} alt={imageProps.alt} style={{ width: "100%" }} />)} actual={({ imageProps }) => (<img {...imageProps} style={{ width: "100%" }} alt={newSection2[index].Id} />)} /> <h6>{newSection2[index].Name}</h6></Link> <div className="play-icon"> <img src="assets/play-icon.svg" alt='play-icon' onClick={() => this.playTracksDirectly(newSection2[index].Id)} /> </div> </div> </>)
 
         const forPopular = popularSection.map(data => <> <Link component={Link} to={`/album/` + data.Id + `/` + data.Name}> <LazyImage src={data.ThumbnailImageWeb} alt={data.Id}
             debounceDurationMs={1} className="popular-image" style={{ width: "100%", height: "100%" }} placeholder={({ imageProps, ref }) => (<img ref={ref} src={`assets/150.svg`} alt={imageProps.alt} style={{ width: "100%" }} />)} actual={({ imageProps }) => (<img {...imageProps} style={{ width: "100%" }} alt={data.Id} />)} /> <h6>{data.Name}</h6> </Link> <div className="play-icon"> <img src="assets/play-icon.svg" alt='play-icon' onClick={() => this.playTracksDirectly(data.Id)} /> </div> </>)

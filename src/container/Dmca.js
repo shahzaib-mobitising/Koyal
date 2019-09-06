@@ -1,14 +1,5 @@
 import React from "react";
-import {
-  FormControl,
-  Input,
-  Button,
-  Icon,
-  InputLabel,
-  Grid
-} from "@material-ui/core";
 import axios from 'axios'
-
 import useForm from 'react-hook-form'
 
 const Dmca = () => {
@@ -129,7 +120,8 @@ const Dmca = () => {
             {/* errors will return when field validation fails  */}
             {errors.url && <span>This field is required</span>}
 
-            <input type="submit" />
+            {/* <input type="submit" /> */}
+            <input className="DMCAButton" type="submit" />
           </form>
 
 

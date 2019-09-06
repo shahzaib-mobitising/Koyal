@@ -1,6 +1,8 @@
 import React, { Component } from 'react'
 import axios from 'axios'
 import { withGlobalState } from 'react-globally'
+import PlayerMenuQueue from './PlayerMenuQueue'
+
 //import { SortablePane, Pane } from 'react-sortable-pane';
 
 
@@ -52,6 +54,7 @@ class Queue extends Component {
                         trackAlbumImage: respo[0].ThumbnailImageWeb,
                         trackAlbumName: respo[0].Album,
                         trackGlobalName: respo[0].Name,
+                        queueState: dataTrack
                     })
 
 
@@ -61,21 +64,31 @@ class Queue extends Component {
                         trackAlbumImage: respo[0].ThumbnailImageWeb,
                         trackAlbumName: respo[0].Album,
                         trackGlobalName: respo[0].Name,
+                        queueState: dataTrack
                     })
 
                 }
             })
             .catch(error => {
                 console.log(error)
-                this.setState({ errMsg: 'Error Data' })
+
             })
     }
 
 
     componentDidUpdate(prevProps, prevState) {
 
+        let mergeList;
 
-        let mergeList = this.state.oldArray.concat(this.props.TrackData)
+        if (this.state.oldArray.length === 0) {
+            mergeList = this.props.TrackData
+        } else {
+            mergeList = this.state.oldArray.concat(this.props.TrackData)
+
+        }
+
+
+        // console.log(mergeList)
 
         if (JSON.parse(localStorage.getItem('queuelist'))) {
             mergeList = JSON.parse(localStorage.getItem('queuelist')).concat(this.props.TrackData)
@@ -99,8 +112,6 @@ class Queue extends Component {
             localStorage.setItem('queuelist', JSON.stringify(this.state.oldArray));
         }
 
-
-
     }
 
     shouldComponentUpdate(newProps, newState) {
@@ -110,65 +121,123 @@ class Queue extends Component {
     render() {
 
 
-        // let cacheStory =  JSON.parse(localStorage.getItem('queuelist'))
+        let cacheStory = JSON.parse(localStorage.getItem('queuelist'))
         let orignalTracks = this.state.oldArray
-        // let finalList ;
+        let finalList;
+        //console.log(cacheStory)
 
-        // if(orignalTracks.length === 0){
-        //             finalList = cacheStory
-        // }else{
-        //     finalList = orignalTracks
-        // }
+        if (orignalTracks.length === 0) {
+            finalList = cacheStory
+        } else {
+            finalList = orignalTracks
+        }
 
         return (
             <>
-                <div className="queueDrawer">
+                {/* <div className="queueDrawer">
                     <div className="queueWrapper">
                         <div className="queueTopBar"><h4>QUEUE</h4></div>
                         <div className="queueMiddleBar">
                             <ul className="scrollQue">
+                                <h3 className="nwplyng">Now Playing</h3>
                                 {
-                                    orignalTracks.map(val => (
-                                        <li className="queueTrackList" key={val.track_id} data-id={val.track_id} onClick={() => this.clickOnTrack(val.track_id)}>
-                                            <div className="trackItem">
-                                                <div style={{ backgroundImage: `url('${val.thumbnailImage}')` }} className="trackImage">
-                                                    <img src={val.thumbnailImage} alt={val.trackName} />
-                                                    {/* <span className="hoverPlayIcon">  </span> */}
-                                                    {/* <i className="material-icons">
-                                                    play_circle_filled_white </i> */}
-                                                </div>
-                                                <div className="trackMeta">
-                                                    <h5>{val.trackName}</h5>
-                                                    <p>{val.albumName} </p>
+                                    cacheStory === null ? <>No Data</> :
+                                        finalList.map(val => (
+                                            <li className="queueTrackList" key={val.track_id} data-id={val.track_id} onClick={() => this.clickOnTrack(val.track_id)}>
+                                                <div className="trackItem">
+
+                                                    <div style={{ backgroundImage: `url('${val.thumbnailImage}')` }} className="trackImage">
+                                                        <img src={val.thumbnailImage} alt={val.trackName} />
+                                                    </div>
+                                                    <div className="trackMeta">
+
+                                                        <div className="metaNames">
+                                                            <h5>{val.trackName}</h5>
+                                                            <p>{val.albumName} </p>
+                                                        </div>
+                                                        <div className="cancelQueTrack">
+
+
+                                                            <PlayerMenu
+                                                                albumImage={val.thumbnailImage}
+                                                                trackName={val.trackName}
+                                                                albumName={val.albumName}
+                                                                artistName={val.albumName}
+                                                                pageURL={window.location.href}
+                                                            />
+                                                        </div>
+                                                    </div>
 
                                                 </div>
-                                                {/* <div className="trackMetaOptions">
-                                                <div className="removeTrackBtn">
-                                                    <i class="material-icons"> close </i>
-                                                </div>
-                                            </div> */}
-                                            </div>
-                                        </li>))
+                                            </li>))
                                 }
                             </ul>
 
-                            {/* <SortablePane
-                            direction="vertical"
-                            isSortable={true}
-                            margin={20}
-                        >
-                            {/* <Pane id={0} key={0} width={120} height="100%">
-                                <p>0</p>
-                            </Pane>
-                            <Pane id={1} key={1} width={120} height="100%">
-                                <p>1</p>
-                            </Pane> */}
-
-                            {/* </SortablePane> */}
 
                         </div>
                     </div>
                 </div>
+            */}
+
+                <div className="queueDrawer">
+                    <div className="queueWrapper">
+                        <div className="queueTopBar">
+                            {/* <h4>QUEUE</h4> */}
+                            {/* <h3 className="nwplyng">Now Playing</h3> */}
+                        </div>
+
+                        <div className="queueMiddleBar">
+                            <ul className="scrollQue">
+                                {cacheStory === null ? (
+                                    <>No Data</>
+                                ) : (
+                                        finalList.map(val => (
+                                            <li
+                                                className="queueTrackList"
+                                                key={val.track_id}
+                                                data-id={val.track_id}
+                                                onClick={() => this.clickOnTrack(val.track_id)}
+                                            >
+
+
+                                                <div className="trackItem">
+                                                    <div
+                                                        style={{
+                                                            backgroundImage: `url('${val.thumbnailImage}')`
+                                                        }}
+                                                        className="trackImage"
+                                                    >
+                                                        <img src={val.thumbnailImage} alt={val.trackName} />
+
+                                                    </div>
+
+                                                    <div className="trackMeta">
+                                                        <div className="metaNames">
+                                                            <h5>{val.trackName}</h5>
+                                                            <p>{val.albumName} </p>
+                                                        </div>
+                                                        <div className="cancelQueTrack">
+                                                            <i className="material-icons cancel_button_css"> cancel </i>
+                                                            <PlayerMenuQueue
+                                                                albumImage={val.thumbnailImage}
+                                                                trackName={val.trackName}
+                                                                albumName={val.albumName}
+                                                                artistName={val.albumName}
+                                                                pageURL={window.location.href}
+                                                            />
+                                                        </div>
+                                                    </div>
+
+                                                </div>
+                                            </li>
+                                        ))
+                                    )}
+                            </ul>
+
+                        </div>
+                    </div>
+                </div>
+
             </>
         )
     }

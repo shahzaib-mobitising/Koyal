@@ -10,7 +10,6 @@ import Rating from '@material-ui/lab/Rating';
 import FavoriteIcon from '@material-ui/icons/Favorite';
 import TrackLikeOption from '../component/TrackLikeOption';
 import { LazyImage } from "react-lazy-images";
-import Ringtone2 from '../component/Ringtone2';
 import DownloadTrack from '../component/DownloadTrack';
 
 
@@ -74,7 +73,7 @@ class TrackView extends Component {
             })
             .catch(error => {
                 console.log(error)
-                this.setState({ errMsg: 'Error Data' })
+               
             })
 
     }
@@ -275,7 +274,7 @@ class TrackView extends Component {
             })
             .catch(error => {
                 console.log(error)
-                this.setState({ errMsg: 'Error Post Data' })
+                
             })
     }
 
@@ -290,7 +289,7 @@ class TrackView extends Component {
             msTransition: 'all' // 'ms' is the only lowercase vendor prefix
         };
 
-        console.log(trackData)
+    
 
         return (
 
@@ -351,7 +350,7 @@ class TrackView extends Component {
                                         <li className="trackCol2"></li>
                                         <li className="trackCol3">Title</li>
                                         <li className="trackCol4">Artist</li>
-                                        <li className="trackCol5"><i class="material-icons">access_time </i></li>
+                                        <li className="trackCol5"><i className="material-icons">access_time </i></li>
                                         <li className="trackCol6">Popularity</li>
                                         <li className="trackCol7"></li>
                                         <li className="trackCol8"></li>
@@ -367,7 +366,7 @@ class TrackView extends Component {
                                                     {this.props.globalState.track_exist === data.TrackId ?
 
 
-                                                        <i class="material-icons pause-icon">
+                                                        <i className="material-icons pause-icon">
                                                             pause_circle_outline
 </i>
                                                         :
@@ -442,7 +441,7 @@ class TrackView extends Component {
                                                 <div className="trackCol6">
 
                                                     <Rating
-                                                        value={data.TrackRanking}
+                                                        value={`${data.TrackRanking}`}
                                                         readOnly
                                                         icon={<FavoriteIcon fontSize="inherit" />}
                                                         className="ratingTrack"

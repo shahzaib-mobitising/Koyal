@@ -80,23 +80,12 @@ const useStyles4 = makeStyles(theme => ({
     }
 }));
 
-const useStyles5 = makeStyles(theme => ({
-    root: {
-        width: "100%",
-        // maxWidth: 360,
-        backgroundColor: theme.palette.background.paper
-    },
-    inline: {
-        display: "inline"
-    }
-}));
 
 const Ringtone = props => {
     const classes = useStyles();
     const classes2 = useStyles2();
     const classes3 = useStyles3();
     const classes4 = useStyles4();
-    const classes5 = useStyles5();
 
     const [open, setOpen] = React.useState(false);
 
@@ -197,7 +186,7 @@ const Ringtone = props => {
         axios.post(`http://api.koyal.pk/musicapp/?request=send-verify-rbt-react`, values)
             .then(response => {
 
-                console.log(response.data.Response)
+               
 
                 setLoading(values => ({
                     ...values,
@@ -206,7 +195,7 @@ const Ringtone = props => {
             })
             .catch(error => {
                 console.log(error)
-                this.setState({ errMsg: 'Error Post Data' })
+               
             })
     }
 
@@ -230,14 +219,10 @@ const Ringtone = props => {
                     alert('Incorrect RBT Verification Code.')
                 }
 
-
-
-
-
             })
             .catch(error => {
                 console.log(error)
-                this.setState({ errMsg: 'Error Post Data' })
+               
             })
 
     }

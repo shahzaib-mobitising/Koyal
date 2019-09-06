@@ -49,14 +49,14 @@ class SingleTrackView extends Component {
                 },
                     () => {
                         //console.log('did mount')
-                        console.log(this.state.albumData)
+                       
                         this.getDataTracks()
                     }
                 )
             })
             .catch(error => {
                 console.log(error)
-                this.setState({ errMsg: 'Error Data' })
+               
             })
 
     }
@@ -267,7 +267,7 @@ class SingleTrackView extends Component {
                                         <li className="trackCol2"></li>
                                         <li className="trackCol3">Title</li>
                                         <li className="trackCol4">Artist</li>
-                                        <li className="trackCol5"><i class="material-icons">access_time </i></li>
+                                        <li className="trackCol5"><i className="material-icons">access_time </i></li>
                                         <li className="trackCol6">Popularity</li>
                                         <li className="trackCol7"></li>
                                         <li className="trackCol8"></li>
@@ -281,7 +281,7 @@ class SingleTrackView extends Component {
 
                                                     {this.props.globalState.track_exist === data.TrackId ?
 
-                                                        <i class="material-icons pause-icon">
+                                                        <i className="material-icons pause-icon">
                                                             pause_circle_outline
 </i>
                                                         :

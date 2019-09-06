@@ -20,11 +20,11 @@ export default class LazyLoadPost extends Component {
                 this.setState({
                     slider: response.data
                 })
-                console.log(this.state.posts)
+              
             })
             .catch(error => {
                 console.log(error)
-                this.setState({ errMsg: 'Error Data' })
+              
             })
     }
 

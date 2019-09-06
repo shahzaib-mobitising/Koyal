@@ -148,7 +148,7 @@ const searchWords = [
 function AlphabetViewMoreCustom(props) {
 
     const alphabetHtml = searchWords.map(val =>
-        <div key={val.id} class="item">
+        <div key={val.id} className="item">
 
             <NavLink
 

@@ -1,10 +1,8 @@
 import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import ClickAwayListener from '@material-ui/core/ClickAwayListener';
-import Button from '@material-ui/core/Button';
 import Paper from '@material-ui/core/Paper';
 import { grey } from '@material-ui/core/colors';
-
 import IconButton from '@material-ui/core/IconButton';
 import MoreVertIcon from '@material-ui/icons/MoreVert';
 import TrackLikeOption from './TrackLikeOption';
@@ -47,8 +45,6 @@ export default function PlayerMenu(props) {
     setOpen(false);
   };
 
-  const fake = <div className={classes.fake} />;
-
   return (
     <div className={classes.root}>
       <ClickAwayListener onClickAway={handleClickAway}>
@@ -60,45 +56,43 @@ export default function PlayerMenu(props) {
             <MoreVertIcon />
           </IconButton>
           {open ? (
-            <Paper className={classes.paper}>
-
+          
+          <Paper className={classes.paper}>
               <div className="playerOptionsExtra">
-              <div class={classes.gap}></div>
+                <div class={classes.gap}></div>
                 <ul className="view">
-                  <img src="/assets/download_black.png" alt='Download'></img>
+                  <img src="/assets/download_black.png" alt="Download"></img>
                   <li>&nbsp;&nbsp;Download</li>
                 </ul>
                 <ul className="view">
-                  {/* <img src="/assets/like_black.png" alt='Like'></img> */}
-                  <li><TrackLikeOption
-
+                  {/* <TrackLikeOption
                     albumImage={props.albumImage}
                     trackName={props.trackName}
                     albumName={props.albumName}
                     artistName={props.artistName}
                     pageURL={props.pageURL}
-
-                  />Like</li>
+                  /> */}
+                  &nbsp;&nbsp;Like
                 </ul>
                 <ul className="view">
-                  <img src="/assets/share_black.png" alt='Share'></img>
-                  <li>
-                    <TrackShareOptions
+               
+                    {/* <TrackShareOptions
                       albumImage={props.albumImage}
                       trackName={props.trackName}
                       albumName={props.albumName}
                       artistName={props.artistName}
                       pageURL={props.pageURL}
-                    />
-                  </li>
+                    /> */}
+                    &nbsp;&nbsp;Share
+               
                 </ul>
                 <ul className="viewWithOutBorder">
-                  <img src="/assets/ringtone_black.png" alt='Ringtone'></img>
+                  <img src="/assets/ringtone_black.png" alt="Ringtone"></img>
                   <li>&nbsp;&nbsp;Caller Tune</li>
                 </ul>
               </div>
-
             </Paper>
+
           ) : null}
         </div>
       </ClickAwayListener>

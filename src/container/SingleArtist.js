@@ -37,11 +37,11 @@ export default class SingleArtist extends Component {
                     artistTracks: response.data.Response.Tracks,
                     loadingData: false
                 })
-                console.log(response)
+               
             })
             .catch(error => {
                 console.log(error)
-                this.setState({ errMsg: 'Error Data' })
+                
             })
 
     }
@@ -64,7 +64,7 @@ export default class SingleArtist extends Component {
             })
             .catch(error => {
                 console.log(error)
-                this.setState({ errMsg: 'Error Post Data' })
+               
             })
     }
 
@@ -146,7 +146,7 @@ export default class SingleArtist extends Component {
                                         <li className="trackCol3 atistiPageTitle">Title</li>
                                         <li className="trackCol4">Artist</li>
                                         <li className="artistAlbumCol">Album</li>
-                                        {/* <li className="trackCol5"><i class="material-icons">access_time </i></li> */}
+                                        {/* <li className="trackCol5"><i className="material-icons">access_time </i></li> */}
                                         <li className="trackCol6">Popularity</li>
                                         {/* <li className="trackCol7"></li>
                                         <li className="trackCol8"></li>
