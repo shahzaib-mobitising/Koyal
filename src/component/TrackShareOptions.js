@@ -101,12 +101,14 @@ export default function TrackShareOptions(props) {
   const classes = useStyles();
 
   return (
-    <>
+    <span>
 
-      <img src='/assets/share_black.png' alt="share" onClick={handleClickOpen} />
+      {/* <img src='/assets/share_black.png' alt="share" onClick={handleClickOpen} /> */}
+
+      <i aria-hidden="true" class="share icon" onClick={handleClickOpen}></i>
 
       {/* Share Screen start */}
-      <Dialog
+      <Dialog className="dialog_share"
         open={open}
         onClose={handleClose}
         aria-labelledby="alert-dialog-title"
@@ -114,9 +116,9 @@ export default function TrackShareOptions(props) {
       >
         <DialogTitle id="alert-dialog-title">
           <Grid container spacing={0}>
-            <Grid item xs={2}></Grid>
-            <Grid item xs={8}>
-              <div className="AlignMeCenter"><b>Share</b></div>
+            {/* <Grid item xs={2}></Grid> */}
+            <Grid item xs={12}>
+              <div className="AlignMeCenter share_text"><b>Share</b></div>
             </Grid>
             {/* <Grid item xs={2}>
               <div className="SearchMaterialIcon">
@@ -125,11 +127,11 @@ export default function TrackShareOptions(props) {
                 </Button>
               </div>
             </Grid> */}
-            <Grid item xs={2}>
+            {/* <Grid item xs={2}>
               <div onClick={handleClose} className={classes.closeTag}>
                 <i className="material-icons">close</i>
               </div>
-            </Grid>
+            </Grid> */}
           </Grid>
         </DialogTitle>
 
@@ -137,24 +139,23 @@ export default function TrackShareOptions(props) {
 
         <DialogContent>
           <DialogContentText id="alert-dialog-description">
-            <div className="DialogContent">
+            <div className="DialogContent contect_center">
               <div className="ContentRef">
                 <Grid container spacing={1}>
-                  <Grid item xs={3}></Grid>
-                  <Grid item xs={6}>
+                  {/* <Grid item xs={3}></Grid> */}
+                  <Grid item xs={12}>
 
-                    <div className={classes.AlbumImg}>
+                    <div className={classes.AlbumImg} className="Album_img">
                       <div className={classes.SquareImg}>
                         <img src={props.albumImage} alt={props.trackName} />
                       </div>
                     </div>
 
-
                   </Grid>
-                  <Grid item xs={3}></Grid>
+                  {/* <Grid item xs={3}></Grid> */}
                 </Grid>
               </div>
-              <div>
+              <div className="trackName">
                 {/* <h3>{props.trackName}</h3> */}
                 <p className={classes.TrackName}>{props.trackName}</p>
               </div>
@@ -171,7 +172,7 @@ export default function TrackShareOptions(props) {
         <DialogActions>
           <div ClassName="DialogFooterCustome">
             {/* <p>Share on</p> */}
-            <p className={classes.FooterTitle}>Share on</p>
+            <p className={classes.FooterTitle} className="share_on">Share on</p>
             <div className="socialIconsShare">
               <a
                 target="_blank" rel="noopener noreferrer"
@@ -186,15 +187,22 @@ export default function TrackShareOptions(props) {
 
               <a
                 target="_blank" rel="noopener noreferrer"
-                href={`http://www.facebook.com/sharer/sharer.php?u=https://www.koyal.pk/`}
+                href={`http://www.facebook.com/sharer/sharer.php?u=${window.location.href}`}
               >
                 <img src="/assets/fb.svg" alt="facebook" />
               </a>
 
               {/* <CopyToClipboard /> */}
               {/* <ReactFBLike /> */}
-
-
+            </div>
+            <div className="LineBreak"></div>
+            <div className="urlShareIcon">
+              <span>
+                <img src="https://cdn2.iconfinder.com/data/icons/web/512/Link-512.png" alt="link" />
+              </span>
+              <div className="shareurllink">
+                <input type="text" value={window.location.href} />
+              </div>
             </div>
           </div>
         </DialogActions>
@@ -202,6 +210,6 @@ export default function TrackShareOptions(props) {
       </Dialog>
 
 
-    </>
+    </span>
   );
 }

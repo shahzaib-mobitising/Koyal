@@ -1,8 +1,6 @@
 import React from 'react'
-import OwlCarousel from 'react-owl-carousel';
-import 'owl.carousel/dist/assets/owl.carousel.css';
-import 'owl.carousel/dist/assets/owl.theme.default.css';
 import { NavLink } from 'react-router-dom'
+import LanguageBarCustom2 from './LanguageBarCustom2'
 
 
 const searchWords = [
@@ -143,40 +141,30 @@ const searchWords = [
     }
 ]
 
-
-
 function AlphabetViewMoreCustom(props) {
 
     const alphabetHtml = searchWords.map(val =>
-        <div key={val.id} className="item">
 
-            <NavLink
-
-                to={`/explore/sort/` + props.languageCurrent + val.url}
-
-                activeStyle={{
-                    backgroundColor: "rgb(236, 41, 123)",
-                    color: "white",
-                    borderRadius: "20px"
-                }}>
-                {val.langName}
-            </NavLink>
-        </div>
-
+        <NavLink
+            key={val.id}
+            to={`/explore/sort/${props.languageCurrentType}/${props.languageCurrent}${val.url}`}
+            activeStyle={{
+                backgroundColor: "rgb(236, 41, 123)",
+                color: "white",
+                borderRadius: "100px"
+            }}>
+            {val.langName}
+        </NavLink>
 
     )
 
-
     return (
-        <div className="alphabetCarousel">
+        <div className="langBar_AlphaBox">
+            <LanguageBarCustom2 type={props.languageCurrentType} title={props.languageCurrent} />
+            <div className="alphabetCarousel">
 
-            <OwlCarousel
-                className="owl-theme"
-                items={14}
-                dots={false}
-            >
                 {alphabetHtml}
-            </OwlCarousel>
+            </div>
         </div>
     )
 }

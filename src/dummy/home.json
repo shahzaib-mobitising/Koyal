@@ -9,22 +9,22 @@
                     {
                         "Id": "1",
                         "Name": "",
-                        "SliderImageWeb": "/assets/slider.svg"
+                        "SliderImageWeb": "/assets/slider.jpg"
                     },
                     {
                         "Id": "2",
                         "Name": "",
-                        "SliderImageWeb": "/assets/slider.svg"
+                        "SliderImageWeb": "/assets/slider.jpg"
                     },
                     {
                         "Id": "3",
                         "Name": "",
-                        "SliderImageWeb": "/assets/slider.svg"
+                        "SliderImageWeb": "/assets/slider.jpg"
                     },
                     {
                         "Id": "4",
                         "Name": "",
-                        "SliderImageWeb": "/assets/slider.svg"
+                        "SliderImageWeb": "/assets/slider.jpg"
                     }
                 ]
             },

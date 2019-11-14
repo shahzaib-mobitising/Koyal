@@ -26,7 +26,7 @@ import { Link } from "react-router-dom";
 import Grid from "@material-ui/core/Grid";
 
 const Transition = React.forwardRef(function Transition(props, ref) {
-  return <Slide direction="up" ref={ref} {...props} />;
+  return <Slide direction="down" ref={ref} {...props} />;
 });
 
 function TabContainer(props) {
@@ -56,9 +56,15 @@ function SearchView() {
 
   function handleClose() {
     setOpen(false);
+    setSearchDataupdate(values => ({
+      ...values,
+      searchDataTrack: searchDummyJson.Response.SearchResult.Tracks,
+      searchDataAlbum: searchDummyJson.Response.SearchResult.Albums,
+      searchDataArtist: searchDummyJson.Response.SearchResult.Artists
+    }));
   }
 
-  const [value, setValue] = React.useState("one");
+  const [value, setValue] = React.useState("two");
 
   function handleChange(event, newValue) {
     setValue(newValue);
@@ -73,7 +79,7 @@ function SearchView() {
   function getInfo(param) {
     axios
       .get(
-        `http://www.staging.koyal.pk/musicapp/?request=search-react&keyword=${param}&limit=20`
+        `https://api.koyal.pk/musicapp/?request=search-react&keyword=${param}&limit=20`
       )
       .then(response => {
         console.log(response);
@@ -90,35 +96,28 @@ function SearchView() {
       });
   }
 
-  // const trackView = (
-  //   <Grid container spacing={0}>
-  //     {searchData.searchDataTrack.map(track => (
-  //       <Grid item xs={3} key={track.TrackId}>
-  //         <List className="trackListView">
-  //           <ListItem alignItems="flex-start">
-  //             <ListItemAvatar>
-  //               <Avatar alt={track.Name} src={track.ThumbnailImageWeb} />
-  //             </ListItemAvatar>
-  //             <Link
-  //               onClick={handleClose}
-  //               component={Link}
-  //               to={`/track/` + track.TrackId + `/` + track.Name}
-  //             >
-  //               {" "}
-  //               <ListItemText primary={track.Name} />
-  //             </Link>
-  //           </ListItem>
+  function ToSeoUrl(url) {
 
-  //           <Divider variant="inset" component="li" />
-  //         </List>
-  //       </Grid>
-  //     ))}
-  //   </Grid>
-  // );
+    // make the url lowercase         
+    var encodedUrl = url.toString().toLowerCase();
 
-  
+    // replace & with and           
+    encodedUrl = encodedUrl.split(/&+/).join("-and-")
+
+    // remove invalid characters 
+    encodedUrl = encodedUrl.split(/[^a-z0-9]/).join("-");
+
+    // remove duplicates 
+    encodedUrl = encodedUrl.split(/-+/).join("-");
+
+    // trim leading & trailing characters 
+    encodedUrl = encodedUrl.trim('-');
+
+    return encodedUrl;
+  }
+
   const trackViewMobile = (
-    <Grid container spacing={0}>
+    <Grid container spacing={0} className="trackSpace">
       {searchData.searchDataTrack.map(track => (
         <Grid item xs={12} key={track.TrackId}>
           <List className="trackListView">
@@ -128,10 +127,10 @@ function SearchView() {
               </ListItemAvatar>
               <Link
                 onClick={handleClose}
-                component={Link}
-                to={`/track/` + track.TrackId + `/` + track.Name}
+
+                to={`/track/` + track.TrackId + `/` + ToSeoUrl(track.Name)}
               >
-                {" "}
+                {""}
                 <ListItemText primary={track.Name} />
               </Link>
             </ListItem>
@@ -146,16 +145,16 @@ function SearchView() {
   const trackView4Desktop = (
     <Grid container spacing={0}>
       {searchData.searchDataTrack.map(track => (
-        <Grid item xs={3} key={track.TrackId}>
+        <Grid item xs={3} md={3} key={track.TrackId}>
           <List className="trackListView">
-            <ListItem alignItems="flex-start">
+            <ListItem alignItems="center">
               <ListItemAvatar>
                 <Avatar alt={track.Name} src={track.ThumbnailImageWeb} />
               </ListItemAvatar>
               <Link
                 onClick={handleClose}
-                component={Link}
-                to={`/track/` + track.TrackId + `/` + track.Name}
+
+                to={`/track/` + track.TrackId + `/` + ToSeoUrl(track.Name)}
               >
                 <ListItemText primary={track.Name} />
               </Link>
@@ -171,16 +170,16 @@ function SearchView() {
   const trackView3Desktop = (
     <Grid container spacing={0}>
       {searchData.searchDataTrack.map(track => (
-        <Grid item xs={4} key={track.TrackId}>
+        <Grid item xs={4} md={3} key={track.TrackId}>
           <List className="trackListView">
-            <ListItem alignItems="flex-start">
+            <ListItem >
               <ListItemAvatar>
                 <Avatar alt={track.Name} src={track.ThumbnailImageWeb} />
               </ListItemAvatar>
               <Link
                 onClick={handleClose}
-                component={Link}
-                to={`/track/` + track.TrackId + `/` + track.Name}
+
+                to={`/track/` + track.TrackId + `/` + ToSeoUrl(track.Name)}
               >
                 <ListItemText primary={track.Name} />
               </Link>
@@ -194,15 +193,15 @@ function SearchView() {
   );
 
   const albumView = (
-    <Grid container spacing={7}>
+    <Grid container spacing={3} className="album_serach">
       {" "}
       {searchData.searchDataAlbum.map((i, index) => (
-        <Grid key={i.Id} item xs={2} className="album_grid">
+        <Grid key={i.Id} item xs={4} md={2} className="album_grid">
           <Card className="viewMoreBox">
             <Link
               onClick={handleClose}
-              component={Link}
-              to={`/album/` + i.Id + `/` + i.Name}
+
+              to={`/album/` + i.Id + `/` + ToSeoUrl(i.Name)}
             >
               <CardActionArea>
                 <CardMedia
@@ -223,24 +222,17 @@ function SearchView() {
       ))}
     </Grid>
   );
-
-  // const artistView = searchData.searchDataArtist.map(album => <Col sm="2" key={album.Id}>
-  //     <Link onClick={handleClose} component={Link} to={`/artist/` + album.Id + `/` + album.Name}>
-  //         <Card className={classes.card}> <CardActionArea>
-  //             <CardMedia className={classes.media} image={album.ThumbnailImageWeb} title={album.Name} /><CardContent>
-  //                 <Typography variant="h6" gutterBottom>{album.Name}</Typography></CardContent></CardActionArea></Card></Link></Col>
-  // )
 
   const artistView = (
-    <Grid container spacing={7}>
+    <Grid container spacing={3} className="mobileSpace album_serach artist_v_search" >
       {" "}
       {searchData.searchDataArtist.map((i, index) => (
-        <Grid key={i.Id} item xs={2} className="album_grid">
+        <Grid key={i.Id} item xs={4} md={2} className="album_grid">
           <Card className="viewMoreBox">
             <Link
               onClick={handleClose}
-              component={Link}
-              to={`/artist/` + i.Id + `/` + i.Name}
+
+              to={`/artist/` + i.Id + `/` + ToSeoUrl(i.Name)}
             >
               <CardActionArea>
                 <CardMedia
@@ -261,6 +253,8 @@ function SearchView() {
       ))}
     </Grid>
   );
+
+
 
   return (
     <div className="searchMainBox">
@@ -293,15 +287,15 @@ function SearchView() {
           </Toolbar>
         </AppBar>
 
-        <div className="searchResultContainer">
-          <AppBar position="static">
+        <div className="searchResultContainer alignitems">
+          <AppBar position="static" className="SearchUpperDiv">
             <Tabs value={value} onChange={handleChange}>
-              <Tab value="one" label="Tracks" wrapped />
               <Tab value="two" label="Albums" />
               <Tab value="three" label="Artist" />
+              <Tab value="one" label="Tracks" wrapped />
             </Tabs>
           </AppBar>
-          
+
           <div className="checkClassMobile">
             {value === "one" && <TabContainer> {trackViewMobile} </TabContainer>}
           </div>
@@ -312,7 +306,7 @@ function SearchView() {
           <div className="ClassDesktopView2">
             {value === "one" && <TabContainer> {trackView4Desktop} </TabContainer>}
           </div>
-          
+
           {/* {value === "one" && <TabContainer> {trackView} </TabContainer>} */}
           {value === "two" && <TabContainer> {albumView} </TabContainer>}
           {value === "three" && <TabContainer>{artistView}</TabContainer>}

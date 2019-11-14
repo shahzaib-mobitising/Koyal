@@ -1,0 +1,1272 @@
+.trackActive,
+.trackNotActive {
+  position: relative;
+}
+
+.activeTrackName, .activeTrackName i.icon.ellipsis.horizontal:before {
+  font-weight: bold;
+  color: #273d93 !important;
+}
+
+.MuiTypography-body1,
+.MuiTypography-h6 {
+  font-family: "Ubuntu" !important;
+}
+.sliderBox .sliderItemDesktop .ui.fluid.card {
+  margin-right: -3px;
+  margin-left: 14px;
+  width: calc(34.333333% - 2em);
+}
+
+.sliderBox .sliderItemMobile .ui.fluid.card {
+  width: calc(55% - 48px);
+  margin-left: 20px;
+  margin-right: 0px;
+}
+
+/* .albumItemMobile .ui.fluid.card {
+  width: 80px !important;
+  margin-left: 13px !important;
+  margin-right: -7px !important;
+} */
+
+.sliderBox .sliderItemMobile .ui.fluid.card .rectangular.image {
+  padding-top: 106px;
+}
+
+.trackActive img,
+.trackNotActive img {
+  position: absolute !important;
+  opacity: 1;
+  z-index: -1;
+}
+
+.sliderItem,
+.SquareItem {
+  margin: 5px;
+}
+
+.sliderItem img,
+.SquareItem img {
+  border-radius: 4px;
+}
+
+.albumItem .ui.card,
+.albumItemMobile .ui.card,
+.sliderItem .ui.card, .dummyAlbumViewMore .ui.card{
+  box-shadow: none !important;
+}
+/* .albumItem .ui.card .square.image {
+  padding-top: 130px;
+} */
+/* border: none !important;
+    box-shadow: none !important; */
+.LazyImage-Actual {
+  background: url("/assets/album.jpg");
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: 100% 100%;
+  height: 130px;
+}
+
+.sliderItemDesktop .rectangular.image {
+  padding-top: 65% !important;
+}
+
+.Red {
+  background: red;
+}
+.text-center {
+  text-align: center;
+}
+.adsSide {
+  position: fixed;
+  /* display: flex; */
+  justify-content: center;
+  align-items: center;
+  flex-direction: column-reverse;
+  top: 85px;
+  text-align: center;
+}
+
+.startRadio {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.slider_heading,
+.grenre_section .home-headings {
+  font-size: 1.2em;
+  font-weight: 600;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+}
+/* Edit By Koyal Css */
+.sliderImageBox:hover .play-icon-1 {
+  transform: translateY(0%);
+}
+
+.sliderSection_1 li.alice-carousel__stage-item:hover .play-icon {
+  visibility: visible;
+}
+
+.new_hover:hover .play-icon {
+  visibility: visible;
+}
+
+.trackItem:hover .cancelQueTrack .MuiPaper-root {
+  left: -160px !important;
+}
+
+.share_text {
+  text-transform: uppercase;
+  font-size: 16px;
+  text-align: center;
+}
+
+.contect_center {
+  margin-top: 20px;
+}
+.trackName p {
+  font-size: 18px;
+  margin-top: 10px;
+  margin-bottom: 10px;
+  font-weight: 600;
+}
+.share_on {
+  margin: 5px 0;
+  font-size: 16px;
+  color: gray;
+}
+
+.makeStyles-SquareImg-279,
+.makeStyles-SquareImg-279 img {
+  border-radius: 3px;
+}
+.MuiDialog-paperWidthSm {
+  background-color: #f0f0f0;
+}
+.Album_img > div {
+  margin: 0 auto;
+}
+
+.dialog_share .MuiPaper-root {
+  background-color: #f7f7f7;
+  border-radius: 10px;
+}
+
+.like_dialogue .MuiDialog-paperWidthSm {
+  width: 350px;
+}
+.artist_name {
+  color: #9c9494;
+  margin: 0px;
+  font-size: 12px;
+}
+
+.logindiv {
+  width: 100%;
+  text-align: center;
+}
+
+.jw-reset {
+  background-color: rgb(39, 61, 147);
+}
+.divider_queue {
+  display: block;
+  width: 100%;
+  border-top: 1px dashed #ccc;
+  margin-top: 10px;
+}
+.queueTopBar .nwplyng,
+.queueTopBar .nwplyng2 {
+  font-weight: 500;
+  text-transform: uppercase;
+  font-size: 14px;
+  letter-spacing: 1px;
+  margin-top: 10px;
+}
+/* .queueTopBar .nwplyng2{
+    display: none;
+}
+
+.queueWrapper:hover .nwplyng2{
+    display: block;
+} */
+.queueWrapper:hover .nwplyng:after {
+  visibility: visible;
+}
+.nwplyng {
+  position: relative;
+}
+.nwplyng:after {
+  position: absolute;
+  content: " Playing";
+  visibility: hidden;
+  padding-left: 5px;
+}
+.MuiRating-root {
+  font-size: 1.4em !important;
+}
+.trackTitle,
+.trackArtist,
+.trackDuration,
+.trackRating {
+  line-height: 45px;
+}
+.relate-title h3,
+.relate-title h2 {
+  margin-bottom: 0px;
+  font-weight: 500;
+  font-size: 18px;
+}
+.ringtone_css .MuiDialog-paperFullScreen {
+  background-color: #f7f7f7;
+  height: auto;
+}
+.ringtone_css header {
+  box-shadow: none;
+  border-bottom: 1px solid #ececec;
+}
+.ringtone_css .MuiAppBar-colorPrimary {
+  background: transparent;
+}
+.ringtone_css h6 {
+  text-align: center;
+  text-transform: uppercase;
+  font-size: 16px;
+  font-weight: 600;
+  color: #1b1b1b;
+  width: 100%;
+}
+.ringtone_css .yourNumberHeading {
+  color: #1b1b1b;
+}
+
+.allTracksContainer .trackTableCustom .trackListHeader {
+  margin-bottom: 0px;
+  display: flex;
+  justify-content: center;
+}
+.allTracksContainer .custom_track_css .trackBody:hover .trackImg img {
+  display: inline-block;
+}
+.allTracksContainer .custom_track_css .trackListHeader {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.homeMainClass .sliderSection_1.artist_section .alice-carousel__stage-item a img {
+  border-radius: 100px;
+}
+.artist_section a p {
+  color: #9c9494;
+  text-decoration: none;
+  margin: 0px;
+  text-align: center;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+}
+.trackCol1.trackImg {
+  display: flex;
+  align-items: center;
+}
+
+.like_dialogue .MuiDialog-paperScrollPaper {
+  border-radius: 10px;
+}
+
+.bottom_layer .MuiPaper-root.MuiPaper-elevation1 {
+  top: -160px;
+  left: -50px;
+}
+
+.urlShareIcon {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 95%;
+  margin: 20px 0 20px;
+}
+.urlShareIcon span {
+  background: #9d9a9a;
+  border-radius: 2px 0 0 2px;
+  padding: 5px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.urlShareIcon img {
+  width: 20px;
+  align-items: center;
+  filter: invert(1);
+}
+.shareurllink input {
+  background: white;
+  padding: 6px;
+  border: 1px solid #dbdbdb;
+  width: 100%;
+}
+.shareurllink input:active,
+.shareurllink input:focus {
+  outline: none;
+}
+.Album_img_ringtone {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 10px 0;
+}
+.Album_img_ringtone .trackName p {
+  font-size: 14px;
+  font-weight: 500;
+  color: #9c9494;
+  margin-left: 10px;
+  margin: 0 0px 0 10px;
+}
+.Album_img_ringtone .trackName .artist_name p {
+  color: #9c9494;
+}
+.dialoge_Ringtone .MuiDialogTitle-root {
+  position: relative;
+}
+.Cross {
+  position: absolute;
+  right: 15px;
+  top: 15px;
+  color: darkgrey;
+  cursor: pointer;
+}
+.dialoge_Ringtone .MuiPaper-rounded {
+  border-radius: 15px;
+}
+p.setTune,
+.setTunec,
+.setTunesub {
+  font-size: 20px;
+  font-weight: 800;
+  text-transform: uppercase;
+  font-family: Ubuntu;
+  margin-top: 0;
+  color: #3a52bc;
+}
+.download_text {
+  margin-top: 0px;
+  color: #9c9494;
+}
+.setTunec {
+  margin-top: 25px;
+}
+.setTunesub {
+  margin-bottom: 0;
+}
+.dialoge_Ringtone .MuiPaper-root {
+  width: 300px;
+}
+.dialoge_Ringtone .MuiDialogContent-root {
+  padding-top: 0px;
+}
+.formtune {
+  width: 80%;
+  margin: 0 auto;
+}
+
+.formtune form {
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+}
+.formtune select {
+  margin: 10px 0 25px;
+  color: #7e7d7d;
+  border-width: 0px 0 1px 0px;
+  font-size: 18px;
+  text-align: center;
+  font-weight: 300;
+}
+.formtune input {
+  margin: 10px 0 35px;
+  color: #9e9e9e;
+  border-width: 0px 0 1px 0px;
+  border-color: gray;
+  font-size: 18px;
+  text-align: left;
+  font-weight: 300;
+}
+select:focus,
+input:focus {
+  outline: none;
+}
+
+.formtune button {
+  background: #3f51b5;
+  color: white;
+  text-transform: uppercase;
+  font-size: 15px;
+  border: none;
+  padding: 5px 9px;
+  border-radius: 4px;
+  width: 100%;
+  margin-bottom: 10px;
+  cursor: pointer;
+  font-family: Ubuntu;
+}
+.congs_text {
+  color: #9c9494;
+  font-size: 18px;
+  width: 75%;
+  font-weight: 300;
+  margin: 0 auto;
+}
+.button_styles {
+  background: #3f51b5;
+  color: white;
+  text-transform: uppercase;
+  font-size: 15px;
+  border: none;
+  padding: 5px 60px;
+  border-radius: 4px;
+  margin: 30px auto 10px;
+  cursor: pointer;
+  font-family: Ubuntu;
+}
+.verification_code input {
+  border-width: 0 0 1px 0;
+  text-align: center;
+  font-size: 20px;
+  color: black;
+  margin: 15px 0;
+  padding: 2px;
+}
+.verification_code a {
+  text-decoration: none;
+  color: #9c9494;
+}
+.verification_code a:hover {
+  color: #7e7d7d;
+}
+
+.homeMainClass p.alice-carousel__prev-btn-item.__inactive {
+  background: url(/assets/prev_icon-inactive.png);
+  background-repeat: no-repeat;
+  font-size: 0px;
+  background-size: 25px;
+}
+.homeMainClass p.alice-carousel__next-btn-item.__inactive {
+  background: url(/assets/next_icon-inactive.png);
+  background-repeat: no-repeat;
+  font-size: 0px;
+  background-size: 25px;
+}
+
+::placeholder {
+  /* Chrome, Firefox, Opera, Safari 10.1+ */
+  color: #7e7d7d;
+  opacity: 1; /* Firefox */
+}
+
+:-ms-input-placeholder {
+  /* Internet Explorer 10-11 */
+  color: #7e7d7d;
+}
+
+::-ms-input-placeholder {
+  /* Microsoft Edge */
+  color: #7e7d7d;
+}
+.allTracksContainer .trackGridMain1 .albumMetaBox {
+  display: flex;
+  justify-content: space-between;
+  flex-direction: column;
+}
+.allTracksContainer .trackGridMain1 .albumMetaBox .short-desc {
+  display: block;
+}
+.paragraphMobile.MuiGrid-container {
+  display: none;
+}
+.queueDrawer .cancelQueTrack .playerOptionsExtra .view img {
+  width: 100%;
+  position: absolute;
+  visibility: visible;
+  opacity: 0;
+  left: 0;
+}
+.playerOptionsExtra.bottom_player_icons .view {
+  position: relative;
+}
+.playerOptionsExtra.bottom_player_icons .view li img {
+  width: 100%;
+  position: absolute;
+  visibility: visible;
+  opacity: 0;
+  left: 0;
+}
+.viewImgLike > div {
+  display: inline;
+}
+.trackCol10 {
+  position: relative;
+  display: none;
+}
+.trackCol10 .MuiPaper-root {
+  left: -161px;
+  top: 15px;
+  z-index: 99;
+}
+.trackCol10 .MuiPaper-root > div,
+.trackCol10 .playerOptionsExtra {
+  height: auto;
+}
+.trackCol10 .MuiPaper-root > div,
+.trackCol10 .playerOptionsExtra {
+  width: 175px;
+}
+.trackCol10 .view {
+  padding-left: 0;
+}
+.trackImg .trackActive i,
+.trackNotActive i {
+  font-size: 16.5px;
+  color: #ffff;
+}
+.relate-title {
+  margin-top: 50px;
+}
+.trackTableCustom {
+  margin-top: 40px;
+}
+.allTracksContainer .trackGridMain2 .trackListHeader .trackCol1 span {
+  padding-left: 14px;
+}
+.buttonTrack {
+  align-items: center;
+  position: relative;
+}
+.buttonTrack .short-head {
+  display: inline-block;
+}
+.buttonTrack .viewAlbumBtn {
+  position: absolute;
+  right: 0;
+  top: 0;
+  left: 0;
+  text-align: right;
+}
+.hide_mobile {
+  display: block;
+}
+.show_mobile {
+  display: none;
+}
+.viewMoreAlphabet .viewMoreBox {
+  padding: 3px;
+}
+.alice-carousel__prev-btn-item.__inactive,
+.alice-carousel__next-btn-item.__inactive {
+  opacity: 1;
+}
+.playerresponsive a {
+  color: #fff;
+  text-decoration: none;
+}
+.sngleArtist .trackCol4 {
+  padding-left: 85px;
+}
+.album_serach.MuiGrid-spacing-xs-3 > .MuiGrid-item {
+  padding: 36px;
+}
+
+.item span i {
+  position: absolute;
+  width: 75%;
+  right: 0;
+}
+.item span {
+  opacity: 0;
+}
+.ui.floating.dropdown.icon > .menu {
+  margin-top: 0px !important;
+}
+ul.view li i {
+  width: 100%;
+  position: absolute;
+  left: 0;
+  top: 0;
+  opacity: 0;
+  cursor: pointer;
+}
+.downloadImagePlayer {
+  color: white;
+}
+.playerOptionsExtra.bottom_player_icons {
+  width: 160px;
+}
+.artist_v_search .viewMoreBox a img {
+  border-radius: 50%;
+}
+i.ellipsis.horizontal.icon {
+  transform: rotate(90deg);
+}
+.playerOptionsExtra.bottom_player_icons {
+  position: relative;
+}
+.playerOptionsExtra.bottom_player_icons:after {
+  content: " ";
+  position: absolute;
+  width: 0;
+  height: 0;
+  bottom: -10px;
+  right: 0px;
+  left: 0;
+  text-align: center;
+  margin: 0 auto;
+  border-top: 10px solid white;
+  border-right: 15px solid transparent;
+  border-left: 0px solid transparent;
+}
+.trackCol7 .ui.floating.dropdown > .menu {
+  left: -115px;
+}
+.MuiAppBar-root.SearchUpperDiv{
+  z-index: 1;
+}
+.bottom_layer.downloadPlayeroption ul li{
+  margin-left: 10px;
+}
+/************************ MEDIA QUERY ************************/
+/************************ MEDIA QUERY ************************/
+/************************ MEDIA QUERY ************************/
+@media screen and (min-width: 1024px) {
+  .adsSide {
+    height: calc(100vh - 155px);
+    overflow: hidden;
+  }
+  .adsSide img {
+    max-width: 100%;
+    height: 24%;
+    margin-bottom: 0px;
+    margin: 0 auto;
+    width: 90%;
+  }
+
+  .myAudioPlayer .audioPlayerImage ul li {
+    width: 68%;
+  }
+  .myAudioPlayer li.menuIconRadio {
+    padding: 5px 5px;
+  }
+  .myAudioPlayer div#MyPlayer {
+    top: 15px;
+  }
+
+  .ringtoneScreen {
+    width: 35%;
+  }
+  .ringtoneScreen .sendMessageBtn {
+    margin: 0px auto;
+  }
+
+  .allTracksContainer .trackGridMain1 .albumMetaBox .counterList li.albumLikes22 {
+    width: 30%;
+  }
+
+  .allTracksContainer .trackGridMain1 .albumMetaBox .counterList li {
+    width: 30%;
+  }
+}
+
+@media only screen and (max-width: 1024px) and (min-width: 993px) {
+  .homeMainClass .alice-carousel__stage-item.__cloned {
+    opacity: 1;
+    visibility: visible;
+  }
+
+  .footerMain .topbarItem a {
+    font-size: 12.5px;
+  }
+  .MuiGrid-spacing-xs-3 > .MuiGrid-item {
+    padding-top: 0px !important;
+  }
+
+  .footerMain .footerMiddleBar {
+    justify-content: flex-start;
+  }
+
+  .footerMain .footerMiddleItem {
+    width: 33.3%;
+  }
+  .allTracksContainer .trackGridMain1 .albumMetaBox .counterList li {
+    padding-left: 32px;
+  }
+  .trackListHeader.trackBody li.trackCol1 {
+    width: 3%;
+  }
+  .MuiGrid-root.album_serach.MuiGrid-container.MuiGrid-spacing-xs-3 {
+    margin-top: 15px;
+  }
+}
+@media only screen and (min-width: 1024px) and (max-width: 1279px) {
+  .alphabetMainBox .alphabetCarousel .owl-stage .item a {
+    padding: 10px 10px;
+    border-radius: 0;
+  }
+  .homeMainClass .sliderBox .alice-carousel__next-btn {
+    right: -10px;
+  }
+  .homeMainClass .sliderBox .alice-carousel__prev-btn {
+    left: -27px;
+  }
+  .homeMainClass .alice-carousel__next-btn {
+    right: -10px;
+    top: 8vh;
+  }
+  .homeMainClass .alice-carousel__prev-btn {
+    left: -28px;
+    top: 8vh;
+  }
+  .homeMainClass .grenre_section .alice-carousel__prev-btn {
+    top: 3vh;
+  }
+  .homeMainClass .grenre_section .alice-carousel__next-btn {
+    top: 3vh;
+  }
+}
+@media only screen and (min-width: 1024px) and (max-width: 1366px) {
+  .footerMain .topbarItem {
+    font-size: 13px;
+  }
+}
+@media only screen and (min-width: 1280px) {
+  .allTracksContainer .trackGridMain1 .albumMetaBox .counterList li {
+    padding-left: 38px;
+  }
+
+  .alphabetMainBox .alphabetCarousel .owl-stage .item a {
+    padding: 10px 16px;
+  }
+
+  .allTracksContainer .trackListHeader.trackBody li.trackCol1 {
+    text-align: left;
+  }
+
+  .allTracksContainer .trackGridMain1 .albumMetaBox .counterList li {
+    width: 25%;
+  }
+  .allTracksContainer .trackGridMain1 .albumMetaBox .counterList li.albumLikes22 {
+    width: 22%;
+  }
+  .albumImgBox {
+    display: flex;
+  }
+  /* //Slider// */
+  .homeMainClass .sliderBox .alice-carousel__next-btn {
+    right: -18px;
+  }
+  .homeMainClass .sliderBox .alice-carousel__prev-btn {
+    left: -28px;
+  }
+  .homeMainClass .alice-carousel__next-btn {
+    right: -17px;
+    top: 3vh;
+  }
+  .homeMainClass .alice-carousel__prev-btn {
+    left: -28px;
+    top: 3vh;
+  }
+  .homeMainClass .grenre_section .alice-carousel__prev-btn {
+    top: 3vh;
+  }
+  .homeMainClass .grenre_section .alice-carousel__next-btn {
+    top: 3vh;
+  }
+}
+
+@media only screen and (min-width: 1366px) {
+  /* //Slider// */
+  .homeMainClass .sliderBox .alice-carousel__next-btn {
+    right: -19px;
+  }
+  .homeMainClass .sliderBox .alice-carousel__prev-btn {
+    left: -28px;
+  }
+  .homeMainClass .alice-carousel__next-btn {
+    right: -20px;
+    top: 4vh;
+  }
+  .homeMainClass .alice-carousel__prev-btn {
+    left: -28px;
+    top: 4vh;
+  }
+  
+  .myAudioPlayer .audioPlayerImage ul li {
+    width: 100%;
+  }
+
+  .albumImgBox {
+    padding-top: 0;
+  }
+
+
+}
+
+@media only screen and (min-width: 1440px) {
+  /* //SLIDER */
+  .homeMainClass .sliderBox .alice-carousel__next-btn {
+    top: 8vh;
+    right: -21px;
+  }
+  .homeMainClass .sliderBox .alice-carousel__prev-btn {
+    top: 8vh;
+    left: -28px;
+  }
+  .homeMainClass .alice-carousel__next-btn {
+    right: -21px;
+    top: 3vh;
+  }
+  .homeMainClass .alice-carousel__prev-btn {
+    left: -28px;
+    top: 3vh;
+  }
+  .homeMainClass .grenre_section .alice-carousel__prev-btn {
+    top: 2vh;
+  }
+  .homeMainClass .grenre_section .alice-carousel__next-btn {
+    top: 2vh;
+  }
+}
+@media only screen and (min-width: 1600px) {
+  /* //SLIDER */
+  .homeMainClass .sliderBox .alice-carousel__next-btn {
+    top: 8vh;
+    right: -27px;
+  }
+  .homeMainClass .sliderBox .alice-carousel__prev-btn {
+    top: 8vh;
+    left: -28px;
+  }
+  .homeMainClass .alice-carousel__next-btn {
+    right: -28px;
+    top: 4vh;
+  }
+  .homeMainClass .alice-carousel__prev-btn {
+    left: -28px;
+    top: 4vh;
+  }
+  .homeMainClass .grenre_section .alice-carousel__prev-btn {
+    top: 3vh;
+  }
+  .homeMainClass .grenre_section .alice-carousel__next-btn {
+    top: 3vh;
+  }
+  .allTracksContainer .trackGridMain1 .albumMetaBox .counterList li {
+    width: 20%;
+  }
+  .allTracksContainer .trackGridMain1 .albumMetaBox .counterList li.albumLikes22 {
+    width: 18%;
+  }
+}
+
+@media only screen and (min-width: 1680px) {
+  /* //SLIDER */
+  .homeMainClass .sliderBox .alice-carousel__next-btn {
+    right: -28px;
+  }
+  .homeMainClass .sliderBox .alice-carousel__prev-btn {
+    left: -28px;
+  }
+  .homeMainClass .alice-carousel__next-btn {
+    right: -28px;
+    top: 4vh;
+  }
+  .homeMainClass .alice-carousel__prev-btn {
+    left: -28px;
+    top: 4vh;
+  }
+}
+
+@media only screen and (min-width: 1920px) {
+}
+
+/* Mobile Responsive Media Query */
+/* Mobile Responsive Media Query */
+/* Mobile Responsive Media Query */
+@media (min-width: 320px) and (max-width: 991px) {
+  
+  .menu_custom_css ul a {
+    border-bottom: 1px solid #ccc;
+  }
+  .menu_custom_css .MuiList-padding {
+    padding-top: 0px;
+  }
+  .menu_custom_css .MuiList-padding a:first-child {
+    background: #3a52bc;
+    border-bottom: 0px solid #ccc;
+  }
+  .menu_custom_css .MuiList-padding a:first-child img {
+    width: 58%;
+  }
+  .menu_custom_css .MuiList-padding a .MuiListItemText-root {
+    margin-top: 0;
+  }
+  .adsSide,
+  .queueDrawer {
+    display: none;
+  }
+  .footerMain .footerMiddleBar {
+    display: none;
+  }
+  .footerBottomBar {
+    text-align: center;
+  }
+  .footerMain .followUsBox {
+    display: block;
+  }
+  .footerMain .followUsBox p.folowItem {
+    display: block;
+  }
+  .footerMain .followUsBox {
+    margin: 15px 0px 20px 0px;
+  }
+  .footerMain .footerTopBar {
+    text-align: center;
+  }
+  .footerMain .topbarItem {
+    font-size: 12px;
+  }
+  .footerMain .topbarItem span {
+    display: none;
+  }
+  .homeMainClass .play-icon {
+    visibility: visible;
+    top: 48%;
+    right: -5px;
+    margin-right: 0%;
+    width: 50px;
+  }
+  .homeMainClass .play-icon-1 {
+    text-align: right;
+    transform: translateY(-10%);
+    right: 15px;
+  }
+  .homeMainClass .play-icon img {
+    width: 45%;
+  }
+  .allTracksContainer .trackGridMain2 .sngleArtist .trackListHeader .trackCol3 {
+    width: 45%;
+  }
+  .alice-carousel__next-btn,
+  .alice-carousel__prev-btn {
+    display: none;
+  }
+  .languageBarCustom .ul_language {
+    margin-bottom: 10px;
+  }
+  .languageBarCustom .language-item {
+    font-size: 11px;
+    font-weight: 300;
+  }
+  .albumMetaBox .short-head{
+    font-size: 9px;
+  }
+  .albumMetaBox h1.main-title {
+    font-size: 1em;
+    width: 100%;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .allTracksContainer .trackGridMain1 .albumMetaBox .short-desc {
+    font-size: 11px;
+    display: none;
+  }
+  .MuiGrid-root.pageGrid1.MuiGrid-item.MuiGrid-grid-xs-12 .short-desc {
+    margin-top: 10px;
+  }
+  .paragraphMobile.MuiGrid-container {
+    display: block;
+  }
+  .allTracksContainer .trackGridMain1 .albumMetaBox .counterList li {
+    width: 28%;
+    padding: 7px 0px 7px 15px;
+    background-size: 15%;
+    font-size: 12px;
+  }
+  .allTracksContainer .trackGridMain1 .albumMetaBox .counterList li.albumLikes22 {
+    width: 25%;
+  }
+  .ui.button {
+    padding: 1em;
+  }
+  .header-spacer {
+    margin-bottom: 45px;
+  }
+  /* Artist Page CSS */
+  .allTracksContainer .trackGridMain2 .custom_track_css .trackListHeader .trackCol6 {
+    display: none;
+  }
+  .sngleArtist .trackCol4 {
+    padding-left: 5px;
+  }
+  .allTracksContainer .trackGridMain2 .trackListHeader .trackCol3,
+  .allTracksContainer .trackGridMain2 .trackListHeader .trackCol2,
+  .allTracksContainer .trackGridMain2 .trackListHeader .trackCol4,
+  .allTracksContainer .trackGridMain2 .trackListHeader .artistAlbumCol {
+    padding-right: 5px;
+    /* line-height: 30px; */
+  }
+  .allTracksContainer .trackGridMain2 .trackListHeader .trackCol3 {
+    width: 60%;
+  }
+  .allTracksContainer .trackGridMain2 .trackListHeader .trackCol7 {
+    width: 6%;
+  }
+  .artistTrack,
+  .Trackviewplay {
+    align-items: center;
+    margin-left: 0px;
+  }
+
+  .TrackviewplayGrid .trackCol4,
+  .TrackviewplayGrid .trackCol5 {
+    display: none;
+  }
+  .allTracksContainer .trackGridMain2 ul.trackListHeader:nth-of-type(1) .trackCol2 {
+    visibility: hidden;
+  }
+  .allTracksContainer .trackGridMain2 .trackBody .downloadImg {
+    padding-left: 0px;
+  }
+  .allTracksContainer .trackTableCustom .trackListHeader {
+    justify-content: space-around;
+  }
+  .alphabetMainBox .alphabetCarousel .owl-stage .item a {
+    padding: 5px 0px;
+    font-size: 11px;
+  }
+  .alphabetMainBox.grid_alphabet {
+    padding: 0px 10px;
+  }
+  .grid_alphabet a.active {
+    background: #ec297b !important;
+    color: rgb(255, 255, 255) !important;
+  }
+  .alphabetMainBox .alphabetCarousel {
+    padding-bottom: 10px;
+    top: -5px;
+  }
+  .alphabetMainBox .alphabetCarousel a {
+    font-size: 8px;
+    padding: 1px 0;
+    top: 5px;
+  }
+  .bodyWrapper {
+    margin: 0px 8px;
+  }
+  .allTracksContainer .trackGridMain2 .trackBody .trackCol7 img,
+  .allTracksContainer .trackGridMain2 .trackBody .trackCol8 img,
+  .allTracksContainer .trackGridMain2 .trackBody .trackCol9 img {
+    width: 20px;
+    height: 20px;
+  }
+
+  .mobileSpace {
+    margin-top: 0px;
+  }
+  .trackSpace .MuiListItem-gutters {
+    padding-left: 0;
+  }
+  .alignitems .MuiTabs-flexContainer {
+    align-content: center;
+    justify-content: space-between;
+  }
+  .downloadPlayeroption .downloadImagePlayer img {
+    filter: invert(0);
+  }
+  /* Mobile PLAYER CSS */
+  .playerresponsive .menuIconRadio {
+    display: none;
+  }
+  .downloadPlayeroption .downloadImagePlayer {
+    display: none;
+  }
+  .header-parent img.logo {
+    max-width: 100px;
+  }
+  .koyal_logo {
+    text-align: center;
+  }
+  .hide_mobile {
+    display: none;
+  }
+  .show_mobile {
+    display: block;
+  }
+  .footerMain .copyright {
+    margin-bottom: 80px;
+  }
+
+  .album_serach.MuiGrid-spacing-xs-3 > .MuiGrid-item {
+    padding: 15px 10px;
+  }
+  .trackListView .MuiListItemText-root {
+    margin-top: 20px;
+  }
+  .playerOptionsExtra.bottom_player_icons:after {
+    bottom: -9px;
+    right: 30px;
+    left: auto;
+    border-top: 10px solid white;
+    border-right: 0px solid transparent;
+    border-left: 15px solid transparent;
+  }
+  .allTracksContainer .trackGridMain1 .albumMetaBox .counterList li .ui.basic.red.label {
+    display: none;
+  }
+  .albumMetaBox .ui.button {
+    font-size: 9px;
+  }
+  .viewMoreAlphabet .viewMoreBox .album-title{
+    font-size: 11px;
+  }
+  .SearchMaterialIcon .material-icons {
+    color: black;
+    font-size: 22px;
+  }
+  .searchMainBox .MuiButton-contained{
+    box-shadow: none;
+  }
+   .header-parent  .searchBox button{
+    background: transparent;
+  }
+  .bottom_layer.downloadPlayeroption ul{
+    align-items: unset;
+  }
+ 
+  .align_item_center {
+    align-items: center;
+  }
+   .bottom_layer.downloadPlayeroption .MuiPaper-root.MuiPaper-elevation1 {
+    left: -110px;
+  }
+  /* .albumImgBox {
+    display: inline-block;
+  } */
+}
+@media only screen and (min-width: 320px) and (max-width: 600px) {
+  /* Responsive Player CSS */
+  /* Player CSS For mobile */
+  /* .TrackviewplayGrid .trackCol7, */
+  .TrackviewplayGrid .trackCol8 {
+    display: none;
+  }
+  .trackCol10 {
+    display: block;
+  }
+  .trackCol10 .MuiButtonBase-root {
+    padding: 0;
+  }
+  .playerresponsive {
+    position: fixed;
+  }
+  .playerresponsive a {
+    color: #fff;
+    text-decoration: none;
+  }
+  .playerresponsive .menuIconRadio {
+    display: none;
+  }
+  .playerOptions.bottom_layer.downloadPlayeroption {
+    position: absolute;
+    top: 10px;
+    right: 15px;
+  }
+  .myAudioPlayer .audioPlayerImage {
+    padding-left: 10px;
+  }
+  .myAudioPlayer.playerresponsive .downloadImagePlayer img {
+    filter: invert(0);
+  }
+ 
+  .myAudioPlayer.playerresponsive div#MyPlayer {
+    top: -20px;
+    position: absolute;
+  }
+  .myAudioPlayer div#MyPlayer {
+    height: 75px !important;
+  }
+  .jw-preview,
+  .jw-controls-backdrop {
+    background: transparent !important;
+  }
+  .jw-wrapper {
+    background-color: transparent !important;
+  }
+  .jwplayer .jw-display-icon-container {
+    display: none;
+  }
+  .jw-flag-touch .jw-slider-time::before,
+  .jw-flag-touch .jw-horizontal-volume-container::before {
+    height: 40px;
+    background: #273d93;
+    bottom: calc(100% - 0px);
+  }
+  .playerresponsive .jw-reset.jw-spacer {
+    display: none;
+  }
+  .playerresponsive .jw-icon-inline,
+  .playerresponsive .jw-icon-tooltip {
+    height: 25px;
+    width: 25px;
+  }
+  .playerresponsive .jw-slider-time.jw-background-color.jw-reset.jw-slider-horizontal.jw-reset {
+    position: absolute;
+    top: -70px;
+    width: 100%;
+    background: #273d93;
+    z-index: -1;
+  }
+  .jw-slider-horizontal .jw-slider-container {
+    height: 2px;
+  }
+  .jw-slider-horizontal .jw-slider-container {
+    height: 3px !important;
+    width: 100%;
+  }
+  .jw-icon.jw-icon-inline.jw-text.jw-reset.jw-text-elapsed {
+    display: none;
+  }
+  
+  span.jw-text.jw-reset.jw-text-alt,
+  .jw-icon.jw-icon-inline.jw-button-color.jw-reset.jw-icon-rewind,
+  .jw-icon.jw-icon-inline.jw-button-color.jw-reset.jw-icon-next {
+    display: none;
+  }
+  .jw-icon.jw-icon-inline.jw-button-color.jw-reset.jw-icon-volume.jw-off {
+    display: flex !important;
+  }
+  .jw-off.jw-icon-volume .jw-svg-icon-volume-0{
+    display: block !important;
+  }
+  .jw-flag-small-player:not(.jw-flag-audio-player):not(.jw-flag-ads)
+    .jw-controlbar
+    .jw-button-container
+    > .jw-icon-playback {
+    display: block !important;
+  }
+  .jw-flag-touch .jw-slider-time::before,
+  .jw-flag-touch .jw-horizontal-volume-container::before {
+    height: 25px !important;
+  }
+  .myAudioPlayer.playerresponsive .MuiGrid-container {
+    flex-direction: column-reverse;
+  }
+}
+@media only screen and (max-width: 320px) {
+  .myAudioPlayer .audioPlayerImage ul li {
+    width: 85%;
+  }
+}

@@ -1,15 +1,20 @@
 import React, { Component } from 'react'
 import axios from 'axios'
 import { withGlobalState } from 'react-globally'
-import Ringtone from '../component/Ringtone';
+//import Ringtone from '../component/Ringtone';
 import { Link } from "react-router-dom";
 import Grid from '@material-ui/core/Grid';
 import ArtistLoader from '../component/ArtistLoader';
-import Rating from '@material-ui/lab/Rating';
-import FavoriteIcon from '@material-ui/icons/Favorite';
+//import Rating from '@material-ui/lab/Rating';
+//import FavoriteIcon from '@material-ui/icons/Favorite';
 import TrackShareOptions from '../component/TrackShareOptions';
 import TrackLikeOption from '../component/TrackLikeOption';
+import TrackRington from '../component/TrackRington';
 import { LazyImage } from "react-lazy-images";
+import DownloadTrack from '../component/DownloadTrack';
+import { Dropdown } from 'semantic-ui-react'
+import { Button, Icon, Label } from 'semantic-ui-react'
+import { Helmet } from "react-helmet";
 
 
 class SingleTrackView extends Component {
@@ -27,14 +32,14 @@ class SingleTrackView extends Component {
         }
 
         this.clickOnTrack = this.clickOnTrack.bind(this)
-        this.downloadTrack = this.downloadTrack.bind(this)
+
         this.noRBT = this.noRBT.bind(this)
 
     }
 
     getData = () => {
 
-        let url = `http://api.koyal.pk/musicapp/?request=get-tracks-react-tracks&id=${this.props.match.params.trackId}`
+        let url = `https://api.koyal.pk/musicapp/?request=get-tracks-react-tracks&id=${this.props.match.params.trackId}`
 
         axios.get(url)
 
@@ -49,16 +54,35 @@ class SingleTrackView extends Component {
                 },
                     () => {
                         //console.log('did mount')
-                       
+
                         this.getDataTracks()
+
+                        setTimeout(() => {
+                            this.pageViews();
+                        }, 2000)
                     }
                 )
             })
             .catch(error => {
                 console.log(error)
-               
+
             })
 
+    }
+
+
+    pageViews() {
+
+        axios.post(`https://api.koyal.pk/musicapp/?request=views_post`, {
+            AlbumId: this.state.page_idd,
+            UserId: 0
+        })
+            .then(response => {
+                //console.log(response)
+            })
+            .catch(error => {
+                console.log(error)
+            })
     }
 
     getDataTracks() {
@@ -75,6 +99,11 @@ class SingleTrackView extends Component {
                 'thumbnailImage': data['ThumbnailImageWeb'],
                 'rbtTelenor': data['rbtTelenor'],
                 'albumArtist': data['AlbumArtist'],
+                'trackURL': data['OrgTrackUrl'],
+                'MobilinkCode': data['MobilinkCode'],
+                'ZongCode': data['ZongCode'],
+                'UfoneCode': data['UfoneCode'],
+                'TelenorCode': data['TelenorCode']
             }
         ))
 
@@ -102,8 +131,16 @@ class SingleTrackView extends Component {
             'file': data['TrackUrl'],
             'track_id': data['TrackId'],
             'trackName': data['Name'],
-            'rbtTelenor': data['rbtTelenor'],
+            'albumId': data['AlbumId'],
+            'albumName': data['Album'],
+            'thumbnailImage': data['ThumbnailImageWeb'],
+            'rbtTelenor': data['TelenorCode'],
             'albumArtist': data['AlbumArtist'],
+            'trackURL': data['OrgTrackUrl'],
+            'MobilinkCode': data['MobilinkCode'],
+            'ZongCode': data['ZongCode'],
+            'UfoneCode': data['UfoneCode'],
+            'TelenorCode': data['TelenorCode']
         }))
 
         // console.log('click')
@@ -127,8 +164,16 @@ class SingleTrackView extends Component {
                     'file': dataTrack2[trackOrder[y]]['file'],
                     'track_id': dataTrack2[trackOrder[y]]['track_id'],
                     'trackName': dataTrack2[trackOrder[y]]['trackName'],
+                    'albumId': dataTrack2[trackOrder[y]]['albumId'],
+                    'albumName': dataTrack2[trackOrder[y]]['albumName'],
+                    'thumbnailImage': dataTrack2[trackOrder[y]]['thumbnailImage'],
                     'rbtTelenor': dataTrack2[trackOrder[y]]['rbtTelenor'],
-                    'albumArtist': dataTrack2[trackOrder[y]]['AlbumArtist'],
+                    'albumArtist': dataTrack2[trackOrder[y]]['albumArtist'],
+                    'trackURL': dataTrack2[trackOrder[y]]['trackURL'],
+                    'MobilinkCode': dataTrack2[trackOrder[y]]['MobilinkCode'],
+                    'ZongCode': dataTrack2[trackOrder[y]]['ZongCode'],
+                    'UfoneCode': dataTrack2[trackOrder[y]]['UfoneCode'],
+                    'TelenorCode': dataTrack2[trackOrder[y]]['TelenorCode']
                 })
         }
 
@@ -146,28 +191,6 @@ class SingleTrackView extends Component {
 
     noRBT = () => {
         alert('Is song ki RBT Mojood Nahi hai.')
-    }
-
-    downloadTrack = (TrackId, AlbumId, OrgTrackUrl) => {
-
-        // let trackInfo = {
-        //     'track_id': TrackId,
-        //     'album_id': AlbumId
-        // }
-
-        // axios.post(`http://35.156.24.14/koyaldownload/download.php`, trackInfo)
-        //     .then(response => {
-
-        //         if (response.data.SearchResult.Success === 'Charged') {
-        //             setTimeout(() => {
-        //                 window.location.href = OrgTrackUrl
-        //             }, 100);
-        //         }
-        //     })
-        //     .catch(error => {
-        //         console.log(error)
-        //         this.setState({ errMsg: 'Error Post Data' })
-        //     })
     }
 
     componentDidMount() {
@@ -189,18 +212,49 @@ class SingleTrackView extends Component {
         1024: { items: 5 },
     }
 
+    ToSeoUrl(url) {
+
+        // make the url lowercase         
+        var encodedUrl = url.toString().toLowerCase();
+
+        // replace & with and           
+        encodedUrl = encodedUrl.split(/\&+/).join("-and-")
+
+        // remove invalid characters 
+        encodedUrl = encodedUrl.split(/[^a-z0-9]/).join("-");
+
+        // remove duplicates 
+        encodedUrl = encodedUrl.split(/-+/).join("-");
+
+        // trim leading & trailing characters 
+        encodedUrl = encodedUrl.trim('-');
+
+        return encodedUrl;
+    }
+
     render() {
 
         const { albumData, trackData, recommendSlider, loadingData } = this.state
 
-        var bgImage = {
-            backgroundImage: 'url(' + albumData.ThumbnailImageWeb + ')',
-            WebkitTransition: 'all', // note the capital 'W' here
-            msTransition: 'all' // 'ms' is the only lowercase vendor prefix
-        };
+        // console.log(recommendSlider)
+
+        // var bgImage = {
+        //     backgroundImage: 'url(' + albumData.ThumbnailImageWeb + ')',
+        //     WebkitTransition: 'all', // note the capital 'W' here
+        //     msTransition: 'all' // 'ms' is the only lowercase vendor prefix
+        // };
+
+        let breakArtist = []
+
+        trackData.map(data =>
+            breakArtist.push({
+                'artist_id': data['Featuring'].split("|"),
+                'artist_name': data['Artist'].split(","),
+            })
+        )
 
 
-
+        //console.log(albumData)
         return (
 
 
@@ -208,10 +262,19 @@ class SingleTrackView extends Component {
                 {loadingData ? <ArtistLoader /> :
 
                     <>
-                        <div className="dummy-img">
-                            <div style={bgImage} className="divImage"></div>
+
+                        <div>
+                            <Helmet>
+                                <meta charSet="utf-8" />
+                                <title>{albumData.Name}</title>
+                            </Helmet>
+
+
                         </div>
-                        <Grid container spacing={0} className="trackGridMain1">
+                        <div className="dummy-img">
+                            {/* <div style={bgImage} className="divImage"></div> */}
+                        </div>
+                        <Grid container spacing={0} className="trackGridMain1 Trackviewplay">
                             <Grid item xs={2} className="pageGrid1">
 
                                 <div className="albumImgBox">
@@ -220,58 +283,94 @@ class SingleTrackView extends Component {
                                         alt={albumData.Name}
                                         debounceDurationMs={50}
                                         placeholder={({ imageProps, ref }) => (<img ref={ref} src={`/assets/albumx150.jpg`} alt={imageProps.alt} style={{ width: "100%" }} />)}
-                                        actual={({ imageProps }) => (<img {...imageProps} style={{ width: "100%" }} alt={albumData.Name} />)} />
+                                        actual={({ imageProps }) => (<img {...imageProps} style={{ width: "100%", verticalAlign: "middle" }} alt={albumData.Name} />)} />
                                 </div>
 
                             </Grid>
-                            <Grid item xs={10} className="pageGrid2">
-                                <div className="albumMetaBox">
+                            <Grid item xs={10} className="pageGrid2 albumMetaBox">
+                                <div className="buttonTrack">
                                     <p className="short-head">Track</p>
-                                    <h1 className="main-title">{albumData.Name}</h1>
-                                    <p className="short-desc">
-                                        {albumData.Description}
-                                    </p>
-                                    {/* <ul className="byDetails">
-                                        <li>By : {albumData.Name}</li>
-                                        <li>Writer : {albumData.Name}</li>
-                                        <li>Composer : {albumData.Name}</li>
-                                    </ul> */}
-                                    <ul className="counterList">
-                                        <li className="albumLikes">
-                                            {/* {albumData.NoOfLikes}  */}
-                                            1.2k Likes</li>
-                                        <li className="albumShare">
-                                            {/* {albumData.NoOfShares}  */}
-                                            2.3k Shares</li>
-                                        <li className="albumPlay">
-                                            {/* {albumData.NoOfLikes} */}
-                                            4k Views</li>
-                                    </ul>
-                                    <div className="viewAlbumBtn">
-                                        <Link component={Link} to={`/album/` + trackData[0].AlbumId + `/` + trackData[0].Album}>
+                                    <div className="viewAlbumBtn hide_mobile">
+                                        <Link to={`/album/` + trackData[0].AlbumId + `/` + this.ToSeoUrl(trackData[0].Album)}>
 
-                                            <img src='/assets/go_back.svg' alt="Go Back" />
+                                            {/* <img src='/assets/go_back.svg' alt="Go Back" /> */}
+
+                                            <Button size='medium'>Go to Album</Button>
 
                                         </Link>
                                     </div>
                                 </div>
+                                <h1 className="main-title">{albumData.Name}</h1>
+                                <p className="short-desc">
+                                    {albumData.Description}
+                                </p>
+                                {/* <ul className="byDetails">
+                                        <li>By : {albumData.Name}</li>
+                                        <li>Writer : {albumData.Name}</li>
+                                        <li>Composer : {albumData.Name}</li>
+                                    </ul> */}
+                                <div className="viewAlbumBtn show_mobile">
+                                    <Link to={`/album/` + trackData[0].AlbumId + `/` + this.ToSeoUrl(trackData[0].Album)}>
 
+                                        <img src='/assets/go_back.svg' alt="Go Back" />
+
+                                    </Link>
+                                </div>
+                                <ul className="counterList hide_mobile">
+                                    <li className="albumLikes22">
+                                        <Button as='div' labelPosition='right'>
+                                            <Button color=''>
+                                                <Icon name='heart' />
+                                                Like
+      </Button>
+                                            <Label as='a' basic color='red' pointing='left'>
+                                                {albumData.NoOfLikes < 1 ? <> 1K </> : <> {albumData.NoOfLikes} </>}
+                                            </Label>
+                                        </Button>
+
+                                    </li>
+                                    <li className="albumShare22">
+
+                                        <Button as='div' labelPosition='right'>
+                                            <Button color=''>
+                                                <Icon name='share' />
+                                                Share
+      </Button>
+                                            <Label as='a' basic color='red' pointing='left'>
+                                                {albumData.NoOfShares < 1 ? <> 1K </> : <> {albumData.NoOfShares} </>}
+                                            </Label>
+                                        </Button>
+                                    </li>
+                                    <li className="albumPlay22">
+
+                                        <Button as='div' labelPosition='right'>
+                                            <Button color=''>
+                                                <Icon name='play' />
+                                                Views
+      </Button>
+                                            <Label as='a' basic color='red' pointing='left'>
+                                                {albumData.NoOfShares < 1 ? <> 1K </> : <> {albumData.NoOfShares} </>}
+                                            </Label>
+                                        </Button>
+                                    </li>
+                                </ul>
                             </Grid>
                         </Grid>
 
-                        <Grid container spacing={1} className="trackGridMain2">
+                        <Grid container spacing={1} className="trackGridMain2 TrackviewplayGrid">
                             <Grid item xs={12} className="pageGrid3">
                                 <div className="trackTableCustom">
                                     <ul className="trackListHeader">
-                                        <li className="trackCol1">#</li>
-                                        <li className="trackCol2"></li>
+                                        <li className="trackCol1"><span>#</span></li>
                                         <li className="trackCol3">Title</li>
                                         <li className="trackCol4">Artist</li>
                                         <li className="trackCol5"><i className="material-icons">access_time </i></li>
-                                        <li className="trackCol6">Popularity</li>
+                                        {/* <li className="trackCol6">Popularity</li> */}
+                                        <li className="trackCol2">Download</li>
                                         <li className="trackCol7"></li>
-                                        <li className="trackCol8"></li>
-                                        <li className="trackCol9"></li>
+                                        {/* <li className="trackCol8">Share</li>
+                                        <li className="trackCol9">Tune</li> */}
+                                        {/* <li className="trackCol9"></li> */}
 
                                     </ul>
                                     {
@@ -279,110 +378,159 @@ class SingleTrackView extends Component {
                                             <ul className="trackListHeader trackBody" key={index}>
                                                 <li className="trackCol1 trackImg">
 
+
                                                     {this.props.globalState.track_exist === data.TrackId ?
 
-                                                        <i className="material-icons pause-icon">
-                                                            pause_circle_outline
-</i>
+                                                        <div className="trackActive">
+                                                            <LazyImage
+                                                                src={data.ThumbnailImageWeb}
+                                                                alt={data.Name}
+                                                                debounceDurationMs={5}
+                                                                placeholder={({ imageProps, ref }) => (<img ref={ref} src={`/assets/albumx150.jpg`} alt={imageProps.alt} style={{ width: "100%" }} />)}
+                                                                actual={({ imageProps }) => (<img {...imageProps} style={{ width: "100%" }} alt={data.Name} />)} />
+                                                            <i aria-hidden="true" class="pause circular icon"></i>
+                                                        </div>
                                                         :
-                                                        <LazyImage
-                                                            src={data.ThumbnailImageWeb}
-                                                            alt={data.Name}
-                                                            debounceDurationMs={5}
-                                                            placeholder={({ imageProps, ref }) => (<img ref={ref} src={`/assets/albumx150.jpg`} alt={imageProps.alt} style={{ width: "100%" }} />)}
-                                                            actual={({ imageProps }) => (<img {...imageProps} style={{ width: "100%" }} alt={data.Name} />)} />
+
+                                                        <div className="trackNotActive">
+                                                            <LazyImage
+                                                                src={data.ThumbnailImageWeb}
+                                                                alt={data.Name}
+                                                                debounceDurationMs={5}
+                                                                placeholder={({ imageProps, ref }) => (<img ref={ref} src={`/assets/albumx150.jpg`} alt={imageProps.alt} style={{ width: "100%" }} />)}
+                                                                actual={({ imageProps }) => (<img {...imageProps} style={{ width: "100%" }} alt={data.Name} />)} />
+                                                            <i aria-hidden="true" class="play circular icon" onClick={() => this.clickOnTrack(index, data.Name.split("-").join(" "))}></i>
+                                                        </div>
 
 
                                                     }
-
-
-                                                    <i className="material-icons playIcon" onClick={() => this.clickOnTrack(index, data.Name.split("-").join(" "))}>
-                                                        play_circle_outline
-</i>
                                                 </li>
-                                                <li className="trackCol2 downloadImg">
 
-                                                    <img src='/assets/download_black.png' alt="download" onClick={() => this.downloadTrack(data.Id, data.AlbumId, data.OrgTrackUrl)} />
-                                                </li>
                                                 <li className="trackCol3 trackTitle">
-                                                    <Link component={Link} to={`/track/` + data.TrackId + `/` + data.Name}>
+                                                    <Link to={`/track/` + data.TrackId + `/` + this.ToSeoUrl(data.Name)}>
                                                         {data.Name.split("-").join(" ")}
 
                                                     </Link>
                                                 </li>
                                                 <li className="trackCol4 trackArtist">
-
-                                                    <Link component={Link} to={`/artist/` + data.ArtistId + `/` + data.Artist}>
-                                                        {albumData.Artist}
-
-                                                    </Link>
+                                                    {
+                                                        breakArtist[index].artist_name.map((item, i) =>
+                                                            <Link to={`/artist/` + breakArtist[index].artist_id[i] + `/` + this.ToSeoUrl(item)}>
+                                                                {item}
+                                                            </Link>
+                                                        )
+                                                    }
 
                                                 </li>
-                                                <li className="trackCol5">
+                                                <li className="trackCol5 trackDuration">
                                                     {data.TrackDuration}
                                                 </li>
-                                                <div className="trackCol6">
+                                                {/* <div className="trackCol6 trackRating">
 
                                                     <Rating
-                                                        value={data.TrackRanking}
+                                                        value={`${data.TrackRanking}`}
                                                         readOnly
                                                         icon={<FavoriteIcon fontSize="inherit" />}
                                                         className="ratingTrack"
                                                         max={3}
                                                     />
-                                                </div>
-                                                <div className="trackCol7">
-                                                    <TrackLikeOption
-                                                        albumImage={data.ThumbnailImageWeb}
-                                                        trackName={data.Name.split("-").join(" ")}
-                                                        albumName={data.Name.split("-").join(" ")}
-                                                        artistName={albumData.Artist}
-                                                        pageURL={window.location.href} />
-                                                </div>
-                                                <div className="trackCol8">
-                                                    <TrackShareOptions
-                                                        albumImage={data.ThumbnailImageWeb}
-                                                        trackName={data.Name.split("-").join(" ")}
-                                                        albumName={data.Name.split("-").join(" ")}
-                                                        artistName={albumData.Artist}
-                                                        pageURL={window.location.href} />
-                                                </div>
-                                                <div className="trackCol9">
-                                                    {data.TelenorCode > 0 ?
-                                                        <Ringtone
-                                                            TelenorCode={data.TelenorCode}
-                                                            UfoneCode={data.UfoneCode}
-                                                            MobilinkCode={data.MobilinkCode}
-                                                            ZongCode={data.ZongCode}
-                                                            RBTCodes={
-                                                                [
-                                                                    {
-                                                                        'code': data.TelenorCode,
-                                                                        'name': 'Telenor'
-                                                                    },
-                                                                    {
-                                                                        'code': data.UfoneCode,
-                                                                        'name': 'Ufone'
-                                                                    },
-                                                                    {
-                                                                        'code': data.ZongCode,
-                                                                        'name': 'Zong'
-                                                                    },
-                                                                    {
-                                                                        'code': data.MobilinkCode,
-                                                                        'name': 'Mobilink'
-                                                                    }
-                                                                ]
-                                                            }
-                                                            albumName={albumData.Name}
-                                                            ThumbnailImageWeb={albumData.ThumbnailImageWeb}
-                                                            TrackName={data.Name.split("-").join(" ")}
-                                                            TrackId={data.TrackId}
-                                                        /> :
+                                                </div> */}
+                                                <li className="trackCol2 downloadImg">
 
-                                                        <img src="/assets/ringtone_black.png" alt='ringtone' onClick={() => this.noRBT()} />
-                                                    }
+                                                    <DownloadTrack
+                                                        trackURL={data.OrgTrackUrl}
+                                                        albumImage={data.ThumbnailImageWeb}
+                                                        trackName={data.Name.split("-").join(" ")}
+                                                        albumName={data.Name.split("-").join(" ")}
+                                                        artistName={albumData.Artist}
+                                                        pageURL={window.location.href}
+                                                        TrackId={data.TrackId}
+                                                        Albumid={data.AlbumId}
+                                                        RBTCodes={
+                                                            [
+                                                                {
+                                                                    'code': 0,
+                                                                    'name': 'Telenor'
+                                                                },
+                                                                {
+                                                                    'code': data.UfoneCode,
+                                                                    'name': 'Ufone'
+                                                                },
+                                                                {
+                                                                    'code': data.ZongCode,
+                                                                    'name': 'Zong'
+                                                                },
+                                                                {
+                                                                    'code': data.MobilinkCode,
+                                                                    'name': 'Mobilink'
+                                                                }
+                                                            ]
+                                                        }
+                                                    />
+
+                                                </li>
+                                                <div className="trackCol7">
+
+                                                    <Dropdown
+                                                        text=''
+                                                        icon='ellipsis horizontal'
+                                                        floating
+                                                        labeled
+                                                        button
+                                                        className='icon'
+                                                    >
+                                                        <Dropdown.Menu>
+                                                            {/* <Dropdown.Header icon='tags' content='Filter by tag' /> */}
+                                                            <Dropdown.Item> <i aria-hidden="true" class="like outline icon" ></i> Like
+                                                                <TrackLikeOption
+                                                                    albumImage={data.ThumbnailImageWeb}
+                                                                    trackName={data.Name.split("-").join(" ")}
+                                                                    albumName={data.Name.split("-").join(" ")}
+                                                                    artistName={albumData.Artist}
+                                                                    pageURL={window.location.href} /></Dropdown.Item>
+                                                            <Dropdown.Item> <i aria-hidden="true" class="share  icon" ></i>  Share <TrackShareOptions
+                                                                albumImage={data.ThumbnailImageWeb}
+                                                                trackName={data.Name.split("-").join(" ")}
+                                                                albumName={data.Name.split("-").join(" ")}
+                                                                artistName={albumData.Artist}
+                                                                pageURL={window.location.href} /></Dropdown.Item>
+                                                            <Dropdown.Item> <i aria-hidden="true" class="bell outline icon" ></i> <b onClick={() => this.noRBT()}> Caller Tune </b>
+                                                                {data.TelenorCode > 0 ?
+                                                                    <TrackRington
+                                                                        albumImage={data.ThumbnailImageWeb}
+                                                                        trackName={data.Name.split("-").join(" ")}
+                                                                        albumName={data.Name.split("-").join(" ")}
+                                                                        artistName={albumData.Artist}
+                                                                        pageURL={window.location.href}
+                                                                        TrackId={data.TrackId}
+                                                                        RBTCodes={
+                                                                            [
+                                                                                {
+                                                                                    'code': data.TelenorCode,
+                                                                                    'name': 'Telenor'
+                                                                                },
+                                                                                {
+                                                                                    'code': data.UfoneCode,
+                                                                                    'name': 'Ufone'
+                                                                                },
+                                                                                {
+                                                                                    'code': data.ZongCode,
+                                                                                    'name': 'Zong'
+                                                                                },
+                                                                                {
+                                                                                    'code': data.MobilinkCode,
+                                                                                    'name': 'Mobilink'
+                                                                                }
+                                                                            ]
+                                                                        }
+                                                                    />
+                                                                    : " "}
+                                                            </Dropdown.Item>
+                                                        </Dropdown.Menu>
+                                                    </Dropdown>
+
                                                 </div>
+
 
                                             </ul>
                                         )
@@ -391,7 +539,7 @@ class SingleTrackView extends Component {
                             </Grid>
                         </Grid>
 
-                        <Grid container spacing={4} className="trackGridMain3">
+                        <Grid container spacing={3} className="trackGridMain3">
                             <Grid item xs={12}>
                                 <div className="relate-title">
                                     <h2>Related Albums</h2>
@@ -399,9 +547,9 @@ class SingleTrackView extends Component {
                             </Grid>
                             {
                                 recommendSlider.map((data, index) =>
-                                    <Grid item xs={2} className="pageGrid4" key={index}>
+                                    <Grid item md={2} xs={4} className="pageGrid4" key={index}>
                                         <div className="relatedBox">
-                                            <Link component={Link} to={`/album/` + data.Id + `/` + data.Name}>
+                                            <Link to={`/album/` + data.Id + `/` + this.ToSeoUrl(data.Name)}>
                                                 <LazyImage
                                                     src={data.ThumbnailImageWeb}
                                                     alt={data.Name}

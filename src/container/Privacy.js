@@ -1,10 +1,16 @@
 import React from 'react'
-
+import { Helmet } from "react-helmet";
 const Privacy = () => {
     return (
+
         <div className="PrivacyPolicy">
             <h2 className="CustomeH2">Privacy Policy</h2>
-
+            <>
+                <Helmet>
+                    <meta charSet="utf-8" />
+                    <title>Koyal - Privacy Policy</title>
+                </Helmet>
+            </>
             <p>
                 <p>
                     This Privacy Policy clarifies our plan and program with respect
@@ -33,8 +39,8 @@ const Privacy = () => {
                 <p className="top">(a) The data about the user as collected by the Company is a data provided by users</p>
                 <p classNam="top">(b) Information automatically tracked whereas navigation (collectively referred to as Information).</p>
                 <h3>
-                    INFORMATION SUPPLIED BY USERS
-        </h3>
+                    Supplied By Users Information
+                </h3>
                 <p>
                     To avail certain services on the Koyal.pk, users are required to provide certain personally identifiable data for the registration process which may incorporate:-
         </p>
@@ -66,18 +72,18 @@ const Privacy = () => {
 
                 <h3>Demographic and purchase information</h3>
                 <p>We may refer other sources of statistic and other data in order to provide you with more focused communications and promotions. We utilize Google Analytics among others to track the user behavior on our site. Google Analytics particularly has been enabled to support us and display promotion data to assist us to pick up an understanding of our users' Demographics and Interests. The reports are highly confidential and cannot be associated with any person personally identifiable data that you simply may have shared with us. You can opt-out of Google Analytics for Show Advertising and customize Google Display Network advertisements using the Ads Settings options provided by Google.</p>
-                <h3>LINKS TO THIRD PARTY SITES / AD-SERVERS</h3>
+                <h3>Links To Third Party Sites / Ad-Servers</h3>
                 <p>We use third-party advertising companies to serve ads when you visit our Web site. These companies may use information (including your name, address, email address or telephone number or other personally identifiable information) about your visits to this and other websites in order to provide advertisements about goods and services which are of interest to you.</p>
                 <p><b>NOTE:</b> We do not provide any personally identifiable information to third party websites / advertisers / ad-servers without your consent.</p>
-                <h3>INFORMATION SHARING</h3>
+                <h3>Information Sharing</h3>
                 <p>The Company does not shares the individual data with any third party without getting the earlier consent of the user in the following limited circumstances:</p>
                 <p>The Company may show data to our advertiser - to assist them to understand our audience and confirm the value of advertising on our website. However, it is usually in the form of aggregated statistics on traffic to various pages within our site.</p>
                 <p>The Company may share your data with respect to your activities on koyal.pk with third party social websites to populate your social wall that's visible to other individuals however you may have a choice to set your security settings where you will choose what you'd like to share or not to share with others.</p>
-                <h3>INFORMATION SECURITY</h3>
+                <h3>Information Security</h3>
                 <p>We take suitable security measures to ensure against unauthorized access or unauthorized change, disclosure or destruction of information. These incorporate internal surveys of our data collection, capacity, handling practices and security measures, including suitable encryption and physical security measures to protect against unauthorized access to systems where we store individual data. All data assembled on koyal.pk is safely stored inside a controlled database. The database is stored on servers secured behind a firewall and the access to those servers is password-protected and is entirely restricted. However, as viable as our security measures are, no security framework is invulnerable. We cannot ensure the security of our database, nor can we ensure that data you supply will not be having chances to be intercepted while being transmitted to us over the Internet.</p>
                 <p>However, the internet is an ever growing medium. We may modify our privacy policy from time to time to incorporate necessary future changes.</p>
                 <p>We outsource advertising companies to serve advertisements when you visit or use our site, mobile application or service. These companies may utilize data (excluding your name, address, email address or phone number) about your visits or use to a specific site, mobile application or service, in order to provide ads about goods and service relevant to you.</p>
-                <h3>UPDATES / CHANGES</h3>
+                <h3>Updates / Changes</h3>
                 <p>The internet is a regularly developing medium as stated earlier. We may modify our privacy policy every once in a while to consolidate essential changes in technology, relevant law or some other variation; Regardless of this, we keep the authority to change  (any point of time) the terms of this Privacy Policy or the Terms of Use. Any progressions we make will be effective immediately on notice which we may give by posting the new policy on the Site. Your constant use of the koyal.pk after such notice will be considered acknowledgement of such changes.</p>
                 <h3>Contacting Us</h3>
                 <p>If there are any questions regarding this privacy policy, you may contact us using the information below. www.koyal.pk and send an email to feedback@koyal.pk

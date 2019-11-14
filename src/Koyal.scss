@@ -1,4 +1,4 @@
-@import url("https://fonts.googleapis.com/css?family=Poppins:400,700&display=swap");
+@import url("https://fonts.googleapis.com/css?family=Ubuntu&display=swap");
 
 .example-appear {
   opacity: 0.01;
@@ -9,27 +9,34 @@
   transition: opacity 0.5s ease-in;
 }
 
-body {
-  overflow-x: hidden;
+.langBar_AlphaBox {
+  margin-top: 50px;
 }
 
 .alphabetMainBox {
   .alphabetCarousel {
-    box-shadow: 0px 1px 3px 0px rgba(0, 0, 0, 0.2), 0px 1px 1px 0px rgba(0, 0, 0, 0.14),
-      0px 2px 1px -1px rgba(0, 0, 0, 0.12);
-    border-radius: 30px;
-    background-color: #6878b4;
+    // box-shadow: 0px 1px 3px 0px rgba(0, 0, 0, 0.2), 0px 1px 1px 0px rgba(0, 0, 0, 0.14),
+    //   0px 2px 1px -1px rgba(0, 0, 0, 0.12);
+    // border-radius: 30px;
+    // background-color: #6878b4;
+    // border-bottom: 1px solid rgba(0,0,0,.07);
+    display: table;
+    border-top: 1px solid rgba(0, 0, 0, 0.07);
+    border-bottom: 1px solid rgba(0, 0, 0, 0.07);
+    width: 100%;
+    position: relative;
+    top: -15px;
+    margin-bottom: -40px;
 
-    .owl-stage .item {
+    a {
+      color: #a9a9a9;
+      display: table-cell;
+      font-size: 13px;
+      padding: 6px;
+      position: relative;
       text-align: center;
-      box-sizing: border-box;
-      padding: 10px 0px;
-    }
-    .owl-stage .item a {
-      color: #fff;
-      text-decoration: none;
-      padding: 10px 18px;
-      box-sizing: border-box;
+      top: 1px;
+      width: 1%;
     }
   }
 }
@@ -47,17 +54,17 @@ body {
 // }
 .ad-container {
   position: relative;
-  .adsSide {
-    //position: fixed;
-    //height: 100%;
-    //top: 60px;
-   // width: 316px;
-  //  right: 0px;
-  }
-  .adsSide img {
-    display: block;
-    //width: 100%;
-  }
+  // .adsSide {
+  //   //position: fixed;
+  //   //height: 100%;
+  //   //top: 60px;
+  //  // width: 316px;
+  // //  right: 0px;
+  // }
+  // .adsSide img {
+  //   // display: block;
+  //   //width: 100%;
+  // }
 }
 
 // .bodyWrapper {
@@ -75,7 +82,7 @@ body {
 $primaryColor: #273d93;
 $secondaryColor: #ec297b;
 $artistName: #868e96;
-$fontFamily: "Poppins", sans-serif;
+$fontFamily: "Ubuntu", sans-serif;
 
 h1,
 .h1,
@@ -89,7 +96,7 @@ h5,
 .h5,
 h6,
 .h6 {
-  color: #252525;
+  color: #1b1b1b;
   font-family: $fontFamily;
 }
 
@@ -107,10 +114,15 @@ h6,
 body {
   font-size: 14px;
   line-height: 1.6;
-  background: #fff;
-  //background: #efefef;
+  //background: #000000;
+  color: #9c9494;
+  overflow-x: hidden;
   margin: 0px;
   font-family: $fontFamily;
+}
+
+.hello {
+  color: #fff;
 }
 
 .header-spacer {
@@ -122,7 +134,7 @@ body {
   // width: 13%;
 
   display: inline-block;
-  width: 8%;
+  width: 10%;
   margin-right: 10px;
 }
 
@@ -130,25 +142,25 @@ body {
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  margin-top: 22px !important;
+  margin-top: 22px;
 }
-
+// Edit by Koyal Css
 .allTracksContainer {
   font-family: $fontFamily;
   .dummy-img {
     height: auto;
     position: absolute;
     background: #fff;
-    width: 81%;
+    width: 80%;
     float: right;
   }
   .divImage {
-    position: absolute;
+    // position: absolute;
     width: 100%;
     background-size: cover;
-    filter: blur(330px);
-    height: 150px;
-    background-position: 200px -180px;
+    //filter: blur(330px);
+    //height: 150px;
+    //background-position: 200px -180px;
   }
   // Track Grid
   .trackGridMain1 {
@@ -157,7 +169,7 @@ body {
     }
 
     .albumMetaBox {
-      margin-top: 8px;
+      margin-top: 0px;
       box-sizing: border-box;
       padding-left: 25px;
 
@@ -182,19 +194,28 @@ body {
         width: 25%;
       }
       .viewAlbumBtn img {
-        width: 12%;
+        width: 26%;
         padding-top: 2px;
       }
+      // Edit By Koyal
       .counterList li {
         display: inline-block;
-        width: 18%;
+        // width: 19% !important;
         box-sizing: border-box;
-        padding: 7px 0px 7px 35px;
-        background-repeat: no-repeat;
-        background-position: left center;
-        
-        background-size: 20%;
-        font-size: 13px;
+        /* background-repeat: no-repeat; */
+        /* background-position: left center; */
+        /* background-size: 20%; */
+        /* font-size: 13px; */
+        padding: 0px !important;
+      }
+
+      .counterList li .ui.basic.red.label {
+        background: none #fff !important;
+        color: #1b1b1b !important;
+        border-color: #e0e1e2 !important;
+        font-weight: 400;
+        font-family: $fontFamily;
+        color: #9c9494 !important;
       }
       .albumLikes {
         background-image: url("/assets/like_black.png");
@@ -222,24 +243,25 @@ body {
         list-style-type: none !important;
       }
       .trackCol1 {
-        width: 5%;
-        text-align: center;
+        width: 8%;
+        text-align: left;
         position: relative;
-        min-width: 40px;
+        min-width: 35px;
         float: left;
-        height: inherit;
+        // height: inherit;
       }
 
       .trackCol2 {
-        width: 6%;
+        width: 10%;
         float: left;
-        height: inherit;
+        text-align: center;
+        // height: inherit;
       }
 
       .trackCol3 {
-        width: 33%;
+        width: 30%;
         float: left;
-        height: inherit;
+        // height: inherit;
         white-space: nowrap;
         overflow: hidden;
         text-overflow: ellipsis;
@@ -248,10 +270,10 @@ body {
       }
 
       .trackCol4 {
-        width: 25%;
+        width: 40%;
         position: relative;
         float: left;
-        height: inherit;
+        // height: inherit;
         white-space: nowrap;
         overflow: hidden;
         text-overflow: ellipsis;
@@ -263,14 +285,15 @@ body {
         width: 7%;
         position: relative;
         float: left;
-        height: inherit;
+        text-align: center;
+        // height: inherit;
       }
 
       .trackCol6 {
         width: 9%;
         position: relative;
         float: left;
-        height: inherit;
+        height: 22px;
       }
 
       .trackCol6 .MuiRating-icon.MuiRating-iconFilled svg {
@@ -280,25 +303,26 @@ body {
       .trackCol7,
       .trackCol8,
       .trackCol9 {
-        width: 5%;
+        width: 3%;
         position: relative;
         float: left;
-        height: inherit;
+        // height: inherit;
         text-align: center;
       }
       .artistAlbumCol {
         width: 28%;
         position: relative;
         float: left;
-        height: inherit;
+        // height: inherit;
         white-space: nowrap;
         overflow: hidden;
         text-overflow: ellipsis;
         box-sizing: border-box;
         padding-right: 20px;
+        text-align: right;
       }
       .artistAlbumCol a {
-        color: black;
+        color: #9c9494;
         text-decoration: none;
       }
       .atistiPageTitle {
@@ -307,18 +331,23 @@ body {
       }
     }
     .trackBody {
-      height: 40px;
+      height: 45px;
+      padding: 10px 0 10px;
+      margin: 0px 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
       .trackImg img {
-        width: 36px !important;
+        width: 32px !important;
         position: relative;
-        top: -4px;
+        top: 1px;
+        border-radius: 2px;
       }
       .downloadImg {
-        text-align: left;
-        padding-left: 15px;
+        text-align: center;
+        padding-left: 0px;
         box-sizing: border-box;
         position: relative;
-        top: -5px;
       }
       .downloadImg img {
         width: 27px;
@@ -327,7 +356,7 @@ body {
       }
       .trackTitle a,
       .trackArtist a {
-        color: black;
+        color: #9c9494;
         text-decoration: none;
       }
       .trackCol7 img,
@@ -338,8 +367,30 @@ body {
         cursor: pointer;
       }
     }
+    // .trackBody:hover a {
+    // color: #1b1b1b;
+    // text-decoration: underline;
+    // }
+    // .trackBody:hover i {
+    //   color: #1b1b1b;
+    // }
+    .trackTitle a:hover,
+    .trackArtist a:hover {
+      color: #1b1b1b;
+      text-decoration: underline;
+    }
+    .trackCol7 .dropdown.icon,
+    .trackCol7 .dropdown.icon i.ellipsis.horizontal.icon {
+      background: transparent;
+    }
+
+    .trackCol2 i {
+      font-size: 1.4rem;
+    }
     .trackBody:hover {
-      background: #e8e8e8;
+      // background: #f6f6f6c9;
+      // background: linear-gradient(90deg, #f6f6f6 0%, #ece9e9 100%);
+      // background: #f6f6f6;
       transition: 0.5s;
       -webkit-transition: all 0.8s;
       transition: all 0.8s;
@@ -348,21 +399,19 @@ body {
       -ms-transition: all 0.8s;
       cursor: pointer;
     }
-    .trackImg .playIcon {
-      display: none;
-    }
-    .trackBody:hover .trackImg img,
-    .trackBody:hover .trackImg .pause-icon {
-      display: none;
-    }
-    .trackBody:hover .trackImg .playIcon {
-      display: block;
+    .trackBody:hover li a,
+    .trackBody:hover li i.download.icon,
+    .trackBody:hover .trackCol7 i.ellipsis.horizontal.icon,
+    .trackBody:hover li p {
+      color: #273d93 !important;
+      font-weight: bold;
+      text-decoration: none;
     }
   }
 
   .relatedBox a {
     text-decoration: none;
-    color: black;
+    color: #9c9494;
   }
   .relatedBox a p {
     margin: 0px;
@@ -381,8 +430,6 @@ body {
   }
 }
 
-
-
 // Search Section
 
 // Search Section
@@ -392,7 +439,7 @@ body {
   .searchDialogueBody {
     .searchResultContainer {
       margin-top: 64px; //it's fixed because of fixed Header
-      padding: 0px 40px 0px;
+      padding: 0px 10px 0px;
 
       .checkClassMobile {
         display: inline;
@@ -532,12 +579,12 @@ body {
   .searchField::after {
     display: none;
   }
-  .MuiToolbar-regular {
-    // padding: 0px 140px 0px;
-  }
+  // .MuiToolbar-regular {
+  //   // padding: 0px 140px 0px;
+  // }
 
   .searchResultContainer {
-    margin-top: 64px; //it's fixed because of fixed Header
+    margin-top: 74px; //it's fixed because of fixed Header
     // padding: 0px 140px 0px;
   }
 
@@ -546,16 +593,14 @@ body {
     background-color: white;
     box-shadow: none;
   }
-  .MuiDialog-paperFullScreen {
-    background-color: white;
-  }
+
   .searchAppBar,
   .MuiToolbar-regular {
     background: white;
   }
   .MuiTabs-root button {
     font-size: 1.250438rem;
-    font-family: "Poppins", sans-serif !important;
+    font-family: "Ubuntu", sans-serif !important;
     text-transform: capitalize;
   }
   .searchField input {
@@ -580,8 +625,8 @@ body {
     // filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#91a5f4', endColorstr='#b08cf9',GradientType=1 );
     border-radius: 5px;
     // transition: opacity 0.3s;
-    box-shadow: 0px 2px 4px -1px rgba(0, 0, 0, 0.2),
-      0px 4px 5px 0px rgba(0, 0, 0, 0.14), 0px 1px 10px 0px rgba(0, 0, 0, 0.12);
+    box-shadow: 0px 2px 4px -1px rgba(0, 0, 0, 0.2), 0px 4px 5px 0px rgba(0, 0, 0, 0.14),
+      0px 1px 10px 0px rgba(0, 0, 0, 0.12);
   }
   .album_grid {
     padding-bottom: 0px !important;
@@ -638,7 +683,7 @@ body {
   }
 
   .trackListView a span {
-    color: black;
+    color: #9c9494;
     font-family: $fontFamily;
     white-space: nowrap;
     overflow: hidden;
@@ -647,6 +692,7 @@ body {
 
   .viewMoreBox a img {
     object-fit: fill;
+    border-radius: 5px;
   }
 }
 
@@ -684,6 +730,18 @@ body {
     margin: 40px 0px 0px 0px;
   }
 
+  /* For Album View More Page */
+
+  .dummyAlbumViewMore {
+    margin-top: 40px;
+
+    img {
+      border-radius: 4px;
+    }
+  }
+
+  /* For Album View More Page */
+
   .viewMoreBox a {
     text-decoration: none;
   }
@@ -696,10 +754,12 @@ body {
     font-family: $fontFamily;
     margin: 0px;
     color: black;
+    font-size: 13px;
   }
 
   .viewMoreBox a img {
     object-fit: fill;
+    border-radius: 5px;
   }
 
   .endMessageViewMore {
@@ -736,19 +796,19 @@ body {
     position: absolute;
     left: -35px;
     text-align: left;
-    top: 40px;
+    top: 3vh;
     //background: white;
     width: 4%;
   }
   .alice-carousel__next-btn {
     position: absolute;
-    right: -20px;
+    right: -35px;
     text-align: right;
-    top: 40px;
+    top: 3vh;
     //background: white;
     width: 4%;
+    z-index: 1;
   }
-
   .extraSpaceHome {
     display: flex;
     margin-top: 0px;
@@ -768,39 +828,34 @@ body {
   // Bhand
 
   .sliderBox .alice-carousel__prev-btn {
-    top: 60px;
-    left: -35px;
+    top: calc(9.5vh);
+    left: -3vh;
   }
 
   .sliderBox .alice-carousel__next-btn {
-    top: 60px;
-    right: -8px;
+    top: calc(9.5vh);
+    right: -3vh;
   }
 
-  .artist_section .alice-carousel__prev-btn,
-  .artist_section .alice-carousel__next-btn {
-    top: 20px;
-  }
-
-  .new-section-slider .alice-carousel__prev-btn,
-  .new-section-slider .alice-carousel__next-btn {
-    top: 175px;
-  }
+  // .new-section-slider .alice-carousel__prev-btn,
+  // .new-section-slider .alice-carousel__next-btn {
+  //   top: 175px;
+  // }
 
   p.alice-carousel__prev-btn-item {
     background: url(/assets/prev_icon.png);
-    padding: 20px;
+    padding: 12px;
     background-repeat: no-repeat;
     font-size: 0px;
-    background-size: 40px;
+    background-size: 25px;
   }
 
   p.alice-carousel__next-btn-item {
     background: url(/assets/next_icon.png);
-    padding: 20px;
+    padding: 12px;
     background-repeat: no-repeat;
     font-size: 0px;
-    background-size: 40px;
+    background-size: 25px;
   }
 
   .sliderBox li a img {
@@ -869,7 +924,7 @@ body {
 
     a.see_all {
       text-decoration: none;
-      width: 100%;
+      // width: 100%;
       text-align: right;
     }
 
@@ -883,25 +938,52 @@ body {
       display: flex;
       height: 70px;
       align-items: center;
+      justify-content: flex-end;
     }
 
     .slider-header {
-      margin-bottom: 5px;
+      margin-bottom: -10px;
     }
   }
-
+  .new-1.new_hover,
+  .new-2.new_hover {
+    position: relative;
+  }
+  // Edit By Koyal Css
   .play-icon {
     position: absolute;
-    bottom: 40px;
-    right: 7px;
+    bottom: 37px;
+    right: 5px;
+    margin-right: -52px;
     border-radius: 30px;
     cursor: pointer;
-    text-align: right;
+    text-align: center;
+    visibility: hidden;
   }
 
   .play-icon img,
   .play-icon-1 img {
-    width: 24%;
+    width: 17%;
+  }
+
+  .play-icon-2 {
+    position: absolute;
+    bottom: 12px;
+    right: 5px;
+  }
+
+  .play-icon-3 {
+    position: absolute;
+    bottom: 30px;
+    right: 5px;
+  }
+
+  .play-icon-2 i.play.circular.icon,
+  .play-icon-3 i.play.circular.icon {
+    color: white;
+    -webkit-box-shadow: 0 0 0 0.1em rgb(255, 255, 255) inset;
+    box-shadow: 0 0 0 0.1em rgb(255, 255, 255) inset;
+    cursor: pointer;
   }
 
   .play-icon i.material-icons {
@@ -910,11 +992,14 @@ body {
 
   .play-icon-1 {
     position: absolute;
-    bottom: 6px;
-    right: 10px;
+    bottom: 6%;
+    right: -45px;
+    // left: 0;
     cursor: pointer;
     border-radius: 30px;
-    text-align: right;
+    text-align: center;
+    transform: translateY(120%);
+    transition: translate 0.5s linear;
   }
 
   .play-icon-1 i.material-icons {
@@ -983,6 +1068,11 @@ body {
     display: flex;
     height: 55px;
     align-items: center;
+
+    h5 a {
+      color: #000;
+      text-decoration: none;
+    }
   }
 
   .desktop-menu-item {
@@ -996,7 +1086,7 @@ body {
   }
 
   .desktop-menu-item a {
-    color: black;
+    color: #000;
     text-decoration: none;
   }
 
@@ -1010,7 +1100,7 @@ body {
   .searchBox h5 {
     padding-right: 20px;
     position: relative;
-    top: -4px;
+    top: 1px;
   }
 
   .searchBox .android_icon {
@@ -1035,7 +1125,7 @@ body {
     border-radius: 3px;
     text-transform: capitalize;
     font-size: 15px;
-    font-family: "Poppins", sans-serif;
+    font-family: "Ubuntu", sans-serif;
 
     margin: 0px 1px;
   }
@@ -1093,9 +1183,9 @@ body {
   z-index: 999;
 
   div#MyPlayer {
-    height: 33px !important;
+    height: 40px !important;
     position: relative;
-    top: 20px;
+    top: 18px;
   }
 
   .audioPlayerImage {
@@ -1125,10 +1215,11 @@ body {
     padding-left: 5px;
     color: #fff;
     font-size: 11px;
-    // white-space: nowrap;
-    // overflow: hidden;
-    // text-overflow: ellipsis;
-    // width: 60%;
+    font-weight: 300;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    width: 100%;
   }
 
   .menuIconPlayer {
@@ -1150,15 +1241,18 @@ body {
     width: 25px;
     height: 25px;
     cursor: pointer;
+    filter: invert(0);
   }
+  //Edit Koyal
   li.menuIconRadio {
     box-sizing: border-box;
     padding: 5px 10px;
     background: white;
-    border-radius: 120px;
+    border-radius: 60px;
     color: #273d93;
-    font-weight: 800;
+    font-weight: 500;
     cursor: pointer;
+    font-size: 12px;
   }
 
   .menuIconPlayer svg {
@@ -1190,6 +1284,9 @@ body {
   .jw-aspect.jw-reset {
     padding: 0px !important;
   }
+}
+.jw-reset {
+  background-color: rgb(39, 61, 147);
 }
 // .myAudioPlayer {
 //   position: relative;
@@ -1307,7 +1404,7 @@ body {
     font-family: $fontFamily;
   }
   .sendMessageBtn {
-    margin: 0 auto;
+    margin: 20px auto;
     font-family: $fontFamily;
   }
   .sendMessageBtn span.MuiButton-label {
@@ -1331,7 +1428,7 @@ body {
   }
   .sideQueueTracks a {
     text-decoration: none;
-    color: black;
+    color: #9c9494;
   }
 }
 
@@ -1346,16 +1443,17 @@ body {
   z-index: 300;
 
   .queueWrapper {
-    height: 100%;
+    height: calc(100vh);
     padding: 66px 0 90px 0;
     position: fixed;
     top: 0;
     z-index: 394;
     left: 0px;
     background: #f6f6f6;
-    width: 80px;
+    width: 70px;
     -webkit-transition: width 0.3s; /* For Safari 3.1 to 6.0 */
     transition: width 0.3s;
+    overflow: hidden;
   }
 
   .trackImage i.material-icons {
@@ -1382,21 +1480,23 @@ body {
   //   background: #f6f6f6;
   //   width: 300px;
   // }
-  .Hamburger_icon{
+  .Hamburger_icon {
     transform: rotate(90deg);
   }
-  
+
   span.MuiTouchRipple-root {
     visibility: hidden;
   }
-// UK
-.queueMiddleBar:hover button.MuiButtonBase-root.MuiIconButton-root {
-  visibility: visible;
-}
-button.MuiButtonBase-root.MuiIconButton-root {
-  visibility: hidden;
-}
-  .MuiIconButton-root, .MuiIconButton-label , .Hamburger_icon ,.MuiIconButton-root:active, .MuiIconButton-label:active , .Hamburger_icon:active{
+
+  button.MuiButtonBase-root.MuiIconButton-root {
+    visibility: hidden;
+  }
+  .MuiIconButton-root,
+  .MuiIconButton-label,
+  .Hamburger_icon,
+  .MuiIconButton-root:active,
+  .MuiIconButton-label:active,
+  .Hamburger_icon:active {
     transition: none;
     background-color: transparent;
   }
@@ -1410,13 +1510,13 @@ button.MuiButtonBase-root.MuiIconButton-root {
     height: 20px;
     vertical-align: middle;
     visibility: hidden;
-}
-.MuiButtonBase-root.MuiIconButton-root:hover{
-  background-color: transparent;
-}
-.trackMeta:hover .cancel_button_css {
-  visibility: visible;
-}
+  }
+  .MuiButtonBase-root.MuiIconButton-root:hover {
+    background-color: transparent;
+  }
+  .trackMeta:hover .cancel_button_css {
+    visibility: visible;
+  }
   // span.hoverPlayIcon {
   //   background: blue;
   //   height: 12px;
@@ -1443,8 +1543,11 @@ button.MuiButtonBase-root.MuiIconButton-root {
   .trackMeta {
     min-height: 58px;
     padding: 13px 0px 8px 63px;
-    position: relative;
+    // position: relative;
     box-sizing: border-box;
+  }
+  .trackMeta:hover {
+    position: relative;
   }
 
   .queueTopBar {
@@ -1464,10 +1567,11 @@ button.MuiButtonBase-root.MuiIconButton-root {
     transition: transform 0.21s ease-in-out;
     z-index: 200;
     background-size: cover;
-    border-radius: 2px;
+    border-radius: 3px;
     box-shadow: inset rgba(0, 0, 0, 0.17) 0 0 0 1px;
     height: 42px;
     width: 42px;
+    border: 1px solid rgba(0, 0, 0, 0.15);
   }
 
   .trackImage img {
@@ -1480,7 +1584,7 @@ button.MuiButtonBase-root.MuiIconButton-root {
     cursor: pointer;
     height: 58px;
     padding: 0 10px 0 10px;
-    border-bottom: 1px solid #c3bdbd;
+    border-bottom: 1px solid #efefef;
   }
 
   li.queueTrackList:hover {
@@ -1503,26 +1607,34 @@ button.MuiButtonBase-root.MuiIconButton-root {
     text-overflow: ellipsis;
     white-space: nowrap;
   }
-
+  //Hover effects
+  .trackMeta:hover h5,
+  .trackMeta:hover p {
+    width: 150px;
+  }
+  // UK
+  .trackMeta:hover button.MuiButtonBase-root.MuiIconButton-root {
+    visibility: visible;
+  }
   .cancelQueTrack {
     float: none !important;
     position: absolute;
-    right: -3px;
+    right: -10px;
     text-align: right;
     width: 25%;
-    top: 50%;
-    transform: translate(0, -50%);
-    -webkit-transform: translate(0, -50%);
-    -moz-transform: translate(0, -50%);
-    -ms-transform: translate(0, -50%);
-    -o-transform: translate(0, -50%);
+    bottom: 0%;
+    transform: translate(0, -20%);
+    -webkit-transform: translate(0, -20%);
+    -moz-transform: translate(0, -20%);
+    -ms-transform: translate(0, -20%);
+    -o-transform: translate(0, -20%);
     opacity: 1;
     -webkit-transition: width 0.5s;
     transition: width 0.5s;
     -moz-transition: width 0.5s;
     -o-transition: width 0.5s;
     -ms-transition: width 0.5s;
-    
+
     .playerOptionsExtra {
       background-color: white;
       width: 230px;
@@ -1530,68 +1642,69 @@ button.MuiButtonBase-root.MuiIconButton-root {
       height: 160px;
       border-radius: 10px;
       z-index: 2;
-      
-      .view {
-      display: block;
-      border-bottom: 1px gray solid;
-      margin: 14px !important;
 
-      .viewImg{
-        background-image: url("/assets/download_black.png");
-        background-repeat: no-repeat;
-        background-position: right center;
-        text-align: left;
-        background-size: 21px;
-        list-style: none;
-      }
-      .viewImgLike{
-        background-image: url("/assets/like_black.png");
-        background-repeat: no-repeat;
-        background-position: right center;
-        text-align: left;
-        background-size: 21px;
-        list-style: none;
-      }
-      .viewImgShare{
-        background-image: url("/assets/share_black.png");
-        background-repeat: no-repeat;
-        background-position: right center;
-        text-align: left;
-        background-size: 21px;
-        list-style: none;
-      }
-      .viewImgCT{
-        background-image: url("/assets/ringtone_black.png");
-        background-repeat: no-repeat;
-        background-position: right center;
-        text-align: left;
-        background-size: 21px;
-        list-style: none;
-      }
+      .view {
+        display: block;
+        border-bottom: 1px transparent solid;
+        margin: 14px !important;
+        position: relative;
+        .viewImg {
+          background-image: url("/assets/download_black.png");
+          background-repeat: no-repeat;
+          background-position: left center;
+          text-align: left;
+          background-size: 21px;
+          list-style: none;
+          padding-left: 25px;
+        }
+        .viewImgLike {
+          background-image: url("/assets/like_black.png");
+          background-repeat: no-repeat;
+          background-position: left center;
+          text-align: left;
+          background-size: 21px;
+          list-style: none;
+          padding-left: 25px;
+        }
+        .viewImgShare {
+          background-image: url("/assets/share_black.png");
+          background-repeat: no-repeat;
+          background-position: left center;
+          text-align: left;
+          background-size: 21px;
+          list-style: none;
+          padding-left: 25px;
+        }
+        .viewImgCT {
+          background-image: url("/assets/ringtone_black.png");
+          background-repeat: no-repeat;
+          background-position: left center;
+          text-align: left;
+          background-size: 21px;
+          list-style: none;
+          padding-left: 25px;
+        }
       }
       .viewWithOutBorder {
-      display: block;
-      // border-bottom: 1px black solid;
-      margin: 14px !important;
+        display: block;
+        // border-bottom: 1px black solid;
+        margin: 14px !important;
       }
       .viewWithOutBorder img {
-      width: 21px;
-      height: 21px;
+        width: 21px;
+        height: 21px;
       }
       .view img {
-      width: 21px;
-      height: 21px;
+        width: 21px;
+        height: 21px;
       }
     }
-    
-
-
   }
-// Commit Overflow Property
+  // Commit Overflow Property
   .queueMiddleBar {
-    height: 530px;
-    // overflow-y: scroll;
-    // overflow-x: hidden;
+    height: calc(100vh - 160px);
+    overflow: scroll;
+    overflow-x: hidden;
   }
 
   // .queueMiddleBar ul {
@@ -1680,8 +1793,8 @@ button.MuiButtonBase-root.MuiIconButton-root {
   margin: 50px 0px 0px 0px;
   box-sizing: border-box;
   padding: 0px 20px;
-  background: rgba(239, 239, 239, 0.28);
-
+  background: #ffffff;
+  border-top: 1px dashed #ccc;
   .footerTopBar {
     display: flex;
     justify-content: center;
@@ -1693,17 +1806,21 @@ button.MuiButtonBase-root.MuiIconButton-root {
   }
 
   .topbarItem a {
-    color: rgba(0, 0, 0, 0.5);
+    color: #9c9494;
     text-decoration: none;
   }
 
   .topbarItem span {
     padding: 0px 20px;
   }
-
+  // Edit By Koyal
   .footerMiddleBar {
     display: flex;
-    justify-content: center;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    h3 {
+      font-weight: 500;
+    }
   }
 
   .footerMiddleItem p {
@@ -1712,18 +1829,19 @@ button.MuiButtonBase-root.MuiIconButton-root {
 
   .footerMiddleItem p a {
     text-decoration: none;
-    color: rgba(0, 0, 0, 0.5);
+    color: #9c9494;
     font-family: $fontFamily;
     font-size: 13px;
   }
-
+  // Edit By Koyal
   .footerMiddleItem {
-    width: 100%;
+    width: 19%;
   }
 
   .followUsBox {
     display: flex;
     justify-content: center;
+    align-items: flex-end;
     margin: 45px 0px 20px 0px;
   }
 
@@ -1743,21 +1861,29 @@ button.MuiButtonBase-root.MuiIconButton-root {
 //about us
 .AboutUs {
   // background-color: blueviolet;
-  margin-top: 100px;
+  margin-top: 0px;
   .CustomeH2 {
     margin: 0px;
     padding: 0px;
   }
+  h2.CustomeH2 {
+    font-weight: 500;
+    color: #1b1b1b;
+    border-bottom: 1px dotted #9c9494;
+    padding-bottom: 20px;
+    margin-bottom: 40px;
+  }
   .AboutContent {
     text-align: justify;
     margin: 0px;
+    color: #9c9494;
+    line-height: 1.6em;
   }
 }
 
 //about us
 .AboutUs {
   // background-color: blueviolet;
-  margin-top: 100px;
   .CustomeH2 {
     margin: 0px;
     padding: 0px;
@@ -1771,10 +1897,17 @@ button.MuiButtonBase-root.MuiIconButton-root {
 //DMCA
 
 .DMCA {
-  margin-top: 100px;
+  margin-top: 0px;
+  p {
+    line-height: 1.6em;
+  }
   .CustomeH2 {
     margin: 0px;
     padding: 0px;
+    font-weight: 500;
+    border-bottom: 1px dotted #9c9494;
+    padding-bottom: 20px;
+    margin-bottom: 20px;
   }
   .DMCAContent {
     text-align: justify;
@@ -1818,9 +1951,8 @@ button.MuiButtonBase-root.MuiIconButton-root {
       min-width: 64px;
       box-sizing: border-box;
       transition: background-color 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms,
-        box-shadow 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms,
-        border 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;
-      font-family: "Roboto", "Helvetica", "Arial", sans-serif;
+        box-shadow 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms, border 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;
+      font-family: "Ubuntu", "Helvetica", "Arial", sans-serif;
       font-weight: 500;
       line-height: 1.75;
       border-radius: 4px;
@@ -1837,9 +1969,8 @@ button.MuiButtonBase-root.MuiIconButton-root {
       min-width: 64px;
       box-sizing: border-box;
       transition: background-color 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms,
-        box-shadow 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms,
-        border 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;
-      font-family: "Roboto", "Helvetica", "Arial", sans-serif;
+        box-shadow 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms, border 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;
+      font-family: "Ubuntu", "Helvetica", "Arial", sans-serif;
       font-weight: 500;
       line-height: 1.75;
       border-radius: 4px;
@@ -1860,14 +1991,36 @@ button.MuiButtonBase-root.MuiIconButton-root {
 
 // TOC
 .TOS {
+  p {
+    line-height: 1.6em;
+  }
+  ul.ListStyle li {
+    margin-bottom: 15px;
+  }
+  h2.CustomeH2 {
+    font-weight: 500;
+    border-bottom: 1px dotted #9c9494;
+    padding-bottom: 20px;
+    margin-bottom: 20px;
+  }
   text-align: justify;
   .ListStyle {
     list-style: none;
+  }
+  h3 {
+    font-weight: 500;
   }
 }
 
 // PrivacyPolicy
 .PrivacyPolicy {
+  p {
+    line-height: 1.6em;
+  }
+  h3 {
+    font-weight: 500;
+    text-transform: capitalize;
+  }
   text-align: justify;
   .ListStyle {
     list-style: none;
@@ -1875,6 +2028,10 @@ button.MuiButtonBase-root.MuiIconButton-root {
   .CustomeH2 {
     margin: 0px;
     padding: 0px;
+    font-weight: 500;
+    border-bottom: 1px dotted #9c9494;
+    padding-bottom: 20px;
+    margin-bottom: 20px;
   }
   .top {
     margin-top: 10px;
@@ -1888,31 +2045,30 @@ button.MuiButtonBase-root.MuiIconButton-root {
   color: gray;
   height: 160px;
   border-radius: 10px;
-  
+
   .view {
-  display: block;
-  border-bottom: 1px gray solid;
-  margin: 14px !important;
-  
+    display: block;
+    border-bottom: 1px transparent solid;
+    margin: 14px !important;
   }
   .viewWithOutBorder {
-  display: block;
-  // border-bottom: 1px black solid;
-  margin: 14px !important;
+    display: block;
+    // border-bottom: 1px black solid;
+    margin: 14px !important;
   }
   .viewWithOutBorder img {
-  width: 21px;
-  height: 21px;
+    width: 21px;
+    height: 21px;
   }
   .view img {
-  width: 21px;
-  height: 21px;
+    width: 21px;
+    height: 21px;
   }
 }
 
 //Track Like Option
 .LineBreak {
-  border-bottom: 1px solid gray;
+  border-bottom: 1px solid #dfdfdf;
 }
 .AlignMeCenter {
   text-align: center !important;
@@ -1960,7 +2116,7 @@ button.MuiButtonBase-root.MuiIconButton-root {
 
   .socialIconsShare img {
     display: inline-block !important;
-    width: 5% !important;
+    width: 10% !important;
     margin-right: 10px;
     margin-left: 10px;
     height: 30px !important;
@@ -1996,5 +2152,17 @@ button.MuiButtonBase-root.MuiIconButton-root {
   .material-icons {
     font-size: 20px;
     color: white;
+  }
+}
+@media (max-width: 600px) {
+  .myAudioPlayer.playerresponsive {
+    .jw-reset.jw-button-container {
+      width: 100%;
+      position: absolute;
+      bottom: 10px;
+      /* z-index: 99999; */
+      right: 45px;
+      justify-content: flex-end;
+    }
   }
 }

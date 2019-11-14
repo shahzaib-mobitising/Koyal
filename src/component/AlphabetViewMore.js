@@ -6,8 +6,9 @@ import Grid from '@material-ui/core/Grid';
 import Card from '@material-ui/core/Card';
 import { LazyImage } from "react-lazy-images";
 import CircularProgress from '@material-ui/core/CircularProgress';
-//import AlbumLoader from './AlbumLoader';
+import AlbumLoader from './AlbumLoader';
 import AlphabetViewMoreCustom from './AlphabetViewMoreCustom';
+
 
 
 
@@ -23,27 +24,61 @@ export default class AlphabetViewMore extends Component {
             offset: 0,
             langIDs: '',
             itemsCheck: [],
-            loadingData : true
+            loadingData: true
         }
     }
 
     getData = () => {
         setTimeout(() => {
-        axios.get(`http://api.koyal.pk/musicapp/?request=get-albums&action=general&languageId=${this.state.langIDs}&userType=guest&limit=24&offset=${this.state.offset}&orderBy=ReleaseDate&orderAs=DESC&keyword=${this.props.match.params.keyword}&match=after`)
-            .then(response => {
-                this.setState({
-                    page_idd: this.props.match.params.keyword,
-                    items: response.data.Response.Albums,
-                    hasMore: true,
-                    loadingData: false
-                })
-            })
-            .catch(error => {
-                console.log(error)
-               
-            })
 
-        }, 1000 );
+            let forLangItem = this.props.match.params.types
+
+            // console.log(forLangItem)
+
+            let urlMore = ''
+
+            if (forLangItem === 'new') {
+
+                urlMore = `https://api.koyal.pk/musicapp/?request=get-albums&action=general&languageId=${this.state.langIDs}&userType=guest&limit=24&offset=${this.state.offset}&orderBy=ReleaseDate&orderAs=DESC&keyword=${this.props.match.params.keywords}&match=after`
+
+            } else if (forLangItem === 'trend') {
+
+                urlMore = `https://api.koyal.pk/musicapp/?request=get-albums&action=popular&languageId=${this.state.langIDs}&userType=guest&limit=24&offset=${this.state.offset}&orderBy=Views&orderAs=DESC&keyword=${this.props.match.params.keywords}&match=after`
+
+            } else if (forLangItem === 'collect') {
+
+                urlMore = `https://api.koyal.pk/musicapp/?request=get-albums&action=collect&languageId=${this.state.langIDs}&userType=guest&limit=24&offset=${this.state.offset}&keyword=${this.props.match.params.keywords}&match=after`
+
+            } else if (forLangItem === 'artist') {
+
+                urlMore = `https://api.koyal.pk/musicapp/?request=get-artists-nd&languageId=${this.state.langIDs}&userType=guest&limit=24&offset=${this.state.offset}&keyword=${this.props.match.params.keywords}&match=after`
+
+            } else if (forLangItem === 'album') {
+
+                urlMore = `https://api.koyal.pk/musicapp/?request=get-albums&languageId=${this.state.langIDs}&userType=guest&limit=24&offset=${this.state.offset}&keyword=${this.props.match.params.keywords}&match=after`
+
+            } else if (forLangItem === 'islamic') {
+
+                urlMore = `https://api.koyal.pk/musicapp/?request=get-albums&action=ramadan&languageId=${this.state.langIDs}&userType=guest&limit=24&offset=${this.state.offset}&orderBy=Views&orderAs=DESC&keyword=${this.props.match.params.keywords}&match=after`
+            }
+
+
+            axios.get(urlMore)
+                .then(response => {
+                    console.log(response)
+                    this.setState({
+                        page_idd: this.props.match.params.keywords,
+                        items: response.data.Response.Albums,
+                        hasMore: true,
+                        loadingData: false
+                    })
+                })
+                .catch(error => {
+                    console.log(error)
+
+                })
+
+        }, 800);
 
     }
 
@@ -53,35 +88,35 @@ export default class AlphabetViewMore extends Component {
 
     componentDidMount() {
 
-        if (this.props.match.params.languageName.split("-", 1)) {
+        if (this.props.match.params.titles) {
 
-            let forLangId = this.props.match.params.languageName.split("-", 1)
+            let forLangId = this.props.match.params.titles
 
-            if (forLangId[0] === 'urdu') {
+            if (forLangId === 'urdu') {
                 this.setState({
                     langIDs: 1
                 });
-            } else if (forLangId[0] === 'punjabi') {
+            } else if (forLangId === 'punjabi') {
                 this.setState({
                     langIDs: 2
                 });
-            } else if (forLangId[0] === 'saraiki') {
+            } else if (forLangId === 'saraiki') {
                 this.setState({
                     langIDs: 3
                 });
-            } else if (forLangId[0] === 'sindhi') {
+            } else if (forLangId === 'sindhi') {
                 this.setState({
                     langIDs: 4
                 });
-            } else if (forLangId[0] === 'pashto') {
+            } else if (forLangId === 'pashto') {
                 this.setState({
                     langIDs: 5
                 });
-            } else if (forLangId[0] === 'balochi') {
+            } else if (forLangId === 'balochi') {
                 this.setState({
                     langIDs: 6
                 });
-            } else if (forLangId[0] === 'hindko') {
+            } else if (forLangId === 'hindko') {
                 this.setState({
                     langIDs: 7
                 });
@@ -89,12 +124,12 @@ export default class AlphabetViewMore extends Component {
         }
 
         this.getData()
-        //  this.testFnf()
+
     }
 
     componentDidUpdate(props, prevState) {
 
-        if (prevState.page_idd !== this.props.match.params.keyword) {
+        if (prevState.page_idd !== this.props.match.params.keywords) {
             this.getData()
         }
 
@@ -102,7 +137,7 @@ export default class AlphabetViewMore extends Component {
 
     fetchMoreData = () => {
 
-       
+
 
         if (this.state.items.length >= 5000) {
             this.setState({
@@ -117,36 +152,37 @@ export default class AlphabetViewMore extends Component {
 
         setTimeout(() => {
 
-            let forLangItem = this.props.match.params.languageName.split("-", 2)
+            let forLangItem = this.props.match.params.types
+
+            // console.log(forLangItem)
 
             let urlMore = ''
 
-            if (forLangItem[1] === 'new') {
+            if (forLangItem === 'new') {
 
-                urlMore = `http://api.koyal.pk/musicapp/?request=get-albums&action=general&languageId=${this.state.langIDs}&userType=guest&limit=24&offset=${this.state.offset}&orderBy=ReleaseDate&orderAs=DESC&keyword=${this.props.match.params.keyword}&match=after`
+                urlMore = `https://api.koyal.pk/musicapp/?request=get-albums&action=general&languageId=${this.state.langIDs}&userType=guest&limit=24&offset=${this.state.offset}&orderBy=ReleaseDate&orderAs=DESC&keyword=${this.props.match.params.keywords}&match=after`
 
-            } else if (forLangItem[1] === 'trend') {
+            } else if (forLangItem === 'trend') {
 
-                urlMore = `http://api.koyal.pk/musicapp/?request=get-albums&action=popular&languageId=${this.state.langIDs}&userType=guest&limit=24&offset=${this.state.offset}&orderBy=Views&orderAs=DESC&keyword=${this.props.match.params.keyword}&match=after`
+                urlMore = `https://api.koyal.pk/musicapp/?request=get-albums&action=popular&languageId=${this.state.langIDs}&userType=guest&limit=24&offset=${this.state.offset}&orderBy=Views&orderAs=DESC&keyword=${this.props.match.params.keywords}&match=after`
 
-            } else if (forLangItem[1] === 'collect') {
+            } else if (forLangItem === 'collect') {
 
-                urlMore = `http://api.koyal.pk/musicapp/?request=get-albums&action=collect&languageId=${this.state.langIDs}&userType=guest&limit=24&offset=${this.state.offset}&keyword=${this.props.match.params.keyword}&match=after`
+                urlMore = `https://api.koyal.pk/musicapp/?request=get-albums&action=collect&languageId=${this.state.langIDs}&userType=guest&limit=24&offset=${this.state.offset}&keyword=${this.props.match.params.keywords}&match=after`
 
-            } else if (forLangItem[1] === 'artist') {
+            } else if (forLangItem === 'artist') {
 
-                urlMore = `http://api.koyal.pk/musicapp/?request=get-artists-nd&languageId=${this.state.langIDs}&userType=guest&limit=24&offset=${this.state.offset}&keyword=${this.props.match.params.keyword}&match=after`
+                urlMore = `https://api.koyal.pk/musicapp/?request=get-artists-nd&languageId=${this.state.langIDs}&userType=guest&limit=24&offset=${this.state.offset}&keyword=${this.props.match.params.keywords}&match=after`
 
+            } else if (forLangItem === 'album') {
 
-            } else if (forLangItem[1] === 'album') {
+                urlMore = `https://api.koyal.pk/musicapp/?request=get-albums&languageId=${this.state.langIDs}&userType=guest&limit=24&offset=${this.state.offset}&keyword=${this.props.match.params.keywords}&match=after`
 
-                urlMore = `http://api.koyal.pk/musicapp/?request=get-albums&languageId=${this.state.langIDs}&userType=guest&limit=24&offset=${this.state.offset}&keyword=${this.props.match.params.keyword}&match=after`
+            } else if (forLangItem === 'islamic') {
 
-            } else if (forLangItem[1] === 'islamic') {
-
-                urlMore = `http://api.koyal.pk/musicapp/?request=get-albums&action=ramadan&languageId=${this.state.langIDs}&userType=guest&limit=24&offset=${this.state.offset}&orderBy=Views&orderAs=DESC&keyword=${this.props.match.params.keyword}&match=after`
+                urlMore = `https://api.koyal.pk/musicapp/?request=get-albums&action=ramadan&languageId=${this.state.langIDs}&userType=guest&limit=24&offset=${this.state.offset}&orderBy=Views&orderAs=DESC&keyword=${this.props.match.params.keywords}&match=after`
             }
-
+            //console.log(forLangItem)
             axios.get(urlMore)
                 .then(response => {
                     this.setState({
@@ -154,7 +190,6 @@ export default class AlphabetViewMore extends Component {
                         itemsCheck: response.data.Response.Albums
                     })
 
-                   
 
                     if ((this.state.itemsCheck.length < 24) || (this.state.itemsCheck.length === null)) {
 
@@ -167,39 +202,47 @@ export default class AlphabetViewMore extends Component {
                 })
                 .catch(error => {
                     console.log(error)
-                   
+
                 })
         }, 10);
     }
 
+    ToSeoUrl(url) {
+
+        // make the url lowercase         
+        var encodedUrl = url.toString().toLowerCase();
+
+        // replace & with and           
+        encodedUrl = encodedUrl.split(/\&+/).join("-and-")
+
+        // remove invalid characters 
+        encodedUrl = encodedUrl.split(/[^a-z0-9]/).join("-");
+
+        // remove duplicates 
+        encodedUrl = encodedUrl.split(/-+/).join("-");
+
+        // trim leading & trailing characters 
+        encodedUrl = encodedUrl.trim('-');
+
+        return encodedUrl;
+    }
+
     render() {
 
-        const checkArtist = this.props.match.params.languageName.split("-", 2);
+        const checkArtist = this.props.match.params.titles;
 
         const forAlbum2 = <Grid container spacing={3}> {this.state.items.map((i, index) => (
             <Grid key={index} item xs={4} md={2}>
                 <Card className="viewMoreBox">
-                    <Link component={Link} to={`/album/` + i.Id + `/` + i.Name}>
+                    <Link to={`/album/` + i.Id + `/` + this.ToSeoUrl(i.Name)}>
                         <LazyImage
                             src={i.ThumbnailImageWeb}
                             alt={i.Name}
-                            debounceDurationMs={900}
+                            debounceDurationMs={100}
                             placeholder={({ imageProps, ref }) => (<img ref={ref} src={`/assets/albumx150.jpg`} alt={imageProps.alt} style={{ width: "100%" }} />)}
                             actual={({ imageProps }) => (<img {...imageProps} style={{ width: "100%" }} alt={i.Name} />)} />
                         <p className="album-title">{i.Name}</p>
-                        {/* <CardActionArea>
-                            <CardMedia
-                                component="img"
-                                alt={i.Name}
-                                image={i.ThumbnailImageWeb}
-                                title={i.Name}
-                            />
-                            <CardContent>
-                                <Typography variant="subtitle1" gutterBottom>
-                                    {i.Name}
-                                </Typography>
-                            </CardContent>
-                        </CardActionArea> */}
+
                     </Link>
                 </Card>
             </Grid>
@@ -208,57 +251,48 @@ export default class AlphabetViewMore extends Component {
         const forArtist = <Grid container spacing={7}> {this.state.items.map((i, index) => (
             <Grid key={index} item xs={4} md={2}>
                 <Card className="viewMoreBox">
-                    <Link component={Link} to={`/artist/` + i.Id + `/` + i.Name}>
+                    <Link to={`/artist/` + i.Id + `/` + this.ToSeoUrl(i.Name)}>
                         <LazyImage
                             src={i.ThumbnailImageWeb}
                             alt={i.Name}
-                            debounceDurationMs={900}
+                            debounceDurationMs={100}
                             placeholder={({ imageProps, ref }) => (<img ref={ref} src={`/assets/albumx150.jpg`} alt={imageProps.alt} style={{ width: "100%" }} />)}
                             actual={({ imageProps }) => (<img {...imageProps} style={{ width: "100%" }} alt={i.Name} />)} />
                         <p className="album-title">{i.Name}</p>
-                        {/* <CardActionArea>
-                            <CardMedia
-                                component="img"
-                                alt={i.Name}
-                                image={i.ThumbnailImageWeb}
-                                title={i.Name}
-                            />
-                            <CardContent>
-                                <Typography variant="subtitle1" gutterBottom>
-                                    {i.Name}
-                                </Typography>
-                            </CardContent>
-                        </CardActionArea> */}
+
                     </Link>
                 </Card>
             </Grid>
         ))}</Grid>
 
-        return (
-            <div className="alphabetMainBox">
-                {/* <SearchAlphabet languageCurrent={this.props.match.params.languageName} /> */}
 
-                <AlphabetViewMoreCustom languageCurrent={this.props.match.params.languageName}/>
+
+        return (
+            <div className="alphabetMainBox grid_alphabet">
+
+
+                <AlphabetViewMoreCustom languageCurrent={this.props.match.params.titles} languageCurrentType={this.props.match.params.types} />
+
 
                 <div className="viewMoreAlphabet">
 
-                    {/* {this.state.loadingData ? <AlbumLoader /> : <> */}
+                    {this.state.loadingData ? <AlbumLoader /> : <>
 
-                    <InfiniteScroll
-                        dataLength={this.state.items.length}
-                        next={this.fetchMoreData}
-                        hasMore={this.state.hasMore}
-                        loader={<div className="viewMoreLoader"><CircularProgress /></div>}
-                        endMessage={<p className="endMessageViewMore"> <b>Thank you for visiting Koyal.pk</b></p>}>
+                        <InfiniteScroll
+                            dataLength={this.state.items.length}
+                            next={this.fetchMoreData}
+                            hasMore={this.state.hasMore}
+                            loader={<div className="viewMoreLoader"><CircularProgress /></div>}
+                            endMessage={<p className="endMessageViewMore"> <b>Whoa !!! You have seen it All …</b></p>}>
 
-                        {checkArtist[1] === 'artist'
-                            ? forArtist
-                            : forAlbum2
-                        }
+                            {checkArtist[1] === 'artist'
+                                ? forArtist
+                                : forAlbum2
+                            }
 
-                    </InfiniteScroll>
+                        </InfiniteScroll>
 
-                    {/* </>} */}
+                    </>}
 
                 </div>
             </div>

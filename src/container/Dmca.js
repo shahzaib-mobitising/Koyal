@@ -1,7 +1,7 @@
 import React from "react";
 import axios from 'axios'
 import useForm from 'react-hook-form'
-
+import { Helmet } from "react-helmet";
 const Dmca = () => {
 
   const { register, handleSubmit, errors } = useForm()
@@ -9,7 +9,7 @@ const Dmca = () => {
   const onSubmit = data => {
 
     //console.log(data)
-    axios.post(`http://api.koyal.pk/musicapp/?request=send-dmca-report`, data)
+    axios.post(`https://api.koyal.pk/musicapp/?request=send-dmca-report`, data)
       .then(response => {
 
         console.log(response)
@@ -107,7 +107,12 @@ const Dmca = () => {
         </ul>
         <h2 clsName="CustomeH2"> Report a Content</h2>
         <p className="DMCAContent">
-
+          <>
+            <Helmet>
+              <meta charSet="utf-8" />
+              <title>Koyal - DMCA</title>
+            </Helmet>
+          </>
           <form onSubmit={handleSubmit(onSubmit)}>
             {/* register your input into the hook by invoking the "register" function */}
             <input className="DMCAName" placeholder="Name" name="name" ref={register} />

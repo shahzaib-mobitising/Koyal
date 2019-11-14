@@ -7,7 +7,9 @@ import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
-import ReactFBLike from 'react-fb-like';
+
+
+//import ReactFBLike from 'react-fb-like';
 //import ReactFBLike from 'react-fb-like';
 
 
@@ -23,23 +25,40 @@ export default function TrackLikeOption(props) {
     setOpen(false);
   }
 
-  return (
-    <div>
-      <img src="/assets/like_black.png" alt="like" onClick={handleClickOpen} />
+  const responseFacebook = (response) => {
+    console.log(response);
+  }
 
-      <Dialog
+
+  return (
+    <span>
+
+      {/* <FacebookLogin
+        appId="168997670356490"
+        autoLoad={false}
+        fields="name,email,picture"
+        //onClick={componentClicked}
+        callback={responseFacebook} /> */}
+
+
+      {/* <img src="/assets/heart_like.png" alt="like" onClick={handleClickOpen} /> */}
+
+      <i aria-hidden="true" class="heart outline icon" onClick={handleClickOpen}></i>
+     
+
+      <Dialog className="like_dialogue"
         open={open}
         onClose={handleClose}
         aria-labelledby="alert-dialog-title"
         aria-describedby="alert-dialog-description"
       >
         <DialogTitle id="alert-dialog-title">
-          <div className="AlignMeCenter">Like</div>
+          <div className="AlignMeCenter share_text"><strong>Like</strong></div>
         </DialogTitle>
 
         <div className="LineBreak"></div>
 
-        <DialogContent>
+        <DialogContent className="contect_center">
           <DialogContentText id="alert-dialog-description">
             <div className="DialogContent">
               <div className="ContentRef">
@@ -48,19 +67,18 @@ export default function TrackLikeOption(props) {
                 </div> */}
 
                 <Grid container spacing={1}>
-                  <Grid item xs={3}>
-                  </Grid>
-                  <Grid item xs={6}>
+
+                  <Grid item xs={12}>
                     <img src={props.albumImage} alt={props.trackName} />
                   </Grid>
 
                 </Grid>
               </div>
-              <div>
-                <h3>{props.trackName}</h3>
+              <div className="trackName">
+                <p >{props.trackName}</p>
               </div>
               <div>
-                <h5>{props.artistName}</h5>
+                <p className="artist_name">{props.artistName}</p>
               </div>
             </div>
           </DialogContentText>
@@ -69,8 +87,8 @@ export default function TrackLikeOption(props) {
         <div className="LineBreak"></div>
 
         <DialogActions>
-          <div ClassName="DialogFooterCustome">
-            <p>Login via </p>
+          <div className="DialogFooterCustome logindiv">
+            <p className="share_on">Login via </p>
             <div className="socialIconsShare">
               <a
                 target="_blank" rel="noopener noreferrer"
@@ -83,14 +101,14 @@ export default function TrackLikeOption(props) {
                 <img src="/assets/insta.svg" alt="instagram" />
               </a> */}
 
-              {/* <a
+              <a
                 target="_blank" rel="noopener noreferrer"
                 href={`http://www.facebook.com/sharer/sharer.php?u=https://www.koyal.pk/`}
               >
                 <img src="/assets/fb.svg" alt="facebook" />
-              </a> */}
-
-              <ReactFBLike />
+              </a>
+              {/* 
+              <ReactFBLike /> */}
 
             </div>
           </div>
@@ -132,7 +150,7 @@ export default function TrackLikeOption(props) {
 
                 </DialogActions>
             </Dialog> */}
-    </div>
+    </span>
   );
 }
 

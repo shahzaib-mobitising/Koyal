@@ -8,6 +8,9 @@ import homeDataDummy from '../dummy/home.json'
 import { withGlobalState } from 'react-globally'
 import { LazyImage } from "react-lazy-images";
 import LanguageBarCustom from '../component/LanguageBarCustom';
+import { Card, Placeholder } from 'semantic-ui-react'
+import { isMobile } from 'react-device-detect';
+import { Helmet } from "react-helmet";
 
 
 
@@ -16,15 +19,15 @@ class Homepage extends Component {
         super(props)
         this.playTracksDirectly = this.playTracksDirectly.bind(this);
         this.state = {
-            sliderSection: [],
+            loading: true,
+            sliderSection: homeDataDummy.Response.HomePageContent[0]['Data'],
             genreSection: homeDataDummy.Response.HomePageContent[1]['Data'],
             newSection: homeDataDummy.Response.HomePageContent[2]['Data'],
-            newSection2: homeDataDummy.Response.HomePageContent[2]['Data'],
             popularSection: homeDataDummy.Response.HomePageContent[2]['Data'],
             collectionsSection: homeDataDummy.Response.HomePageContent[2]['Data'],
             artistSection: homeDataDummy.Response.HomePageContent[1]['Data'],
             albumSection: homeDataDummy.Response.HomePageContent[2]['Data'],
-            islamicSection: homeDataDummy.Response.HomePageContent[2]['Data']
+            islamicSection: homeDataDummy.Response.HomePageContent[2]['Data'],
         }
 
     }
@@ -33,14 +36,14 @@ class Homepage extends Component {
 
         //   console.log(id)
 
-        axios.get(`http://api.koyal.pk/musicapp/?request=get-tracks-react-button&id=${id}`)
+        axios.get(`https://api.koyal.pk/musicapp/?request=get-tracks-react-button&id=${id}`)
             .then(response => {
 
                 let dataTrack = []
                 let respo = response.data.Response.Tracks
 
                 let TestImage = respo[0].ThumbnailImageWeb;
-
+                // console.log(respo)
                 respo.map(data =>
 
                     dataTrack.push(
@@ -52,8 +55,13 @@ class Homepage extends Component {
                             'albumId': data['AlbumId'],
                             'albumName': data['Album'].split("_").join(" "),
                             'thumbnailImage': TestImage,
-                            'rbtTelenor': data['rbtTelenor'],
+                            'rbtTelenor': data['TelenorCode'],
                             'albumArtist': data['AlbumArtist'],
+                            'trackURL': data['OrgTrackUrl'],
+                            'MobilinkCode': data['MobilinkCode'],
+                            'ZongCode': data['ZongCode'],
+                            'UfoneCode': data['UfoneCode'],
+                            'TelenorCode': data['TelenorCode']
                         }
 
 
@@ -89,246 +97,326 @@ class Homepage extends Component {
 
     componentDidMount() {
 
-        //  setTimeout(() =>
+        setTimeout(() =>
 
-        axios.get('http://api.koyal.pk/app_files/web/new/home.json')
-            .then(response => {
-                // console.log(homeDataDummy)
-                this.setState({
-                    sliderSection: response.data.Response.HomePageContent[0]['Data'],
-                    genreSection: response.data.Response.HomePageContent[1]['Data'],
-                    newSection: response.data.Response.HomePageContent[2]['Data'],
-                    newSection2: response.data.Response.HomePageContent[3]['Data'],
-                    popularSection: response.data.Response.HomePageContent[4]['Data'],
-                    collectionsSection: response.data.Response.HomePageContent[5]['Data'],
-                    artistSection: response.data.Response.HomePageContent[6]['Data'],
-                    albumSection: response.data.Response.HomePageContent[7]['Data'],
-                    islamicSection: response.data.Response.HomePageContent[8]['Data']
-                })
+            axios.get('https://api.koyal.pk/app_files/web/new/home.json')
+                .then(response => {
+                    console.log(homeDataDummy)
+                    this.setState({
+                        loading: false,
+                        sliderSection: response.data.Response.HomePageContent[0]['Data'],
+                        genreSection: response.data.Response.HomePageContent[1]['Data'],
+                        newSection: response.data.Response.HomePageContent[2]['Data'],
+                        popularSection: response.data.Response.HomePageContent[3]['Data'],
+                        collectionsSection: response.data.Response.HomePageContent[4]['Data'],
+                        artistSection: response.data.Response.HomePageContent[5]['Data'],
+                        albumSection: response.data.Response.HomePageContent[6]['Data'],
+                        islamicSection: response.data.Response.HomePageContent[7]['Data']
+                    })
 
-                let CacheData = JSON.parse(localStorage.getItem('queuelist'))
+                    let CacheData = JSON.parse(localStorage.getItem('queuelist'))
 
-               // console.log(CacheData)
+                    // console.log(CacheData)
 
-                if (CacheData) {
+                    if (CacheData) {
 
-                    let dataTrack = []
+                        let dataTrack = []
 
-                    CacheData.map(data =>
+                        CacheData.map(data =>
 
-                        dataTrack.push(
-                            {
+                            dataTrack.push(
+                                {
 
-                                'file': data['TrackUrl'],
-                                'track_id': data['TrackId'],
-                                'trackName': data['Name'],
-                                'albumId': data['AlbumId'],
-                                'albumName': data['Album'],
-                                'thumbnailImage': data['ThumbnailImageWeb'],
-                                'rbtTelenor': data['rbtTelenor']
-                            }
+                                    'file': data['TrackUrl'],
+                                    'track_id': data['TrackId'],
+                                    'trackName': data['Name'],
+                                    'albumId': data['AlbumId'],
+                                    'albumName': data['Album'],
+                                    'thumbnailImage': data['ThumbnailImageWeb'],
+                                    'rbtTelenor': data['rbtTelenor']
+                                })
+                        )
 
+                        //  console.log(dataTrack.file)
 
-                        ))
-
-                    //  console.log(dataTrack.file)
-
-                    if (dataTrack.file === undefined) {
-                       // console.log('empty')
-                    } else {
-                        if (this.props.globalState.track_exist !== 0) {
-
-                            this.props.setGlobalState({
-                                tracks: dataTrack,
-                                trackAlbumImage: CacheData[0].ThumbnailImageWeb,
-                                trackAlbumName: CacheData[0].Album,
-                                trackGlobalName: CacheData[0].Name,
-                                queueState: dataTrack
-                            })
-
-
+                        if (dataTrack.file === undefined) {
+                            // console.log('empty')
                         } else {
-                            console.log(456)
-                            this.props.setGlobalState({
-                                tracks: dataTrack,
-                                trackAlbumImage: CacheData[0].ThumbnailImageWeb,
-                                trackAlbumName: CacheData[0].Album,
-                                trackGlobalName: CacheData[0].Name,
-                                queueState: dataTrack
-                            })
+                            if (this.props.globalState.track_exist !== 0) {
 
+                                this.props.setGlobalState({
+                                    tracks: dataTrack,
+                                    trackAlbumImage: CacheData[0].ThumbnailImageWeb,
+                                    trackAlbumName: CacheData[0].Album,
+                                    trackGlobalName: CacheData[0].Name,
+                                    queueState: dataTrack
+                                })
+
+
+                            } else {
+
+                                this.props.setGlobalState({
+                                    tracks: dataTrack,
+                                    trackAlbumImage: CacheData[0].ThumbnailImageWeb,
+                                    trackAlbumName: CacheData[0].Album,
+                                    trackGlobalName: CacheData[0].Name,
+                                    queueState: dataTrack
+                                })
+
+                            }
                         }
+
+                    } else {
+                        console.log('From Homepage')
                     }
 
-                } else {
-                    console.log(false)
-                }
+                })
+                .catch(error => {
+                    console.log(error)
+                    this.setState({ errMsg: 'Error Data' })
+                })
 
-
-
-            })
-            .catch(error => {
-                console.log(error)
-                this.setState({ errMsg: 'Error Data' })
-            })
-
-        // , 500)
+            , 50)
     }
 
     responsiveSlider = {
-        0: { items: 1 },
+        0: { items: 2 },
+        320: { items: 2 },
+        360: { items: 2 },
         1024: { items: 3 },
 
     }
 
     responsive2 = {
-        0: { items: 2 },
+        0: { items: 3 },
+        320: { items: 4 },
+        360: { items: 4 },
         1024: { items: 8 }
     }
 
     responsive3 = {
-        0: { items: 2 },
-        1024: { items: 9 },
+        0: { items: 3 },
+        320: { items: 4 },
+        360: { items: 4 },
+        1024: { items: 8 },
+        1366: { items: 10 },
     }
 
     artistR = {
-        0: { items: 2 },
-        1024: { items: 11 },
+        0: { items: 3 },
+        320: { items: 4 },
+        360: { items: 4 },
+        1024: { items: 8 },
     }
+
+    ToSeoUrl(url) {
+
+        // make the url lowercase         
+        var encodedUrl = url.toString().toLowerCase();
+
+        // replace & with and           
+        encodedUrl = encodedUrl.split(/\&+/).join("-and-")
+
+        // remove invalid characters 
+        encodedUrl = encodedUrl.split(/[^a-z0-9]/).join("-");
+
+        // remove duplicates 
+        encodedUrl = encodedUrl.split(/-+/).join("-");
+
+        // trim leading & trailing characters 
+        encodedUrl = encodedUrl.trim('-');
+
+        return encodedUrl;
+    }
+
 
     render() {
 
-        const { sliderSection, genreSection, newSection, newSection2, popularSection, collectionsSection, artistSection, albumSection, islamicSection } = this.state
+        const { loading, sliderSection, genreSection, newSection, popularSection, collectionsSection, artistSection, albumSection, islamicSection } = this.state
 
-        const forSlider = sliderSection.map(data => <div className="sliderImageBox"> <Link component={Link} to={`/album/` + data.Id + `/` + data.Name}><LazyImage src={data.SliderImageWeb} alt={data.Id} debounceDurationMs={1} placeholder={({ imageProps, ref }) => (<img ref={ref} src={`assets/slider.jpg`} alt={imageProps.alt} style={{ width: "100%" }} />)} actual={({ imageProps }) => (<img {...imageProps} style={{ width: "100%" }} alt={data.Id} />)} /></Link> <div className="play-icon-1"> <img src="assets/play-icon.svg" alt='play-icon' onClick={() => this.playTracksDirectly(data.Id)} /></div> </div>)
+        const LoaderMobile = isMobile ?
+            <Card.Group className="sliderItemMobile" itemsPerRow={2}>
+                {
+                    [1, 2].map((data, index) =>
+                        <Card fluid={true}>
+                            <Placeholder key={index}>
+                                <Placeholder.Image rectangular />
+                            </Placeholder>
+                        </Card>
+                    )
+                }
+            </Card.Group>
+            : <Card.Group className="sliderItemDesktop" itemsPerRow={3}>
+                {
+                    [1, 2, 3].map((data, index) =>
+                        <Card fluid={true}>
+                            <Placeholder key={index}>
+                                <Placeholder.Image rectangular />
+                            </Placeholder>
+                        </Card>
+                    )
+                }
+            </Card.Group>
 
-        const forGenre = genreSection.map(data => <> <Link component={Link} to={`/album/genre/` + data.Name}> <LazyImage src={data.ThumbnailImageWeb} className="genre-image" alt={data.Id}
-            debounceDurationMs={1} style={{ width: "100%", height: "100%" }} placeholder={({ imageProps, ref }) => (<img ref={ref} src={`assets/slider.jpg`} alt={imageProps.alt} style={{ width: "100%" }} />)} actual={({ imageProps }) => (<img {...imageProps} style={{ width: "100%" }} alt={data.Id} />)} /> <h6 className="genre-name">{data.Name}</h6> </Link></>)
+        const loaderMobile2 = isMobile ?
+            <Card.Group className="albumItemMobile" itemsPerRow={4}>
+                {
+                    [1, 2, 1, 2].map((data, index) =>
+                        <Card fluid={true}>
+                            <Placeholder key={index}>
+                                <Placeholder.Image square />
+                                <Placeholder.Line />
+                            </Placeholder>
+                        </Card>
+                    )
+                }
+            </Card.Group>
+            : <Card.Group className="albumItem" itemsPerRow={8}>
+                {
+                    [1, 2, 3, 4, 5, 6, 7, 8].map((data, index) =>
+                        <Card>
+                            <Placeholder key={index}>
+                                <Placeholder.Image square />
+                                <Placeholder.Line />
+                            </Placeholder>
+                        </Card>
+                    )
+                }
+            </Card.Group>
 
-        const forNew = newSection.map((data, index) => <> 
-        <div className="new-1"> 
-        <Link component={Link} to={`/album/` + data.Id + `/` + data.Name}> 
-        <LazyImage src={data.ThumbnailImageWeb} alt={data.Id} debounceDurationMs={1} className="new1-image" style={{ width: "100%", height: "100%" }} placeholder={({ imageProps, ref }) => (<img ref={ref} src={`assets/150.svg`} alt={imageProps.alt} style={{ width: "100%" }} />)} actual={({ imageProps }) => (<img {...imageProps} style={{ width: "100%" }} alt={data.Id} />)} /> <h6>{data.Name}</h6> </Link> <div className="play-icon"> <img src="assets/play-icon.svg" alt='play-icon' onClick={() => this.playTracksDirectly(data.Id)} /> </div> </div> <div className="new-2"> <Link component={Link} to={`/album/` + newSection2[index].Id + `/` + newSection2[index].Name}>
-        <LazyImage src={newSection2[index].ThumbnailImageWeb} alt={newSection2[index].Id} debounceDurationMs={1} className="new2-image" style={{ width: "100%", height: "100%" }} placeholder={({ imageProps, ref }) => (<img ref={ref} src={`assets/150.svg`} alt={imageProps.alt} style={{ width: "100%" }} />)} actual={({ imageProps }) => (<img {...imageProps} style={{ width: "100%" }} alt={newSection2[index].Id} />)} /> <h6>{newSection2[index].Name}</h6></Link> <div className="play-icon"> <img src="assets/play-icon.svg" alt='play-icon' onClick={() => this.playTracksDirectly(newSection2[index].Id)} /> </div> </div> </>)
+        const forSlider = sliderSection.map(data => <div className="sliderImageBox">
+            <Link to={`/album/` + data.Id + `/` + this.ToSeoUrl(data.Name)}>
+                <LazyImage src={data.SliderImageWeb} alt={data.Id} debounceDurationMs={1} placeholder={({ imageProps, ref }) => (<img ref={ref} src={`assets/slider.jpg`} alt={imageProps.alt} style={{ width: "100%" }} />)} actual={({ imageProps }) => (<img {...imageProps} style={{ width: "100%" }} alt={data.Id} />)} /></Link><div className="play-icon-2"><i aria-hidden="true" class="play circular icon" onClick={() => this.playTracksDirectly(data.Id)}></i></div></div>)
 
-        const forPopular = popularSection.map(data => <> <Link component={Link} to={`/album/` + data.Id + `/` + data.Name}> <LazyImage src={data.ThumbnailImageWeb} alt={data.Id}
-            debounceDurationMs={1} className="popular-image" style={{ width: "100%", height: "100%" }} placeholder={({ imageProps, ref }) => (<img ref={ref} src={`assets/150.svg`} alt={imageProps.alt} style={{ width: "100%" }} />)} actual={({ imageProps }) => (<img {...imageProps} style={{ width: "100%" }} alt={data.Id} />)} /> <h6>{data.Name}</h6> </Link> <div className="play-icon"> <img src="assets/play-icon.svg" alt='play-icon' onClick={() => this.playTracksDirectly(data.Id)} /> </div> </>)
+        const forGenre = genreSection.map(data => <><div className="new-1 new_hover"><Link to={`/album/genre/` + this.ToSeoUrl(data.Name)}> <LazyImage src={data.ThumbnailImageWeb} className="genre-image" alt={data.Id} debounceDurationMs={1} style={{ width: "100%", height: "100%" }} placeholder={({ imageProps, ref }) => (<img ref={ref} src={`assets/artist.png`} alt={imageProps.alt} style={{ width: "100%" }} />)} actual={({ imageProps }) => (<img {...imageProps} style={{ width: "100%" }} alt={data.Id} />)} /><h6 className="genre-name">{data.Name}</h6> </Link></div></>)
 
-        const forArtist = artistSection.map(data => <> <Link component={Link} to={`/artist/` + data.Id + `/` + data.Name}> <LazyImage src={data.ThumbnailImageWeb} style={{ width: "100%", height: "100%" }} alt={data.Id}
-            debounceDurationMs={1} placeholder={({ imageProps, ref }) => (<img ref={ref} src={`assets/album.jpg`} alt={imageProps.alt} style={{ width: "100%" }} />)} actual={({ imageProps }) => (<img {...imageProps} style={{ width: "100%" }} alt={data.Id} />)} /> </Link> </>)
+        const forNew = newSection.map((data, index) => <><div className="new-1 new_hover"><Link to={`/album/` + data.Id + `/` + this.ToSeoUrl(data.Name)}><LazyImage src={data.ThumbnailImageWeb} alt={data.Id} debounceDurationMs={1} className="new1-image" style={{ width: "100%", height: "100%" }} placeholder={({ imageProps, ref }) => (<img ref={ref} src={`assets/album.jpg`} alt={imageProps.alt} style={{ width: "100%" }} />)} actual={({ imageProps }) => (<img {...imageProps} style={{ width: "100%" }} alt={data.Id} />)} /><h6>{data.Name}</h6></Link><div className="play-icon-3"><i aria-hidden="true" class="play circular icon" onClick={() => this.playTracksDirectly(data.Id)}></i></div></div> </>)
 
-        const forAlbum = albumSection.map(data => <> <Link component={Link} to={`/album/` + data.Id + `/` + data.Name}> <LazyImage src={data.ThumbnailImageWeb} alt={data.Id}
-            debounceDurationMs={1} className="album-image" style={{ width: "100%", height: "100%" }} placeholder={({ imageProps, ref }) => (<img ref={ref} src={`assets/150.svg`} alt={imageProps.alt} style={{ width: "100%" }} />)} actual={({ imageProps }) => (<img {...imageProps} style={{ width: "100%" }} alt={data.Id} />)} /> <h6>{data.Name}</h6> </Link> <div className="play-icon"> <img src="assets/play-icon.svg" alt='play-icon' onClick={() => this.playTracksDirectly(data.Id)} /> </div> </>)
+        const forPopular = popularSection.map(data => <><div className="new-1 new_hover"><Link to={`/album/` + data.Id + `/` + this.ToSeoUrl(data.Name)}><LazyImage src={data.ThumbnailImageWeb} alt={data.Id} debounceDurationMs={1} className="popular-image" style={{ width: "100%", height: "100%" }} placeholder={({ imageProps, ref }) => (<img ref={ref} src={`assets/album.jpg`} alt={imageProps.alt} style={{ width: "100%" }} />)} actual={({ imageProps }) => (<img {...imageProps} style={{ width: "100%" }} alt={data.Id} />)} /><h6>{data.Name}</h6></Link><div className="play-icon-3"><i aria-hidden="true" class="play circular icon" onClick={() => this.playTracksDirectly(data.Id)}></i></div> </div></>)
 
-        const forIslamic = islamicSection.map(data => <> <Link component={Link} to={`/album/` + data.Id + `/` + data.Name}> <LazyImage src={data.ThumbnailImageWeb} alt={data.Id}
-            debounceDurationMs={1} className="islamic-image" style={{ width: "100%", height: "100%" }} placeholder={({ imageProps, ref }) => (<img ref={ref} src={`assets/150.svg`} alt={imageProps.alt} style={{ width: "100%" }} />)} actual={({ imageProps }) => (<img {...imageProps} style={{ width: "100%" }} alt={data.Id} />)} /> <h6>{data.Name}</h6> </Link> <div className="play-icon"> <img src="assets/play-icon.svg" alt='play-icon' onClick={() => this.playTracksDirectly(data.Id)} /> </div> </>)
+        const forArtist = artistSection.map(data => <><div className="new-1 new_hover"><Link to={`/artist/` + data.Id + `/` + this.ToSeoUrl(data.Name)}><LazyImage src={data.ThumbnailImageWeb} style={{ width: "100%", height: "100%" }} alt={data.Id} debounceDurationMs={1} placeholder={({ imageProps, ref }) => (<img ref={ref} src={`assets/album.jpg`} alt={imageProps.alt} style={{ width: "100%" }} />)} actual={({ imageProps }) => (<img {...imageProps} style={{ width: "100%" }} alt={data.Id} />)} /><p>{data.Name}</p> </Link> </div> </>)
 
-        const forCollection = collectionsSection.map(data => <> <Link component={Link} to={`/collection/` + data.Id + `/` + data.Name}> <LazyImage src={data.ThumbnailImageWeb} alt={data.Id}
-            debounceDurationMs={1} className="collection-image" style={{ width: "100%", height: "100%" }} placeholder={({ imageProps, ref }) => (<img ref={ref} src={`assets/150.svg`} alt={imageProps.alt} style={{ width: "100%" }} />)} actual={({ imageProps }) => (<img {...imageProps} style={{ width: "100%" }} alt={data.Id} />)} /> <h6>{data.Name}</h6> </Link> <div className="play-icon"> <img src="assets/play-icon.svg" alt='play-icon' onClick={() => this.playTracksDirectly(data.Id)} /> </div> </>)
+        const forAlbum = albumSection.map(data => <><div className="new-1 new_hover"><Link to={`/album/` + data.Id + `/` + this.ToSeoUrl(data.Name)}> <LazyImage src={data.ThumbnailImageWeb} alt={data.Id} debounceDurationMs={1} className="album-image" style={{ width: "100%", height: "100%" }} placeholder={({ imageProps, ref }) => (<img ref={ref} src={`assets/album.jpg`} alt={imageProps.alt} style={{ width: "100%" }} />)} actual={({ imageProps }) => (<img {...imageProps} style={{ width: "100%" }} alt={data.Id} />)} /> <h6>{data.Name}</h6></Link><div className="play-icon-3"><i aria-hidden="true" class="play circular icon" onClick={() => this.playTracksDirectly(data.Id)}></i></div></div></>)
 
-        // console.log(sliderSection.length)
+        const forIslamic = islamicSection.map(data => <><div className="new-1 new_hover"><Link to={`/album/` + data.Id + `/` + this.ToSeoUrl(data.Name)}> <LazyImage src={data.ThumbnailImageWeb} alt={data.Id} debounceDurationMs={1} className="islamic-image" style={{ width: "100%", height: "100%" }} placeholder={({ imageProps, ref }) => (<img ref={ref} src={`assets/album.jpg`} alt={imageProps.alt} style={{ width: "100%" }} />)} actual={({ imageProps }) => (<img {...imageProps} style={{ width: "100%" }} alt={data.Id} />)} /> <h6>{data.Name}</h6> </Link><div className="play-icon-3"><i aria-hidden="true" class="play circular icon" onClick={() => this.playTracksDirectly(data.Id)}></i></div></div></>)
+
+        const forCollection = collectionsSection.map(data => <><div className="new-1 new_hover"><Link to={`/collection/` + data.Id + `/` + this.ToSeoUrl(data.Name)}> <LazyImage src={data.ThumbnailImageWeb} alt={data.Id} debounceDurationMs={1} className="collection-image" style={{ width: "100%", height: "100%" }} placeholder={({ imageProps, ref }) => (<img ref={ref} src={`assets/album.jpg`} alt={imageProps.alt} style={{ width: "100%" }} />)} actual={({ imageProps }) => (<img {...imageProps} style={{ width: "100%" }} alt={data.Id} />)} /> <h6>{data.Name}</h6> </Link><div className="play-icon-3"><i aria-hidden="true" class="play circular icon" onClick={() => this.playTracksDirectly(data.Id)}></i></div></div></>)
 
         return (
             <div className="homeMainClass">
-
-                {/* <LanguageBar2 /> */}
-
-
+                <>
+                    <Helmet>
+                        <meta charSet="utf-8" />
+                        <title>Koyal - Home</title>
+                    </Helmet>
+                </>
                 <LanguageBarCustom />
+
                 <div className="sliderBox">
-                    <AliceCarousel
-                        items={forSlider}
-                        responsive={this.responsiveSlider}
-                        autoPlayInterval={4000}
-                        autoPlay={false}
-                        fadeOutAnimation={true}
-                        playButtonEnabled={false}
-                        disableAutoPlayOnAction={false}
-                        buttonsDisabled={false}
-                        dotsDisabled={true} infinite={false}
-                    />
+
+                    {
+                        loading ?
+                            LoaderMobile
+                            :
+                            <>
+                                <AliceCarousel
+                                    items={forSlider}
+                                    responsive={this.responsiveSlider}
+                                    autoPlayInterval={4000}
+                                    autoPlay={false}
+                                    fadeOutAnimation={true}
+                                    playButtonEnabled={false}
+                                    disableAutoPlayOnAction={false}
+                                    buttonsDisabled={false}
+                                    dotsDisabled={true} infinite={false}
+                                />
+                            </>
+                    }
+
                 </div>
-
-
-
-                {forSlider.length === 0 ?
-                    <div className="extraSpaceHome">
-                        <div className="emptyItem">
-                            <img src={`assets/slider.jpg`} alt={`ok`} style={{ width: "100%" }} />
-                        </div>
-                        <div className="emptyItem">
-                            <img src={`assets/slider.jpg`} alt={`ok`} style={{ width: "100%" }} />
-                        </div>
-                        <div className="emptyItem">
-                            <img src={`assets/slider.jpg`} alt={`ok`} style={{ width: "100%" }} />
-                        </div>
-                        {/* <div className="emptyItem">
-                            <img src={`assets/slider.jpg`} alt={`ok`} style={{ width: "100%" }} />
-                        </div> */}
-                    </div>
-                    : <div></div>}
 
                 <hr className="divider" />
 
                 <div className="sliderSection_1 new-section-slider">
 
-                    <Grid container spacing={3} className="slider-header"> <Grid item xs={6} className="slider-side1"><h2 className="slider_heading">New</h2></Grid> <Grid item xs={6} className="slider-side2">  <Link to="/explore/urdu-new" className="see_all"><h6 className="slider_subheading">See All <i className="material-icons"> arrow_forward</i></h6></Link> </Grid> </Grid>
+                    <Grid container spacing={3} className="slider-header"> <Grid item xs={6} className="slider-side1"><h2 className="slider_heading">New</h2></Grid> <Grid item xs={6} className="slider-side2">  <Link to="/explore/new/urdu" className="see_all"><h6 className="slider_subheading">See All <i className="material-icons"> arrow_forward</i></h6></Link> </Grid> </Grid>
 
-                    <AliceCarousel
-                        items={forNew}
-                        responsive={this.responsive2}
-                        autoPlayInterval={6000}
-                        autoPlay={false}
-                        fadeOutAnimation={true}
-                        playButtonEnabled={false}
-                        disableAutoPlayOnAction={false}
-                        buttonsDisabled={false}
-                        dotsDisabled={true} infinite={false}
-                    />
-
-                </div>
-
-                <hr className="divider2" />
-                <div className="sliderSection_1">
-
-                    <Grid container spacing={3} className="slider-header"> <Grid item xs={6} className="slider-side1"><h2 className="slider_heading">Popular</h2></Grid> <Grid item xs={6} className="slider-side2">  <Link to="/explore/urdu-trend" className="see_all"><h6 className="slider_subheading">See All <i className="material-icons"> arrow_forward</i></h6></Link> </Grid> </Grid>
-
-                    <AliceCarousel
-                        items={forPopular}
-                        responsive={this.responsive2}
-                        autoPlayInterval={6000}
-                        autoPlay={false}
-                        fadeOutAnimation={true}
-                        playButtonEnabled={false}
-                        disableAutoPlayOnAction={false}
-                        buttonsDisabled={false}
-                        dotsDisabled={true} infinite={false}
-                    />
-                </div>
-                <hr className="divider2" />
-                <div className="sliderSection_1">
-
-                    <Grid container spacing={3} className="slider-header"> <Grid item xs={6} className="slider-side1"><h2 className="slider_heading">Collection</h2></Grid> <Grid item xs={6} className="slider-side2">  <Link to="/explore/urdu-collect" className="see_all"><h6 className="slider_subheading">See All <i className="material-icons"> arrow_forward</i></h6></Link> </Grid> </Grid>
-
-
-                    <AliceCarousel
-                        items={forCollection}
-                        responsive={this.responsive2}
-                        autoPlayInterval={6000}
-                        autoPlay={false}
-                        fadeOutAnimation={true}
-                        playButtonEnabled={false}
-                        disableAutoPlayOnAction={false}
-                        buttonsDisabled={false}
-                        dotsDisabled={true} infinite={false}
-                    />
+                    {loading ?
+                        loaderMobile2
+                        :
+                        <>
+                            <AliceCarousel
+                                items={forNew}
+                                responsive={this.responsive2}
+                                autoPlayInterval={6000}
+                                autoPlay={false}
+                                fadeOutAnimation={true}
+                                playButtonEnabled={false}
+                                disableAutoPlayOnAction={false}
+                                buttonsDisabled={false}
+                                dotsDisabled={true} infinite={false}
+                            />
+                        </>
+                    }
 
                 </div>
+
+                {/* <hr className="divider2" /> */}
+                <div className="sliderSection_1 new_hover2">
+
+                    <Grid container spacing={3} className="slider-header"> <Grid item xs={6} className="slider-side1"><h2 className="slider_heading">Popular</h2></Grid> <Grid item xs={6} className="slider-side2">  <Link to="/explore/trend/urdu" className="see_all"><h6 className="slider_subheading">See All <i className="material-icons"> arrow_forward</i></h6></Link> </Grid> </Grid>
+
+                    {
+                        loading ?
+                            loaderMobile2
+                            :
+                            <>
+                                <AliceCarousel
+                                    items={forPopular}
+                                    responsive={this.responsive2}
+                                    autoPlayInterval={6000}
+                                    autoPlay={false}
+                                    fadeOutAnimation={true}
+                                    playButtonEnabled={false}
+                                    disableAutoPlayOnAction={false}
+                                    buttonsDisabled={false}
+                                    dotsDisabled={true} infinite={false}
+                                />
+
+                            </>
+                    }
+                </div>
                 <hr className="divider2" />
-                <div className="sliderSection_1 artist_section">
+                <div className="sliderSection_1 new_hover2">
 
+                    <Grid container spacing={3} className="slider-header"> <Grid item xs={6} className="slider-side1"><h2 className="slider_heading">Collection</h2></Grid>  </Grid>
 
-                    <Grid container spacing={3} className="slider-header"> <Grid item xs={6} className="slider-side1"><h2 className="slider_heading">Artist</h2></Grid> <Grid item xs={6} className="slider-side2">  <Link to="/explore/urdu-artist" className="see_all"><h6 className="slider_subheading">See All <i className="material-icons"> arrow_forward</i></h6></Link> </Grid> </Grid>
+                    {
+                        loading ?
+                            loaderMobile2
+                            :
+                            <>
+
+                                <AliceCarousel
+                                    items={forCollection}
+                                    responsive={this.responsive2}
+                                    autoPlayInterval={6000}
+                                    autoPlay={false}
+                                    fadeOutAnimation={true}
+                                    playButtonEnabled={false}
+                                    disableAutoPlayOnAction={false}
+                                    buttonsDisabled={false}
+                                    dotsDisabled={true} infinite={false}
+                                />
+
+                            </>
+                    }
+
+                </div>
+                <hr className="divider2" />
+                <div className="sliderSection_1 new_hover2 artist_section">
+
+                    <Grid container spacing={3} className="slider-header"> <Grid item xs={6} className="slider-side1"><h2 className="slider_heading">Artist</h2></Grid> <Grid item xs={6} className="slider-side2">  <Link to="/explore/artist/urdu" className="see_all"><h6 className="slider_subheading">See All <i className="material-icons"> arrow_forward</i></h6></Link> </Grid> </Grid>
 
                     <AliceCarousel
                         items={forArtist}
@@ -343,10 +431,9 @@ class Homepage extends Component {
                     />
                 </div>
                 <hr className="divider2" />
-                <div className="sliderSection_1">
+                <div className="sliderSection_1 new_hover2">
 
-
-                    <Grid container spacing={3} className="slider-header"> <Grid item xs={6} className="slider-side1"><h2 className="slider_heading">Albums</h2></Grid> <Grid item xs={6} className="slider-side2">  <Link to="/explore/urdu-album" className="see_all"><h6 className="slider_subheading">See All <i className="material-icons"> arrow_forward</i></h6></Link> </Grid> </Grid>
+                    <Grid container spacing={3} className="slider-header"> <Grid item xs={6} className="slider-side1"><h2 className="slider_heading">Albums</h2></Grid> <Grid item xs={6} className="slider-side2">  <Link to="/explore/album/urdu" className="see_all"><h6 className="slider_subheading">See All <i className="material-icons"> arrow_forward</i></h6></Link> </Grid> </Grid>
 
                     <AliceCarousel
                         items={forAlbum}
@@ -362,9 +449,9 @@ class Homepage extends Component {
                     />
                 </div>
                 <hr className="divider2" />
-                <div className="sliderSection_1">
+                <div className="sliderSection_1 new_hover2">
 
-                    <Grid container spacing={3} className="slider-header"> <Grid item xs={6} className="slider-side1"><h2 className="slider_heading">Islamic</h2></Grid> <Grid item xs={6} className="slider-side2">  <Link to="/explore/urdu-islamic" className="see_all"><h6 className="slider_subheading">See All <i className="material-icons"> arrow_forward</i></h6></Link> </Grid> </Grid>
+                    <Grid container spacing={3} className="slider-header"> <Grid item xs={6} className="slider-side1"><h2 className="slider_heading">Islamic</h2></Grid> <Grid item xs={6} className="slider-side2">  <Link to="/explore/islamic/urdu" className="see_all"><h6 className="slider_subheading">See All <i className="material-icons"> arrow_forward</i></h6></Link> </Grid> </Grid>
 
                     <AliceCarousel
                         items={forIslamic}
@@ -396,6 +483,7 @@ class Homepage extends Component {
                         buttonsDisabled={false}
                         dotsDisabled={true} infinite={false}
                     />
+
                 </div>
             </div>
         )

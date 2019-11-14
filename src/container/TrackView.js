@@ -1,16 +1,20 @@
 import React, { Component } from 'react'
 import axios from 'axios'
 import { withGlobalState } from 'react-globally'
-import Ringtone from '../component/Ringtone';
 import { Link } from "react-router-dom";
 import Grid from '@material-ui/core/Grid';
 import ArtistLoader from '../component/ArtistLoader';
 import TrackShareOptions from '../component/TrackShareOptions';
-import Rating from '@material-ui/lab/Rating';
-import FavoriteIcon from '@material-ui/icons/Favorite';
 import TrackLikeOption from '../component/TrackLikeOption';
 import { LazyImage } from "react-lazy-images";
 import DownloadTrack from '../component/DownloadTrack';
+import TrackRington from '../component/TrackRington';
+import { Button, Icon, Label } from 'semantic-ui-react'
+import { Dropdown } from 'semantic-ui-react'
+import { FacebookProvider, Like, ShareButton } from 'react-facebook';
+//import MetaTags from 'react-meta-tags';
+import { Helmet } from "react-helmet";
+
 
 
 class TrackView extends Component {
@@ -25,11 +29,11 @@ class TrackView extends Component {
             recommendSlider: [],
             trackIndex: null,
             loadingData: true,
-            checkRef: true
+            checkRef: true,
+
         }
 
         this.clickOnTrack = this.clickOnTrack.bind(this)
-        this.downloadTrack = this.downloadTrack.bind(this)
         this.noRBT = this.noRBT.bind(this)
         this.likeAlbum = this.likeAlbum.bind(this)
 
@@ -41,17 +45,16 @@ class TrackView extends Component {
 
         if ((this.props.match.params.type === 'album') && (this.props.match.params.albumId === 'genre')) {
 
-            url = `http://api.koyal.pk/musicapp/?request=get-tracks-sd&action=${this.props.match.params.albumName}&limit=50`
+            url = `https://api.koyal.pk/app_files/webgenre/${this.props.match.params.albumName}.json`
         }
 
         else if (this.props.match.params.type === 'collection') {
 
-            url = `http://api.koyal.pk/musicapp/?request=get-tracks-react&action=collect&Id=${this.props.match.params.albumId}`
+            url = `https://api.koyal.pk/app_files/collect/${this.props.match.params.albumId}.json`
 
         } else if (this.props.match.params.type === 'album') {
 
-            url = `http://api.koyal.pk/musicapp/?request=get-tracks-react&id=${this.props.match.params.albumId}`
-
+            url = ` https://api.koyal.pk/app_files/album/${this.props.match.params.albumId}.json`
         }
 
         axios.get(url)
@@ -66,19 +69,37 @@ class TrackView extends Component {
                     loadingData: false
                 },
                     () => {
-                       // console.log(this.state.albumData)
+                        //console.log(response)
                         this.getDataTracks()
+
+                        setTimeout(() => {
+                            this.pageViews();
+                        }, 2500)
+
+
                     }
                 )
             })
             .catch(error => {
                 console.log(error)
-               
+
             })
 
     }
 
+    pageViews() {
 
+        axios.post(`https://api.koyal.pk/musicapp/?request=views_post`, {
+            AlbumId: this.state.page_idd,
+            UserId: 0
+        })
+            .then(response => {
+                //console.log(response)
+            })
+            .catch(error => {
+                console.log(error)
+            })
+    }
 
     getDataTracks() {
 
@@ -94,11 +115,16 @@ class TrackView extends Component {
                 'thumbnailImage': data['ThumbnailImageWeb'],
                 'rbtTelenor': data['TelenorCode'],
                 'albumArtist': data['AlbumArtist'],
+                'trackURL': data['OrgTrackUrl'],
+                'MobilinkCode': data['MobilinkCode'],
+                'ZongCode': data['ZongCode'],
+                'UfoneCode': data['UfoneCode'],
+                'TelenorCode': data['TelenorCode']
             }
         ))
 
 
-        //console.log(dataTrack)
+        // console.log(dataTrack)
         if (this.props.globalState.track_exist !== 0) {
 
             //console.log(this.props.globalState.track_exist)
@@ -128,6 +154,11 @@ class TrackView extends Component {
             'thumbnailImage': data['ThumbnailImageWeb'],
             'rbtTelenor': data['TelenorCode'],
             'albumArtist': data['AlbumArtist'],
+            'trackURL': data['OrgTrackUrl'],
+            'MobilinkCode': data['MobilinkCode'],
+            'ZongCode': data['ZongCode'],
+            'UfoneCode': data['UfoneCode'],
+            'TelenorCode': data['TelenorCode']
         }))
 
 
@@ -154,7 +185,12 @@ class TrackView extends Component {
                     'albumName': dataTrack2[trackOrder[y]]['albumName'],
                     'thumbnailImage': dataTrack2[trackOrder[y]]['thumbnailImage'],
                     'rbtTelenor': dataTrack2[trackOrder[y]]['rbtTelenor'],
-                    'albumArtist': dataTrack2[trackOrder[y]]['albumArtist']
+                    'albumArtist': dataTrack2[trackOrder[y]]['albumArtist'],
+                    'trackURL': dataTrack2[trackOrder[y]]['trackURL'],
+                    'MobilinkCode': dataTrack2[trackOrder[y]]['MobilinkCode'],
+                    'ZongCode': dataTrack2[trackOrder[y]]['ZongCode'],
+                    'UfoneCode': dataTrack2[trackOrder[y]]['UfoneCode'],
+                    'TelenorCode': dataTrack2[trackOrder[y]]['TelenorCode']
                 })
         }
 
@@ -174,68 +210,6 @@ class TrackView extends Component {
     noRBT = () => {
         alert('Is song ki RBT Mojood Nahi hai.')
     }
-
-    downloadTrack = (TrackId, AlbumId, OrgTrackUrl) => {
-
-        // let trackInfo = {
-        //     'track_id': TrackId,
-        //     'album_id': AlbumId
-        // }
-
-
-        // axios.post(`http://35.156.24.14/koyaldownload/download.php`, trackInfo)
-        //     .then(response => {
-
-        //         if (response.data.SearchResult.Success === 'Charged') {
-        //             setTimeout(() => {
-        //                 window.location.href = OrgTrackUrl
-        //             }, 100);
-        //         }
-        //     })
-        //     .catch(error => {
-        //         console.log(error)
-        //         this.setState({ errMsg: 'Error Post Data' })
-        //     })
-
-
-
-        const method = 'GET';
-
-        const url = 'https://d3ball6p71brug.cloudfront.net/Teri-Bargah-Main_Afshan_Zaibi.mp3';
-
-        axios
-
-            .request({
-
-                url,
-
-                method,
-
-                responseType: 'blob', //important
-
-            })
-
-            .then(({ data }) => {
-
-                const downloadUrl = window.URL.createObjectURL(new Blob([data]));
-
-                const link = document.createElement('a');
-
-                link.href = downloadUrl;
-
-                link.setAttribute('download', 'Khan_Rokhrhi.mp3'); //any other extension
-
-                document.body.appendChild(link);
-
-                link.click();
-
-                link.remove();
-
-            });
-
-    }
-
-
 
     componentDidMount() {
 
@@ -268,93 +242,189 @@ class TrackView extends Component {
         ]
 
 
-        axios.post(`http://api.koyal.pk/musicapp/?request=add-fav-react`, likeData)
+        axios.post(`https://api.koyal.pk/musicapp/?request=add-fav-react`, likeData)
             .then(response => {
                 // console.log(response)
             })
             .catch(error => {
                 console.log(error)
-                
+
             })
     }
+
+    ToSeoUrl(url) {
+
+        // make the url lowercase         
+        var encodedUrl = url.toString().toLowerCase();
+
+        // replace & with and           
+        encodedUrl = encodedUrl.split(/\&+/).join("-and-")
+
+        // remove invalid characters 
+        encodedUrl = encodedUrl.split(/[^a-z0-9]/).join("-");
+
+        // remove duplicates 
+        encodedUrl = encodedUrl.split(/-+/).join("-");
+
+        // trim leading & trailing characters 
+        encodedUrl = encodedUrl.trim('-');
+
+        return encodedUrl;
+    }
+
 
 
     render() {
 
         const { albumData, trackData, recommendSlider, loadingData } = this.state
+        const sameAlbumID = this.props.match.params.albumId;
 
-        var bgImage = {
-            backgroundImage: 'url(' + albumData.ThumbnailImageWeb + ')',
-            WebkitTransition: 'all', // note the capital 'W' here
-            msTransition: 'all' // 'ms' is the only lowercase vendor prefix
-        };
+        // var bgImage = {
+        //     backgroundImage: 'url(' + albumData.ThumbnailImageWeb + ')',
+        //     WebkitTransition: 'all', // note the capital 'W' here
+        //     msTransition: 'all' // 'ms' is the only lowercase vendor prefix
+        // };
 
-    
+        /////console.log(sameAlbumID)
+
+        let pageType = ''
+
+        this.props.match.params.type === 'album' ? pageType = 'album' : pageType = 'collection'
+
+        //console.log(pageType)
+
+        let breakArtist = []
+
+        trackData.map(data =>
+            breakArtist.push({
+                'artist_id': data['Featuring'].split("|"),
+                'artist_name': data['Artist'].split(","),
+            })
+        )
+
+        console.log(window.location.href)
 
         return (
 
 
             <div className="allTracksContainer">
+
+
+
                 {loadingData ? <ArtistLoader /> :
 
                     <>
-                        <div className="dummy-img">
-                            <div style={bgImage} className="divImage"></div>
+                        <div>
+                            <Helmet>
+                                <meta charSet="utf-8" />
+                                <title>{albumData.Name}</title>
+                            </Helmet>
                         </div>
-                        <Grid container spacing={0} className="trackGridMain1">
+
+
+
+                        <div className="dummy-img">
+                            {/* <div style={bgImage} className="divImage"></div> */}
+                        </div>
+                        <Grid container spacing={0} className="trackGridMain1 Trackviewplay">
                             <Grid item xs={2} className="pageGrid1">
 
                                 <div className="albumImgBox">
                                     <LazyImage
                                         src={albumData.ThumbnailImageWeb}
                                         alt={albumData.Name}
-                                        debounceDurationMs={50}
+                                        debounceDurationMs={0}
                                         placeholder={({ imageProps, ref }) => (<img ref={ref} src={`/assets/albumx150.jpg`} alt={imageProps.alt} style={{ width: "100%" }} />)}
-                                        actual={({ imageProps }) => (<img {...imageProps} style={{ width: "100%" }} alt={albumData.Name} />)} />
+                                        actual={({ imageProps }) => (<img {...imageProps} style={{ width: "100%", verticalAlign: "middle" }} alt={albumData.Name} />)} />
                                 </div>
 
                             </Grid>
-                            <Grid item xs={10} className="pageGrid2">
-                                <div className="albumMetaBox">
-                                    <p className="short-head">Album</p>
-                                    <h1 className="main-title">{albumData.Name}</h1>
-                                    <p className="short-desc">
-                                       {albumData.Description}
-                                    </p>
-                                    {/* <ul className="byDetails">
+                            <Grid item xs={10} className="pageGrid2 albumMetaBox">
+
+                                <p className="short-head">Album</p>
+                                <h1 className="main-title">{albumData.Name}</h1>
+                                <p className="short-desc">
+                                    {albumData.Description}
+                                </p>
+
+
+                                {/* <ul className="byDetails">
                                         <li>By : {albumData.Name}</li>
                                         <li>Writer : {albumData.Name}</li>
                                         <li>Composer : {albumData.Name}</li>
                                     </ul> */}
-                                    <ul className="counterList">
-                                        <li className="albumLikes">
-                                            {/* {albumData.NoOfLikes}  */}
-                                            1.2k Likes</li>
-                                        <li className="albumShare">
-                                            {/* {albumData.NoOfShares}  */}
-                                            2.3k Shares</li>
-                                        <li className="albumPlay">
-                                            {/* {albumData.NoOfLikes} */}
-                                            4k Views</li>
-                                    </ul>
-                                </div>
+                                <ul className="counterList">
+                                    <li className="albumLikes22">
+                                        <Button as='div' labelPosition='right'>
+                                            <Button color=''>
+                                                <Icon name='heart' />
+                                                Like
+      </Button>
+                                            <Label as='a' basic color='red' pointing='left'>
+                                                {albumData.NoOfLikes < 1 ? <> 1K </> : <> {albumData.NoOfLikes} </>}
+                                            </Label>
+                                        </Button>
+                                        {/* <FacebookProvider appId="168997670356490">
+                                            <Like href={window.location.href} colorScheme="dark" showFaces share />
+
+                                            <ShareButton href={window.location.href}>
+                                                Share
+        </ShareButton>
+                                        </FacebookProvider> */}
+
+                                    </li>
+                                    <li className="albumShare22">
+
+                                        <Button as='div' labelPosition='right'>
+                                            <Button color=''>
+                                                <Icon name='share' />
+                                                Share
+      </Button>
+                                            <Label as='a' basic color='red' pointing='left'>
+                                                {albumData.NoOfShares < 1 ? <> 1K </> : <> {albumData.NoOfShares} </>}
+                                            </Label>
+                                        </Button>
+                                    </li>
+                                    <li className="albumPlay22">
+
+                                        <Button as='div' labelPosition='right'>
+                                            <Button color=''>
+                                                <Icon name='play' />
+                                                Views
+      </Button>
+                                            <Label as='a' basic color='red' pointing='left'>
+                                                {albumData.NoOfShares < 1 ? <> 1K </> : <> {albumData.NoOfShares} </>}
+                                            </Label>
+                                        </Button>
+                                    </li>
+                                </ul>
+
 
                             </Grid>
                         </Grid>
 
-                        <Grid container spacing={1} className="trackGridMain2">
+                        <Grid container spacing={1} className="paragraphMobile">
+                            <Grid item xs={12} className="pageGrid1">
+                                <p className="short-desc">
+                                    {albumData.Description}
+                                </p>
+                            </Grid>
+                        </Grid>
+
+                        <Grid container spacing={1} className="trackGridMain2 TrackviewplayGrid">
                             <Grid item xs={12} className="pageGrid3">
                                 <div className="trackTableCustom">
                                     <ul className="trackListHeader">
-                                        <li className="trackCol1">#</li>
-                                        <li className="trackCol2"></li>
+                                        <li className="trackCol1"><span>#</span></li>
                                         <li className="trackCol3">Title</li>
                                         <li className="trackCol4">Artist</li>
                                         <li className="trackCol5"><i className="material-icons">access_time </i></li>
-                                        <li className="trackCol6">Popularity</li>
+                                        {/* <li className="trackCol6">Popularity</li> */}
+                                        <li className="trackCol2">Download</li>
                                         <li className="trackCol7"></li>
-                                        <li className="trackCol8"></li>
-                                        <li className="trackCol9"></li>
+                                        {/* <li className="trackCol8">Share</li>
+                                        <li className="trackCol9">Tune</li> */}
+                                        {/* <li className="trackCol9"></li> */}
 
                                     </ul>
                                     {
@@ -362,119 +432,125 @@ class TrackView extends Component {
                                             <ul className="trackListHeader trackBody" key={index}>
                                                 <li className="trackCol1 trackImg">
 
-
                                                     {this.props.globalState.track_exist === data.TrackId ?
 
+                                                        <div className="trackActive">
+                                                            <LazyImage
+                                                                src={data.ThumbnailImageWeb}
+                                                                alt={data.Name}
+                                                                debounceDurationMs={0}
+                                                                placeholder={({ imageProps, ref }) => (<img ref={ref} src={`/assets/albumx150.jpg`} alt={imageProps.alt} style={{ width: "100%" }} />)}
+                                                                actual={({ imageProps }) => (<img {...imageProps} style={{ width: "100%" }} alt={data.Name} />)} />
+                                                            {/* <i className="material-icons pause-icon">pause_circle_outline</i> */}
+                                                            <i aria-hidden="true" class="pause circular icon"></i>
+                                                        </div>
 
-                                                        <i className="material-icons pause-icon">
-                                                            pause_circle_outline
-</i>
                                                         :
-                                                        <LazyImage
-                                                            src={data.ThumbnailImageWeb}
-                                                            alt={data.Name}
-                                                            debounceDurationMs={5}
-                                                            placeholder={({ imageProps, ref }) => (<img ref={ref} src={`/assets/albumx150.jpg`} alt={imageProps.alt} style={{ width: "100%" }} />)}
-                                                            actual={({ imageProps }) => (<img {...imageProps} style={{ width: "100%" }} alt={data.Name} />)} />
 
+                                                        <div className="trackNotActive">
+                                                            <LazyImage
+                                                                src={data.ThumbnailImageWeb}
+                                                                alt={data.Name}
+                                                                debounceDurationMs={0}
+                                                                placeholder={({ imageProps, ref }) => (<img ref={ref} src={`/assets/albumx150.jpg`} alt={imageProps.alt} style={{ width: "100%" }} />)}
+                                                                actual={({ imageProps }) => (<img {...imageProps} style={{ width: "100%" }} alt={data.Name} />)} />
+                                                            {/* <i className="material-icons playIcon" onClick={() => this.clickOnTrack(index, data.Name.split("-").join(" "))}>play_circle_outline</i> */}
+                                                            <i aria-hidden="true" class="play circular icon" onClick={() => this.clickOnTrack(index, data.Name.split("-").join(" "))}></i>
+                                                        </div>
 
                                                     }
 
-
-                                                    <i className="material-icons playIcon" onClick={() => this.clickOnTrack(index, data.Name.split("-").join(" "))}>
-                                                        play_circle_outline
-</i>
-                                                </li>
-                                                <li className="trackCol2 downloadImg">
-
-                                                    {/* <img src='/assets/download_black.png' alt="download" onClick={() => this.downloadTrack(data.Id, data.AlbumId, data.OrgTrackUrl)} /> */}
-                                                    <DownloadTrack
-
-                                                        TelenorCode={data.TelenorCode}
-                                                        UfoneCode={data.UfoneCode}
-                                                        MobilinkCode={data.MobilinkCode}
-                                                        ZongCode={data.ZongCode}
-                                                        RBTCodes={
-                                                            [
-                                                                {
-                                                                    'code': data.TelenorCode,
-                                                                    'name': 'Telenor'
-                                                                },
-                                                                {
-                                                                    'code': data.UfoneCode,
-                                                                    'name': 'Ufone'
-                                                                },
-                                                                {
-                                                                    'code': data.ZongCode,
-                                                                    'name': 'Zong'
-                                                                },
-                                                                {
-                                                                    'code': data.MobilinkCode,
-                                                                    'name': 'Mobilink'
-                                                                }
-                                                            ]
-                                                        }
-                                                        albumName={albumData.Name}
-                                                        ThumbnailImageWeb={albumData.ThumbnailImageWeb}
-                                                        TrackName={data.Name.split("-").join(" ")}
-                                                        TrackId={data.TrackId}
-                                                        Albumid = {data.AlbumId}
-                                                    />
-
                                                 </li>
                                                 <li className="trackCol3 trackTitle">
-                                                    <Link component={Link} to={`/track/` + data.TrackId + `/` + data.Name}>
-                                                        {data.Name.split("-").join(" ")}
+                                                    {this.props.globalState.track_exist === data.TrackId
+                                                        ?
+                                                        <Link className="activeTrackName" to={`/track/` + data.TrackId + `/` + this.ToSeoUrl(data.Name)}>
+                                                            {data.Name.split("-").join(" ")}
+                                                        </Link>
+                                                        : <Link to={`/track/` + data.TrackId + `/` + this.ToSeoUrl(data.Name)}>
+                                                            {data.Name.split("-").join(" ")}
+                                                        </Link>
+                                                    }
 
-                                                    </Link>
                                                 </li>
+
+
                                                 <li className="trackCol4 trackArtist">
 
-                                                    <Link component={Link} to={`/artist/` + data.ArtistId + `/` + data.Artist}>
-                                                        {albumData.Artist}
-                                                    </Link>
+                                                    {this.props.globalState.track_exist === data.TrackId
+                                                        ?
+                                                        breakArtist[index].artist_name.map((item, i) =>
+                                                            <Link className="activeTrackName" to={`/artist/` + breakArtist[index].artist_id[i] + `/` + this.ToSeoUrl(item)}>
+                                                                {
+
+                                                                    item
+                                                                }
+                                                            </Link>
+                                                        )
+                                                        :
+                                                        breakArtist[index].artist_name.map((item, i) =>
+                                                            <Link to={`/artist/` + breakArtist[index].artist_id[i] + `/` + this.ToSeoUrl(item)}>
+                                                                &nbsp;{item}
+                                                            </Link>
+                                                        )
+                                                    }
 
                                                 </li>
-                                                <li className="trackCol5">
-                                                    {data.TrackDuration}
-                                                </li>
-                                                <div className="trackCol6">
+                                                <li className="trackCol5 trackDuration">
+                                                    {this.props.globalState.track_exist === data.TrackId ?
+                                                        <p className="activeTrackName">{data.TrackDuration}</p> :
+                                                        <p>{data.TrackDuration}</p>}
 
-                                                    <Rating
-                                                        value={`${data.TrackRanking}`}
-                                                        readOnly
-                                                        icon={<FavoriteIcon fontSize="inherit" />}
-                                                        className="ratingTrack"
-                                                        max={3}
-                                                    />
-                                                </div>
-                                                <div className="trackCol7">
-                                                    <TrackLikeOption
-                                                        albumImage={data.ThumbnailImageWeb}
-                                                        trackName={data.Name.split("-").join(" ")}
-                                                        albumName={data.Name.split("-").join(" ")}
-                                                        artistName={albumData.Artist}
-                                                        pageURL={window.location.href} />
-                                                </div>
-                                                <div className="trackCol8">
-                                                    <TrackShareOptions
-                                                        albumImage={data.ThumbnailImageWeb}
-                                                        trackName={data.Name.split("-").join(" ")}
-                                                        albumName={data.Name.split("-").join(" ")}
-                                                        artistName={albumData.Artist}
-                                                        pageURL={window.location.href} />
-                                                </div>
-                                                <div className="trackCol9">
-                                                    {data.TelenorCode > 0 ?
-                                                        <Ringtone
-                                                            TelenorCode={data.TelenorCode}
-                                                            UfoneCode={data.UfoneCode}
-                                                            MobilinkCode={data.MobilinkCode}
-                                                            ZongCode={data.ZongCode}
+                                                </li>
+
+                                                <li className="trackCol2 downloadImg">
+                                                    {this.props.globalState.track_exist === data.TrackId ?
+                                                        <div className="activeTrackName">
+                                                            <DownloadTrack
+                                                                trackURL={data.OrgTrackUrl}
+                                                                albumImage={data.ThumbnailImageWeb}
+                                                                trackName={data.Name.split("-").join(" ")}
+                                                                albumName={data.Name.split("-").join(" ")}
+                                                                artistName={albumData.Artist}
+                                                                pageURL={window.location.href}
+                                                                TrackId={data.TrackId}
+                                                                Albumid={data.AlbumId}
+                                                                RBTCodes={
+                                                                    [
+                                                                        {
+                                                                            'code': 0,
+                                                                            'name': 'Telenor'
+                                                                        },
+                                                                        {
+                                                                            'code': data.UfoneCode,
+                                                                            'name': 'Ufone'
+                                                                        },
+                                                                        {
+                                                                            'code': data.ZongCode,
+                                                                            'name': 'Zong'
+                                                                        },
+                                                                        {
+                                                                            'code': data.MobilinkCode,
+                                                                            'name': 'Mobilink'
+                                                                        }
+                                                                    ]
+                                                                }
+                                                            />
+                                                        </div>
+                                                        :
+                                                        <DownloadTrack
+                                                            trackURL={data.OrgTrackUrl}
+                                                            albumImage={data.ThumbnailImageWeb}
+                                                            trackName={data.Name.split("-").join(" ")}
+                                                            albumName={data.Name.split("-").join(" ")}
+                                                            artistName={albumData.Artist}
+                                                            pageURL={window.location.href}
+                                                            TrackId={data.TrackId}
+                                                            Albumid={data.AlbumId}
                                                             RBTCodes={
                                                                 [
                                                                     {
-                                                                        'code': data.TelenorCode,
+                                                                        'code': 0,
                                                                         'name': 'Telenor'
                                                                     },
                                                                     {
@@ -491,14 +567,139 @@ class TrackView extends Component {
                                                                     }
                                                                 ]
                                                             }
-                                                            albumName={albumData.Name}
-                                                            ThumbnailImageWeb={albumData.ThumbnailImageWeb}
-                                                            TrackName={data.Name.split("-").join(" ")}
-                                                            TrackId={data.TrackId}
-                                                        /> :
+                                                        />}
 
-                                                        <img src="/assets/ringtone_black.png" alt='ringtone' onClick={() => this.noRBT()} />
-                                                    }
+
+                                                </li>
+                                                <div className="trackCol7">
+                                                    {this.props.globalState.track_exist === data.TrackId ?
+                                                        <div className="activeTrackName">   <Dropdown
+                                                            text=''
+                                                            icon='ellipsis horizontal'
+                                                            floating
+                                                            labeled
+                                                            button
+                                                            className='icon'
+                                                        >
+                                                            <Dropdown.Menu>
+                                                                {/* <Dropdown.Header icon='tags' content='Filter by tag' /> */}
+                                                                <Dropdown.Item> <i aria-hidden="true" class="heart outline icon"></i> Like
+                                                                <TrackLikeOption
+                                                                        albumImage={data.ThumbnailImageWeb}
+                                                                        trackName={data.Name.split("-").join(" ")}
+                                                                        albumName={data.Name.split("-").join(" ")}
+                                                                        artistName={albumData.Artist}
+                                                                        pageURL={window.location.href} /></Dropdown.Item>
+                                                                <Dropdown.Item> <i aria-hidden="true" class="share icon"></i>  Share <TrackShareOptions
+                                                                    albumImage={data.ThumbnailImageWeb}
+                                                                    trackName={data.Name.split("-").join(" ")}
+                                                                    albumName={data.Name.split("-").join(" ")}
+                                                                    artistName={albumData.Artist}
+                                                                    pageURL={window.location.href} /></Dropdown.Item>
+                                                                <Dropdown.Item> <i aria-hidden="true" class="bell outline icon"></i>  Caller Tune
+                                                                {data.TelenorCode > 0 ?
+                                                                        <TrackRington
+                                                                            albumImage={data.ThumbnailImageWeb}
+                                                                            trackName={data.Name.split("-").join(" ")}
+                                                                            albumName={data.Name.split("-").join(" ")}
+                                                                            artistName={albumData.Artist}
+                                                                            pageURL={window.location.href}
+                                                                            TrackId={data.TrackId}
+                                                                            RBTCodes={
+                                                                                [
+                                                                                    {
+                                                                                        'code': data.TelenorCode,
+                                                                                        'name': 'Telenor'
+                                                                                    },
+                                                                                    {
+                                                                                        'code': data.UfoneCode,
+                                                                                        'name': 'Ufone'
+                                                                                    },
+                                                                                    {
+                                                                                        'code': data.ZongCode,
+                                                                                        'name': 'Zong'
+                                                                                    },
+                                                                                    {
+                                                                                        'code': data.MobilinkCode,
+                                                                                        'name': 'Mobilink'
+                                                                                    }
+                                                                                ]
+                                                                            }
+                                                                        />
+                                                                        :
+
+                                                                        // <img src="/assets/ringtone_black.png" alt='ringtone' onClick={() => this.noRBT()} />
+                                                                        <span>
+                                                                            <i aria-hidden="true" class="bell outline icon" onClick={() => this.noRBT()}></i>
+                                                                        </span>
+                                                                    }
+                                                                </Dropdown.Item>
+                                                            </Dropdown.Menu>
+                                                        </Dropdown>
+                                                        </div> : <div>   <Dropdown
+                                                            text=''
+                                                            icon='ellipsis horizontal'
+                                                            floating
+                                                            labeled
+                                                            button
+                                                            className='icon'
+                                                        >
+                                                            <Dropdown.Menu>
+                                                                {/* <Dropdown.Header icon='tags' content='Filter by tag' /> */}
+                                                                <Dropdown.Item> <i aria-hidden="true" class="heart outline icon"></i> Like
+                                                                <TrackLikeOption
+                                                                        albumImage={data.ThumbnailImageWeb}
+                                                                        trackName={data.Name.split("-").join(" ")}
+                                                                        albumName={data.Name.split("-").join(" ")}
+                                                                        artistName={albumData.Artist}
+                                                                        pageURL={window.location.href} /></Dropdown.Item>
+                                                                <Dropdown.Item> <i aria-hidden="true" class="share icon"></i> Share  <TrackShareOptions
+                                                                    albumImage={data.ThumbnailImageWeb}
+                                                                    trackName={data.Name.split("-").join(" ")}
+                                                                    albumName={data.Name.split("-").join(" ")}
+                                                                    artistName={albumData.Artist}
+                                                                    pageURL={window.location.href} /></Dropdown.Item>
+                                                                <Dropdown.Item> <i aria-hidden="true" class="bell outline icon"></i>  Caller Tune
+                                                                {data.TelenorCode > 0 ?
+                                                                        <TrackRington
+                                                                            albumImage={data.ThumbnailImageWeb}
+                                                                            trackName={data.Name.split("-").join(" ")}
+                                                                            albumName={data.Name.split("-").join(" ")}
+                                                                            artistName={albumData.Artist}
+                                                                            pageURL={window.location.href}
+                                                                            TrackId={data.TrackId}
+                                                                            RBTCodes={
+                                                                                [
+                                                                                    {
+                                                                                        'code': data.TelenorCode,
+                                                                                        'name': 'Telenor'
+                                                                                    },
+                                                                                    {
+                                                                                        'code': data.UfoneCode,
+                                                                                        'name': 'Ufone'
+                                                                                    },
+                                                                                    {
+                                                                                        'code': data.ZongCode,
+                                                                                        'name': 'Zong'
+                                                                                    },
+                                                                                    {
+                                                                                        'code': data.MobilinkCode,
+                                                                                        'name': 'Mobilink'
+                                                                                    }
+                                                                                ]
+                                                                            }
+                                                                        />
+                                                                        :
+
+                                                                        // <img src="/assets/ringtone_black.png" alt='ringtone' onClick={() => this.noRBT()} />
+                                                                        <span>
+                                                                            <i aria-hidden="true" class="bell outline icon" onClick={() => this.noRBT()}></i>
+                                                                        </span>
+                                                                    }
+                                                                </Dropdown.Item>
+                                                            </Dropdown.Menu>
+                                                        </Dropdown>
+                                                        </div>}
 
                                                 </div>
 
@@ -509,34 +710,37 @@ class TrackView extends Component {
                             </Grid>
                         </Grid>
 
-                        <Grid container spacing={4} className="trackGridMain3">
+                        <Grid container spacing={3} className="trackGridMain3">
                             <Grid item xs={12}>
                                 <div className="relate-title">
-                                    <h2>Related Albums</h2>
+                                    <h3>Related Albums</h3>
                                 </div>
                             </Grid>
                             {
                                 recommendSlider.map((data, index) =>
-                                    <Grid item xs={2} className="pageGrid4" key={index}>
-                                        <div className="relatedBox">
-                                            <Link component={Link} to={`/album/` + data.Id + `/` + data.Name}>
-                                                <LazyImage
-                                                    src={data.ThumbnailImageWeb}
-                                                    alt={data.Name}
-                                                    debounceDurationMs={50}
-                                                    placeholder={({ imageProps, ref }) => (<img ref={ref} src={`/assets/albumx150.jpg`} alt={imageProps.alt} style={{ width: "100%" }} />)}
-                                                    actual={({ imageProps }) => (<img {...imageProps} style={{ width: "100%" }} alt={data.Name} />)} />
-                                                <p>{data.Name}</p>
-                                            </Link>
-                                        </div>
-                                    </Grid>
+                                    sameAlbumID === data.Id ?
+                                        <></>
+                                        :
+                                        <Grid item xs={4} md={2} className="pageGrid4" key={index}>
+                                            <div className="relatedBox">
+                                                <Link to={`/` + pageType + `/` + data.Id + `/` + this.ToSeoUrl(data.Name)}>
+                                                    <LazyImage
+                                                        src={data.ThumbnailImageWeb}
+                                                        alt={data.Name}
+                                                        debounceDurationMs={50}
+                                                        placeholder={({ imageProps, ref }) => (<img ref={ref} src={`/assets/albumx150.jpg`} alt={imageProps.alt} style={{ width: "100%" }} />)}
+                                                        actual={({ imageProps }) => (<img {...imageProps} style={{ width: "100%" }} alt={data.Name} />)} />
+                                                    <p>{data.Name}</p>
+                                                </Link>
+                                            </div>
+                                        </Grid>
                                 )
                             }
                         </Grid>
-
                     </>
                 }
             </div>
+
         )
     }
 }

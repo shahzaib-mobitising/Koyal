@@ -64,17 +64,18 @@ const Header = props => {
     >
 
       <Grid container spacing={0}>
-        <Grid item xs={6}>
+        <Grid item xs={12} className="menu_custom_css">
           <List>
-            <ListItem button component={Link} to="/"><ListItemText>Home</ListItemText></ListItem>
-            <ListItem button component={Link} to="/"><ListItemText>About Us</ListItemText></ListItem>
-            <ListItem button component={Link} to="/"><ListItemText>Contact US</ListItemText></ListItem>
-            <ListItem button component={Link} to="/"><ListItemText>DMCA</ListItemText></ListItem>
+            <ListItem button  to="/"><Link to="/"><img src="https://d3tzxv3uykrqm6.cloudfront.net/assets/koyal-logo.png" alt="koyal-logo" className="logo" /></Link></ListItem>
+            <ListItem button  to="/"><ListItemText>Home</ListItemText></ListItem>
+            <ListItem button  to="/"><ListItemText>About Us</ListItemText></ListItem>
+            <ListItem button  to="/"><ListItemText>Contact Us</ListItemText></ListItem>
+            <ListItem button  to="/"><ListItemText>DMCA</ListItemText></ListItem>
           </List>
         </Grid>
-        <Grid item xs={6} className={classes.alignRight}>
+        {/* <Grid item xs={12} className={classes.alignRight}>
           <Button className={classes.menuIcon} onClick={toggleDrawer('left', true)} ><i className="material-icons md-24">close</i></Button>
-        </Grid>
+        </Grid> */}
       </Grid>
 
     </div>
@@ -86,16 +87,33 @@ const Header = props => {
       <AppBar position="fixed" color="inherit">
         <Container maxWidth="xl" className="main-container">
           <Box display={{ xs: 'block', md: 'none' }} >
-            <Grid container spacing={0}>
-              <Grid item xs={1}>
+            <Grid container spacing={0} className="align_item_center">
+              <Grid item xs={4} sm={4}  >
                 <Button className={classes.menuIcon} onClick={toggleDrawer('left', true)} ><i className="material-icons md-36">menu</i></Button>
                 <Drawer classes={{ paper: classes.drawerPaper, }} open={state.left} onClose={toggleDrawer('left', false)}>
                   {sideList('left')}
                 </Drawer>
               </Grid>
-              <Grid item xs={6}>
+              <Grid item xs={4} sm={4} className="koyal_logo">
 
-                <Link to="/"><img src="assets/koyal-logo.png" alt="koyal-logo" className="logo" /></Link>
+                <Link to="/"><img src="https://d3tzxv3uykrqm6.cloudfront.net/assets/koyal-logo.png" alt="koyal-logo" className="logo" /></Link>
+              </Grid>
+              <Grid item xs={4} sm={4}>
+                <div className="searchBox searchBoxSpace">
+                  {/* <h5>   App Download <i className="material-icons android_icon">android</i></h5> */}
+                  <h5>
+                    <a
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      href="https://play.google.com/store/apps/details?id=com.mobitising.koyeel"
+                    >
+                  </a>
+                  </h5>
+
+                  {/* https://play.google.com/store/apps/details?id=com.mobitising.koyeel */}
+
+                  <SearchView />
+                </div>
               </Grid>
             </Grid>
           </Box>
@@ -103,7 +121,7 @@ const Header = props => {
           <Box display={{ xs: 'none', md: 'block' }} >
             <Grid container spacing={0}>
               <Grid item md={1} className="logoContainer">
-                <Link to="/"><img src="assets/koyal-logo.png" alt="koyal-logo" className="logo" /></Link>
+                <Link to="/"><img src="https://d3tzxv3uykrqm6.cloudfront.net/assets/koyal-logo.png" alt="koyal-logo" className="logo" /></Link>
               </Grid>
               <Grid item md={6}>
                 <div className="desktop-nav">
@@ -119,7 +137,18 @@ const Header = props => {
               </Grid>
               <Grid item md={5}>
                 <div className="searchBox">
-                  <h5>App Download <i className="material-icons android_icon">android</i></h5>
+                  {/* <h5>   App Download <i className="material-icons android_icon">android</i></h5> */}
+                  <h5>
+                    <a
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      href="https://play.google.com/store/apps/details?id=com.mobitising.koyeel"
+                    >
+                      App Download <i className="material-icons android_icon">android</i>
+                  </a>
+                  </h5>
+
+                  {/* https://play.google.com/store/apps/details?id=com.mobitising.koyeel */}
 
                   <SearchView />
                 </div>

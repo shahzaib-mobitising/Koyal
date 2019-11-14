@@ -179,7 +179,7 @@ function SearchAlphabet(props) {
                             <Tab key={data.id} 
                             className="alphabet-test" 
                             label={data.langName} 
-                            component={Link} to={`/explore/sort/` + props.languageCurrent + data.url} />
+                             to={`/explore/sort/` + props.languageCurrent + data.url} />
 
                         )}
 

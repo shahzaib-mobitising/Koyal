@@ -1,36 +1,44 @@
 import React from 'react'
-import ContentLoader from "react-content-loader"
+// import Grid from '@material-ui/core/Grid';
+// import { LazyImage } from "react-lazy-images";
+import { Card, Placeholder } from 'semantic-ui-react'
+import { isMobile } from 'react-device-detect';
 
 function AlbumLoader() {
+
+    const loaderMobile2 = isMobile ?
+        <Card.Group className="dummyAlbumViewMore mobileAlbumViewMore" itemsPerRow={3}>
+            {
+                [1, 2, 3, 4, 5, 6, 7, 8, 9].map((data, index) =>
+                    <Card>
+                        <Placeholder key={index}>
+                            <Placeholder.Image square />
+                            <Placeholder.Line />
+                        </Placeholder>
+                    </Card>
+                )
+            }
+        </Card.Group>
+        : <Card.Group className="dummyAlbumViewMore" itemsPerRow={6}>
+            {
+                [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18].map((data, index) =>
+                    <Card>
+                        <Placeholder key={index}>
+                            <Placeholder.Image square />
+                            <Placeholder.Line />
+                        </Placeholder>
+                    </Card>
+                )
+            }
+        </Card.Group>
+
+
     return (
-        <div>
-            <ContentLoader
-                height={475}
-                width={800}
-                speed={2}
-                primaryColor="#f3f3f3"
-                secondaryColor="#ecebeb"
-            >
-                <rect x="0" y="12" rx="5" ry="5" width="130" height="130" />
-                <rect x="150" y="12" rx="5" ry="5" width="130" height="130" />
-                <rect x="295" y="12" rx="5" ry="5" width="130" height="130" />
-                <rect x="440" y="12" rx="5" ry="5" width="130" height="130" />
-                <rect x="585" y="12" rx="5" ry="5" width="130" height="130" />
+        <>
 
-                <rect x="0" y="162" rx="5" ry="5" width="130" height="130" />
-                <rect x="150" y="162" rx="5" ry="5" width="130" height="130" />
-                <rect x="295" y="162" rx="5" ry="5" width="130" height="130" />
-                <rect x="440" y="162" rx="5" ry="5" width="130" height="130" />
-                <rect x="585" y="162" rx="5" ry="5" width="130" height="130" />
+            {loaderMobile2}
 
-                <rect x="0" y="315" rx="5" ry="5" width="130" height="130" />
-                <rect x="150" y="315" rx="5" ry="5" width="130" height="130" />
-                <rect x="295" y="315" rx="5" ry="5" width="130" height="130" />
-                <rect x="440" y="315" rx="5" ry="5" width="130" height="130" />
-                <rect x="585" y="315" rx="5" ry="5" width="130" height="130" />
-
-            </ContentLoader>
-        </div>
+        </>
     )
 }
 

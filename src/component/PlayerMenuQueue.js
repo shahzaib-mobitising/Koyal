@@ -7,6 +7,8 @@ import IconButton from "@material-ui/core/IconButton";
 import MoreVertIcon from "@material-ui/icons/MoreVert";
 import TrackLikeOption from "./TrackLikeOption";
 import TrackShareOptions from "./TrackShareOptions";
+import DownloadTrack from "./DownloadTrack";
+import TrackRington from "./TrackRington";
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -22,13 +24,13 @@ const useStyles = makeStyles(theme => ({
     // border: "1px solid black"
     // // background: "transparent"
     // // background: ""
-    left: '76px',
+    left: "-1000px",
     // border: '1px solid black',
     display: " block",
     position: "absolute",
     // backgroundColor: "black",
     width: "inherit",
-    top: "15px",
+    top: "35px",
   },
   fake: {
     backgroundColor: grey[200],
@@ -92,6 +94,10 @@ export default function PlayerMenuQueue(props) {
     setOpen(false);
   };
 
+  function noRBT() {
+    alert('Is song ki RBT Mojood Nahi hai.')
+  }
+
   return (
     // <div className={classes.root}>
     <ClickAwayListener onClickAway={handleClickAway}>
@@ -113,40 +119,102 @@ export default function PlayerMenuQueue(props) {
                   <li className="viewImg">
 
                     {/* <img className={classes.viewImg} src="/assets/download_black.png" alt="Download"></img> */}
-
-                    &nbsp;&nbsp;Download
+                    Download <DownloadTrack
+                      trackURL={props.OrgTrackUrl}
+                      albumImage={props.albumImage}
+                      trackName={props.trackName}
+                      albumName={props.albumName}
+                      artistName={props.artistName}
+                      pageURL={window.location.href}
+                      TrackId={props.TrackId}
+                      Albumid={props.AlbumId}
+                      RBTCodes={
+                        [
+                          {
+                            'code': 0,
+                            'name': 'Telenor'
+                          },
+                          {
+                            'code': props.UfoneCode,
+                            'name': 'Ufone'
+                          },
+                          {
+                            'code': props.ZongCode,
+                            'name': 'Zong'
+                          },
+                          {
+                            'code': props.MobilinkCode,
+                            'name': 'Mobilink'
+                          }
+                        ]
+                      }
+                    />
+                    {/* &nbsp;&nbsp;Download */}
                   </li>
                 </ul>
                 <ul className="view">
                   {/* <ul className={classes.view}> */}
                   <li className="viewImgLike">
-                    {/* <TrackLikeOption
+                    Like <TrackLikeOption
                       albumImage={props.albumImage}
                       trackName={props.trackName}
                       albumName={props.albumName}
                       artistName={props.artistName}
                       pageURL={props.pageURL}
-                    /> */}
-                    &nbsp;&nbsp;Like
+                    />
+                    {/* &nbsp;&nbsp;Like */}
                   </li>
                 </ul>
-                <ul  className="view">
+                <ul className="view">
                   <li className="viewImgShare">
-                    {/* <TrackShareOptions
+                    Share <TrackShareOptions
                       albumImage={props.albumImage}
                       trackName={props.trackName}
                       albumName={props.albumName}
                       artistName={props.artistName}
                       pageURL={props.pageURL}
-                    /> */}
-                    &nbsp;&nbsp;Share
-                    </li>
+                    />
+                    {/* &nbsp;&nbsp;Share */}
+                  </li>
                 </ul>
-                <ul  className="view">
+                <ul className="view">
 
 
                   <li className="viewImgCT">
-                    &nbsp;&nbsp;Caller Tune</li>
+                    Caller Tune
+                    {props.TelenorCode > 0 ?
+                      <TrackRington
+                        trackURL={props.OrgTrackUrl}
+                        albumImage={props.albumImage}
+                        trackName={props.trackName}
+                        albumName={props.albumName}
+                        artistName={props.artistName}
+                        pageURL={window.location.href}
+                        TrackId={props.TrackId}
+                        Albumid={props.AlbumId}
+                        RBTCodes={
+                          [
+                            {
+                              'code': props.TelenorCode,
+                              'name': 'Telenor'
+                            },
+                            {
+                              'code': props.UfoneCode,
+                              'name': 'Ufone'
+                            },
+                            {
+                              'code': props.ZongCode,
+                              'name': 'Zong'
+                            },
+                            {
+                              'code': props.MobilinkCode,
+                              'name': 'Mobilink'
+                            }
+                          ]
+                        }
+                      /> :
+                      <img src="/assets/ringtone_black.png" alt='ringtone' onClick={() => noRBT()} />}
+                  </li>
                 </ul>
 
               </div>

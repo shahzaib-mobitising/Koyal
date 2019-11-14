@@ -5,37 +5,37 @@ const languages = [
     {
         id: 1,
         langName: "Urdu",
-        url: "/urdu-songs"
+        url: "/urdu"
     },
     {
         id: 2,
         langName: "Punjabi",
-        url: "/punjabi-songs"
+        url: "/punjabi"
     },
     {
         id: 3,
         langName: "Saraiki",
-        url: "/saraiki-songs"
+        url: "/saraiki"
     },
     {
         id: 4,
         langName: "Sindhi",
-        url: "/sindhi-songs"
+        url: "/sindhi"
     },
     {
         id: 5,
         langName: "Pashto",
-        url: "/pashto-songs"
+        url: "/pashto"
     },
     {
         id: 6,
         langName: "Balochi",
-        url: "/balochi-songs"
+        url: "/balochi"
     },
     {
         id: 7,
         langName: "Hindko",
-        url: "/hindko-songs"
+        url: "/hindko"
     }
 ]
 

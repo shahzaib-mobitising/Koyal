@@ -1,8 +1,14 @@
 import React from 'react'
+import { Helmet } from "react-helmet";
 
 const About = () => {
     return (
-        <div className="AboutUs">
+        <div className="AboutUs"> <>
+            <Helmet>
+                <meta charSet="utf-8" />
+                <title>Koyal - About Us</title>
+            </Helmet>
+        </>
             <h2 className="CustomeH2">About Us</h2>
             <p className="AboutContent">
                 Koyal.pk is the tomorrow of music streaming. We offer an endless

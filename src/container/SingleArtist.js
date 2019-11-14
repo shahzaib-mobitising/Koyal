@@ -4,8 +4,8 @@ import { Link } from "react-router-dom";
 import Grid from '@material-ui/core/Grid';
 import ArtistLoader from '../component/ArtistLoader';
 import { LazyImage } from "react-lazy-images";
-import Rating from '@material-ui/lab/Rating';
-import FavoriteIcon from '@material-ui/icons/Favorite';
+import { Button, Icon, Label } from 'semantic-ui-react'
+import { Helmet } from "react-helmet";
 
 
 export default class SingleArtist extends Component {
@@ -27,7 +27,7 @@ export default class SingleArtist extends Component {
 
     getData = () => {
 
-        axios.get(`http://api.koyal.pk/app_files/web/artist/artist-${this.props.match.params.artistid}.json`)
+        axios.get(`https://api.koyal.pk/app_files/web/artist/artist-${this.props.match.params.artistid}.json`)
             .then(response => {
                 //  console.log(response)
                 this.setState({
@@ -37,11 +37,11 @@ export default class SingleArtist extends Component {
                     artistTracks: response.data.Response.Tracks,
                     loadingData: false
                 })
-               
+
             })
             .catch(error => {
                 console.log(error)
-                
+
             })
 
     }
@@ -64,7 +64,7 @@ export default class SingleArtist extends Component {
             })
             .catch(error => {
                 console.log(error)
-               
+
             })
     }
 
@@ -85,15 +85,35 @@ export default class SingleArtist extends Component {
         1024: { items: 4 },
     }
 
+
+    ToSeoUrl(url) {
+
+        // make the url lowercase         
+        var encodedUrl = url.toString().toLowerCase();
+
+        // replace & with and           
+        encodedUrl = encodedUrl.split(/\&+/).join("-and-")
+
+        // remove invalid characters 
+        encodedUrl = encodedUrl.split(/[^a-z0-9]/).join("-");
+
+        // remove duplicates 
+        encodedUrl = encodedUrl.split(/-+/).join("-");
+
+        // trim leading & trailing characters 
+        encodedUrl = encodedUrl.trim('-');
+
+        return encodedUrl;
+    }
+
     render() {
         const { artistInfo, artistAlbums, artistTracks, loadingData } = this.state
 
-        var bgImage = {
-            backgroundImage: 'url(' + artistInfo.ThumbnailImageWeb + ')',
-            WebkitTransition: 'all', // note the capital 'W' here
-            msTransition: 'all' // 'ms' is the only lowercase vendor prefix
-        };
-
+        // var bgImage = {
+        //     backgroundImage: 'url(' + artistInfo.ThumbnailImageWeb + ')',
+        //     WebkitTransition: 'all', // note the capital 'W' here
+        //     msTransition: 'all' // 'ms' is the only lowercase vendor prefix
+        // };
 
         return (
 
@@ -101,10 +121,17 @@ export default class SingleArtist extends Component {
                 {loadingData ? <ArtistLoader /> :
 
                     <>
-                        <div className="dummy-img">
-                            <div style={bgImage} className="divImage"></div>
+
+                        <div>
+                            <Helmet>
+                                <meta charSet="utf-8" />
+                                <title>{artistInfo.Artist}</title>
+                            </Helmet>
                         </div>
-                        <Grid container spacing={0} className="trackGridMain1">
+                        <div className="dummy-img">
+                            {/* <div style={bgImage} className="divImage"></div> */}
+                        </div>
+                        <Grid container spacing={0} className="trackGridMain1 artistTrack">
                             <Grid item xs={2} className="pageGrid1">
 
                                 <div className="albumImgBox">
@@ -113,41 +140,61 @@ export default class SingleArtist extends Component {
                                         alt={artistInfo.Name}
                                         debounceDurationMs={50}
                                         placeholder={({ imageProps, ref }) => (<img ref={ref} src={`/assets/albumx150.jpg`} alt={imageProps.alt} style={{ width: "100%" }} />)}
-                                        actual={({ imageProps }) => (<img {...imageProps} style={{ width: "100%" }} alt={artistInfo.Name} />)} />
+                                        actual={({ imageProps }) => (<img {...imageProps} style={{ width: "100%", verticalAlign: "middle" }} alt={artistInfo.Name} />)} />
                                 </div>
 
                             </Grid>
-                            <Grid item xs={10} className="pageGrid2">
-                                <div className="albumMetaBox">
-                                    <p className="short-head">Artist</p>
-                                    <h1 className="main-title">{artistInfo.Artist}</h1>
-                                    <p className="short-desc">
-                                        {artistInfo.Description}
-                                    </p>
-                                    {/* <p> 
+                            <Grid item xs={10} className="pageGrid2 albumMetaBox">
+                                <p className="short-head">Artist</p>
+                                <h1 className="main-title">{artistInfo.Artist}</h1>
+                                <p className="short-desc">
+                                    {artistInfo.Description}
+                                </p>
+                                {/* <p> 
                                         By <span>{artistInfo.Artist}</span>
                                         Writer <span>{artistInfo.Artist}</span>
                                         Composer <span>{artistInfo.Artist}</span>
                                     </p> */}
-                                    <ul className="counterList">
-                                        <li className="artistAlbumCounter">80 Albums</li>
-                                        <li className="artistSongsCounter">240 Songs</li>
-                                    </ul>
-                                </div>
+                                <ul className="counterList">
+                                    {/* <li className="artistAlbumCounter">{artistInfo.NoOfAlbums} Albums</li>
+                                    <li className="artistSongsCounter">{artistInfo.NoOfTracks} Tracks</li> */}
+                                    <li className="">
+                                        <Button as='div' labelPosition='right'>
+                                            <Button color=''>
+                                                <Icon name='heart' />
+                                                Albums
+      </Button>
+                                            <Label as='a' basic color='red' pointing='left'>
+                                                {artistInfo.NoOfAlbums < 1 ? <> 1K </> : <> {artistInfo.NoOfAlbums} </>}
+                                            </Label>
+                                        </Button>
+                                    </li>
+                                    <li className="">
+                                        <Button as='div' labelPosition='right'>
+                                            <Button color=''>
+                                                <Icon name='heart' />
+                                                Tracks
+      </Button>
+                                            <Label as='a' basic color='red' pointing='left'>
+                                                {artistInfo.NoOfTracks < 1 ? <> 1K </> : <> {artistInfo.NoOfTracks} </>}
+                                            </Label>
+                                        </Button>
+                                    </li>
+                                </ul>
 
                             </Grid>
                         </Grid>
-                        <Grid container spacing={1} className="trackGridMain2">
+                        <Grid container spacing={1} className="trackGridMain2 ">
                             <Grid item xs={12} className="pageGrid3">
-                                <div className="trackTableCustom">
+                                <div className="trackTableCustom custom_track_css sngleArtist">
                                     <ul className="trackListHeader">
-                                        <li className="trackCol1">#</li>
+                                        <li className="trackCol1"><span>#</span></li>
                                         {/* <li className="trackCol2"></li> */}
                                         <li className="trackCol3 atistiPageTitle">Title</li>
-                                        <li className="trackCol4">Artist</li>
-                                        <li className="artistAlbumCol">Album</li>
+                                        <li className="trackCol4">Album</li>
+                                        <li className="artistAlbumCol"><i className="material-icons">access_time </i></li>
                                         {/* <li className="trackCol5"><i className="material-icons">access_time </i></li> */}
-                                        <li className="trackCol6">Popularity</li>
+                                        {/* <li className="trackCol6">Popularity</li> */}
                                         {/* <li className="trackCol7"></li>
                                         <li className="trackCol8"></li>
                                         <li className="trackCol9"></li> */}
@@ -169,28 +216,26 @@ export default class SingleArtist extends Component {
                                                     <img src='/assets/download_black.png' alt="download" onClick={() => this.downloadTrack(data.Id, data.AlbumId, data.TrackUrl)} />
                                                 </li> */}
                                                 <li className="trackCol3 trackTitle atistiPageTitle">
-                                                    <Link component={Link} to={`/track/` + data.Id + `/` + data.Name}>
+                                                    <Link to={`/track/` + data.Id + `/` + this.ToSeoUrl(data.Name)}>
                                                         {data.Name.split("-").join(" ")}
                                                         {/* Episode 03 Zindagi Guzarne Ka Behtareen Tarika */}
                                                     </Link>
                                                 </li>
                                                 <li className="trackCol4 trackArtist">
 
-                                                    <Link component={Link} to={`/artist/` + data.ArtistId + `/` + data.Artist}>
-                                                        {artistInfo.Artist}
-                                                    </Link>
-                                                    {/* Episode 03 Zindagi Guzarne Ka Behtareen Tarika */}
-                                                </li>
-                                                <li className="artistAlbumCol">
-                                                    <Link component={Link} to={`/album/` + data.AlbumId + `/` + data.Album}>
+                                                    <Link to={`/album/` + data.AlbumId + `/` + this.ToSeoUrl(data.Album)}>
                                                         {data.Album}
                                                     </Link>
+
+                                                </li>
+                                                <li className="trackCol5 artistAlbumCol">
+                                                    5:30
                                                 </li>
                                                 {/* <li className="trackCol5">
                                                     5:30
                                                 </li> */}
 
-                                                <div className="trackCol6">
+                                                {/* <div className="trackCol6 fdsfsdf">
                                                     <Rating
                                                         value="2"
                                                         readOnly
@@ -198,7 +243,7 @@ export default class SingleArtist extends Component {
                                                         className="ratingTrack"
                                                         max={3}
                                                     />
-                                                </div>
+                                                </div> */}
                                                 {/* <div className="trackCol7">
                                                     <TrackLikeOption />
                                                 </div> */}
@@ -249,7 +294,7 @@ export default class SingleArtist extends Component {
                             </Grid>
                         </Grid>
 
-                        <Grid container spacing={4} className="trackGridMain3">
+                        <Grid container spacing={3} className="trackGridMain3">
                             <Grid item xs={12}>
                                 <div className="relate-title">
                                     <h2>Albums</h2>
@@ -257,9 +302,9 @@ export default class SingleArtist extends Component {
                             </Grid>
                             {
                                 artistAlbums.map((data, index) =>
-                                    <Grid item xs={2} className="pageGrid4" key={index}>
+                                    <Grid item xs={4} sm={3} md={2} className="pageGrid4" key={index}>
                                         <div className="relatedBox">
-                                            <Link component={Link} to={`/album/` + data.Id + `/` + data.Name}>
+                                            <Link to={`/album/` + data.Id + `/` + this.ToSeoUrl(data.Name)}>
                                                 <LazyImage
                                                     src={data.ThumbnailImageWeb}
                                                     alt={data.Name}
