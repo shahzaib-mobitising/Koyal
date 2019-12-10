@@ -9,6 +9,9 @@ import { Grid } from "@material-ui/core";
 import axios from 'axios'
 import { Loader } from 'semantic-ui-react'
 
+import Button from '@material-ui/core/Button';
+
+
 
 const useStyles = makeStyles(theme => ({
     root: {
@@ -88,6 +91,8 @@ const useStyles = makeStyles(theme => ({
 
 export default function DownloadTrack(props) {
     const [open, setOpen] = React.useState(false);
+    const [openModal2, setOpenModal2] = React.useState(false);
+
 
     function handleClickOpen() {
 
@@ -101,75 +106,19 @@ export default function DownloadTrack(props) {
 
 
         let msisdn2 = localStorage.getItem('msisdn')
-        // console.log(msisdn2)
+
         if (msisdn2 === null || msisdn2.length === 0) {
 
-            // alert('Local storage Null ')
-
-            axios.get(`https://api.koyal.pk/musicapp/?request=getNumber`)
-                .then(response => {
-                    let getNumber = response.data.Response.msisdn
-                    let getPremium = response.data.Response.premium
-                    console.log(response)
-
-                    //    alert('Get Number API Response back')
-
-                    //   alert(`Number is` + getNumber)
-
-                    if (getNumber.length === 0) {
-
-                        //alert('No Number Found in Response API')
-
-                        setOpen(true)
-
-                    } else {
-
-                        alert('Number is Found in Response API')
-
-                        localStorage.setItem('msisdn', JSON.stringify(getNumber));
-
-                        if (getPremium === 1 || getPremium === '1') {
-
-                            let sendData2 = {
-                                UserId: 0,
-                                AlbumId: props.Albumid,
-                                TrackId: props.TrackId,
-                                Action: 'download',
-                                Msisdn: getNumber
-                            }
-
-                            downloadTrack(sendData2)
-
-                            //     alert('Premium 1 User')
-                        } else {
-                            setValues(values => ({
-                                ...values,
-                                msisdn: getNumber
-                            }));
-                            //   alert('Auto Text Field Filled.')
-                            setOpen(true)
-                        }
-
-                    }
-
-                })
-                .catch(error => {
-                    console.log(error)
-                })
         } else {
             downloadTrack(sendData)
-            //setOpen(true)
         }
 
     }
 
 
     function downloadTrack(sendData) {
-        // alert(sendData)
-        axios.post(`https://api.koyal.pk/musicapp/?request=charge-download-web.php`, sendData)
-      
-        //axios.post(`http://35.156.24.14/koyaldownload/charge-download-web.php`, sendData)
-        
+
+        axios.post(`https://api.koyal.pk/musicapp/charge-download-web.php`, sendData)
             .then(response => {
 
                 let url = props.trackURL
@@ -177,15 +126,12 @@ export default function DownloadTrack(props) {
                 const method = 'GET';
 
                 let checkResp = response.data.Response.response
-                //alert(response.data.Response)
+                
                 if (checkResp === 'numbererror') {
-                    //   alert('Number Error in Download.')
-                    // setOpen(true);
+                    
                 } else {
 
                     let checkResp2 = response.data.Response.response
-
-                    console.log(response)
 
                     if (checkResp2 === 'notcharged') {
                         alert('Sorry Sir ! you have insufficient balance.')
@@ -220,6 +166,14 @@ export default function DownloadTrack(props) {
         setOpen(false);
     }
 
+    function handleClickOpenModal2() {
+        setOpenModal2(true);
+    }
+
+    function handleCloseModal2() {
+        setOpenModal2(false);
+    }
+
     const classes = useStyles();
 
     const [values, setValues] = React.useState({
@@ -238,7 +192,6 @@ export default function DownloadTrack(props) {
         formConfirmRBT: false,
         formFinalMsg: false
     });
-
 
 
     function selectOperator(event) {
@@ -392,8 +345,6 @@ export default function DownloadTrack(props) {
 
     }
 
-
-
     const enterNumberBox = <DialogContent>
         <DialogContentText id="alert-dialog-description">
             <div className="DialogContent ">
@@ -495,12 +446,61 @@ export default function DownloadTrack(props) {
 
     </DialogActions>
 
+    let url2 = props.trackURL
+    let nameT2 = `${props.trackName}.mp3`;
+
+    const urlLink = `http://charge.koyal.pk/koyaldownload/scripts/download.php?pageURL=${window.location}&trackId=${props.TrackId}&userId=0&verifyCode=&code=&action=download&AlbumId=${props.Albumid}&trackURL=${url2}&trackName=${nameT2}`;
+    //const urlLink = `http://localhost/koyal-download-new/download.php?pageURL=${window.location}&trackId=${props.TrackId}&userId=0&verifyCode=&code=&action=download&AlbumId=${props.Albumid}&trackURL=${url2}&trackName=${nameT2}`;
+
+    const checkLocalStorageNum = localStorage.getItem('msisdn');
+
     return (
 
         <>
-            {/* <img src="/assets/download_black.png" alt='ringtone' onClick={handleClickOpen} />
-            cloud download */}
-            <i aria-hidden="true" className="download icon" onClick={handleClickOpen}></i>
+
+            {
+                checkLocalStorageNum === null ?
+                    <i aria-hidden="true" className="download icon" onClick={handleClickOpenModal2}></i> :
+                    <i aria-hidden="true" className="download icon" onClick={handleClickOpen}></i>
+            }
+
+            <Dialog open={openModal2} onClose={handleCloseModal2} aria-labelledby="form-dialog-title">
+                <DialogTitle id="alert-dialog-title">
+                    <Grid item xs={12}>
+                        <div className="AlignMeCenter share_text congoMainTitle"><b>Koyal - Subscription</b></div>
+                    </Grid>
+                    <Grid container spacing={0}>
+                        <Grid item xs={12}>
+                            <div className={classes.AlbumImg} className="Album_img_ringtone">
+                                <div className={classes.SquareImg}>
+                                    <img src={props.albumImage} alt={props.trackName} />
+                                </div>
+                                <div className="trackName congoTrack">
+                                    <p className={classes.TrackName}>{props.trackName}</p>
+                                    <div className="artist_name">
+                                        <p className={classes.ArtistName}>{props.artistName}</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </Grid>
+                    </Grid>
+                </DialogTitle>
+                <DialogActions>
+                    <Grid item xs={12}>
+                        <div className="congs_text congo_text2">
+                            <p> <span className="Line1Congo">Subscribe and Download Unlimited Content, you will be charged Rs 1 per Day</span>
+                                <br />
+                                <br />
+                                <span className="Line2Congo"> (for each additional track you will be charged Rs 0.2 per track after 5 tracks) </span></p>
+                        </div>
+                        <button className="button_styles">
+                            <a className="triggerClick activeLinkBtn" href={urlLink}>Activate</a>
+                        </button>
+                    </Grid>
+
+                </DialogActions>
+                <div className="LineBreak"></div>
+            </Dialog>
 
             <Dialog className="dialoge_Ringtone"
                 open={open}
@@ -538,28 +538,8 @@ export default function DownloadTrack(props) {
 
                 {loading.formFinalMsg ? finalBox : <></>}
 
-                {/* <DialogActions>
-            <Grid item xs={12}>
-              <div className="DialogContent ">
-                <div className="setCallerTune">
-                  <p className="setTunec">OOPS!!!</p>
-                </div>
-              </div>
-              <div className="congs_text">
-                  <p>This Subscription is only available for Telenor Customers
-                  </p>
-              </div> 
-                <button className="button_styles">
-                        OK
-                </button>
-            </Grid> 
-            
-        </DialogActions> */}
-
                 <div className="LineBreak"></div>
             </Dialog>
-
-
         </>
     );
 }

@@ -105,7 +105,7 @@ export default function TrackShareOptions(props) {
 
       {/* <img src='/assets/share_black.png' alt="share" onClick={handleClickOpen} /> */}
 
-      <i aria-hidden="true" class="share icon" onClick={handleClickOpen}></i>
+      <i aria-hidden="true" className="share icon" onClick={handleClickOpen}></i>
 
       {/* Share Screen start */}
       <Dialog className="dialog_share"

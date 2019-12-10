@@ -1,5 +1,6 @@
 import React from "react";
-import Button from "@material-ui/core/Button";
+//import Button from "@material-ui/core/Button";
+import { Button, Header, Segment, TransitionablePortal } from 'semantic-ui-react'
 import Dialog from "@material-ui/core/Dialog";
 import ListItemText from "@material-ui/core/ListItemText";
 import ListItem from "@material-ui/core/ListItem";
@@ -22,14 +23,19 @@ import CardContent from "@material-ui/core/CardContent";
 import CardMedia from "@material-ui/core/CardMedia";
 import axios from "axios";
 import { Link } from "react-router-dom";
-
 import Grid from "@material-ui/core/Grid";
+import DialogActions from '@material-ui/core/DialogActions';
+import DialogContent from '@material-ui/core/DialogContent';
+import DialogContentText from '@material-ui/core/DialogContentText';
+import DialogTitle from '@material-ui/core/DialogTitle';
+
 
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="down" ref={ref} {...props} />;
 });
 
 function TabContainer(props) {
+
   return (
     <Typography component="div" style={{ padding: 1 * 3 }}>
       {props.children}
@@ -43,6 +49,8 @@ TabContainer.propTypes = {
 
 function SearchView() {
   const [open, setOpen] = React.useState(false);
+  const [openActiveUser, openActiveUserOpen] = React.useState(false);
+  const [openDeleteUser, openDeleteUserOpen] = React.useState(false);
 
   const [searchData, setSearchDataupdate] = React.useState({
     searchDataTrack: searchDummyJson.Response.SearchResult.Tracks,
@@ -52,6 +60,82 @@ function SearchView() {
 
   function handleClickOpen() {
     setOpen(true);
+  }
+
+  function handleOpenActiveUser() {
+    //openDeleteUserOpen(true);
+    //openActiveUserOpen(true);
+
+    let localStorageNum = localStorage.getItem('msisdn')
+
+    let testtt = {
+      msisdn: localStorageNum
+    }
+
+    if (localStorageNum != null) {
+      console.log('Number Hai')
+      axios.post(`https://api.koyal.pk/musicapp/checksubscriber.php`, testtt)
+        .then(response => {
+          let RespApi = response.data.Response.response;
+
+          if (RespApi === false || RespApi === 'false') {
+            //console.log('fase')
+            openDeleteUserOpen(true)
+          } else {
+            //  console.log('trree')
+            openActiveUserOpen(true)
+          }
+
+        })
+        .catch(error => {
+          console.log(error)
+        })
+    } else {
+      //console.log('Number Nahi Hai')
+      openDeleteUserOpen(true)
+    }
+  }
+
+  function handleCloseActiveUser() {
+    openActiveUserOpen(false);
+  }
+
+  function handleOpenActiveUser2() {
+    openDeleteUserOpen(true);
+  }
+
+  function handleCloseActiveUser2() {
+    openDeleteUserOpen(false);
+  }
+
+  function handleClickOpen() {
+    setOpen(true);
+  }
+
+  function deactiveUser() {
+
+    let testtt = {
+      Msisdn: localStorage.getItem('msisdn')
+    }
+
+    axios.post(`https://api.koyal.pk/musicapp/?request=delete-charged-download-react`, testtt)
+      .then(response => {
+        let ApiResp = response.data.Response.Success
+        console.log(ApiResp)
+
+        if (ApiResp === true) {
+          openActiveUserOpen(false)
+          alert('Your Subscription for Koyal has now been Deactivated. Thank you for using www.koyal.pk')
+          localStorage.clear();
+          window.location = 'http://' + window.location.hostname + window.location.pathname;
+        }
+
+
+
+      })
+      .catch(error => {
+        console.log(error)
+      })
   }
 
   function handleClose() {
@@ -254,15 +338,65 @@ function SearchView() {
     </Grid>
   );
 
+  const deactiveBtn = localStorage.getItem('msisdn') === null ? <></> : <Button color='red' onClick={deactiveUser}>Deactive</Button>
+
+
 
 
   return (
     <div className="searchMainBox">
-      <div className="SearchMaterialIcon">
+      {/* <div className="SearchMaterialIcon header_icons">
         <Button variant="contained" color="secondary" onClick={handleClickOpen}>
           <i className="material-icons">search</i>
         </Button>
       </div>
+      <div className="SearchMaterialIcon header_icons">
+        <Button variant="contained" color="secondary" onClick={handleClickOpen}>
+          <i className="material-icons">watch</i>
+        </Button>
+      </div> */}
+      <div className="topHeadButton">
+        <Button onClick={handleClickOpen} circular icon='search' color='pink' />
+        <Button circular icon='user' color='pink' onClick={handleOpenActiveUser} />
+        {/* {deactiveBtn} */}
+
+      </div>
+
+
+      <Dialog open={openDeleteUser} onClose={handleCloseActiveUser2} aria-labelledby="form-dialog-title">
+        <DialogTitle id="form-dialog-title" className="cnfirmPoppTitle">Alert</DialogTitle>
+        <DialogContent>
+          <DialogContentText id="confirmMessagesPopup">
+            You are not Subscribed for Koyal.pk
+          </DialogContentText>
+
+        </DialogContent>
+        <DialogActions className="cnfirmpopupFooter">
+          <Button onClick={handleCloseActiveUser2} color="primary">
+            Cancel
+          </Button>
+        </DialogActions>
+      </Dialog>
+
+
+      <Dialog open={openActiveUser} onClose={handleCloseActiveUser} aria-labelledby="form-dialog-title">
+        <DialogTitle id="form-dialog-title" className="cnfirmPoppTitle">Confirmation</DialogTitle>
+        <DialogContent>
+          <DialogContentText id="confirmMessagesPopup">
+            Are you sure you want to Deactivate Koyal Subscription.
+            You will not be able to Download songs for FREE anymore
+          </DialogContentText>
+
+        </DialogContent>
+        <DialogActions className="cnfirmpopupFooter">
+          <Button onClick={handleCloseActiveUser} color="primary">
+            Cancel
+          </Button>
+          <Button color='red' onClick={deactiveUser}>Deactive</Button>
+        </DialogActions>
+      </Dialog>
+
+
 
       <Dialog
         fullScreen
@@ -281,9 +415,10 @@ function SearchView() {
                 "aria-label": "Search"
               }}
             />
-            <Button color="secondary" onClick={handleClose}>
+            {/* <Button color="secondary" onClick={handleClose}>
               <i className="material-icons">close</i>
-            </Button>
+            </Button> */}
+            <Button onClick={handleClose} circular icon='close' color='black' />
           </Toolbar>
         </AppBar>
 

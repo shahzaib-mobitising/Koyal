@@ -1,12 +1,11 @@
 import React, { Component } from 'react'
 import axios from 'axios'
 import { withGlobalState } from 'react-globally'
-//import Ringtone from '../component/Ringtone';
 import { Link } from "react-router-dom";
 import Grid from '@material-ui/core/Grid';
 import ArtistLoader from '../component/ArtistLoader';
-//import Rating from '@material-ui/lab/Rating';
-//import FavoriteIcon from '@material-ui/icons/Favorite';
+import Dialog from '@material-ui/core/Dialog';
+import DialogActions from '@material-ui/core/DialogActions';
 import TrackShareOptions from '../component/TrackShareOptions';
 import TrackLikeOption from '../component/TrackLikeOption';
 import TrackRington from '../component/TrackRington';
@@ -28,11 +27,13 @@ class SingleTrackView extends Component {
             playlist: [],
             recommendSlider: [],
             trackIndex: null,
-            loadingData: true
+            loadingData: true,
+            noRBTModal: false,
         }
 
         this.clickOnTrack = this.clickOnTrack.bind(this)
-
+        this.RBTModalClose = this.RBTModalClose.bind(this)
+        this.RBTModalOpen = this.RBTModalOpen.bind(this)
         this.noRBT = this.noRBT.bind(this)
 
     }
@@ -78,7 +79,7 @@ class SingleTrackView extends Component {
             UserId: 0
         })
             .then(response => {
-                //console.log(response)
+                console.log(response)
             })
             .catch(error => {
                 console.log(error)
@@ -190,13 +191,20 @@ class SingleTrackView extends Component {
     }
 
     noRBT = () => {
-        alert('Is song ki RBT Mojood Nahi hai.')
+        this.RBTModalOpen();
+    }
+
+    RBTModalOpen = () => {
+        this.setState({ noRBTModal: true })
+    }
+
+    RBTModalClose = () => {
+        this.setState({ noRBTModal: false })
     }
 
     componentDidMount() {
 
         this.getData()
-
     }
 
     componentDidUpdate(prevState) {
@@ -234,9 +242,7 @@ class SingleTrackView extends Component {
 
     render() {
 
-        const { albumData, trackData, recommendSlider, loadingData } = this.state
-
-        // console.log(recommendSlider)
+        const { noRBTModal, albumData, trackData, recommendSlider, loadingData } = this.state
 
         // var bgImage = {
         //     backgroundImage: 'url(' + albumData.ThumbnailImageWeb + ')',
@@ -259,6 +265,29 @@ class SingleTrackView extends Component {
 
 
             <div className="allTracksContainer">
+
+                {/* NO RBT */}
+                <div className="firstTimeRBTPopup">
+                    <Dialog open={noRBTModal} onClose={this.RBTModalClose} aria-labelledby="form-dialog-title">
+                        <DialogActions>
+                            <Grid item xs={12}>
+                                <div className="DialogContent ">
+                                    <div className="setCallerTune">
+                                        <p className="setTunec">Sorry !!!!</p>
+                                    </div>
+                                </div>
+                                <div className="congs_text rbt_text">
+                                    <p>Is song ki RBT Mojood Nahi hai.</p>
+                                </div>
+                                <button className="button_styles" onClick={this.RBTModalClose}>
+                                    Close
+      </button>
+                            </Grid>
+                        </DialogActions>
+                    </Dialog>
+                </div>
+                {/* NO RBT */}
+
                 {loadingData ? <ArtistLoader /> :
 
                     <>
@@ -354,6 +383,8 @@ class SingleTrackView extends Component {
                                         </Button>
                                     </li>
                                 </ul>
+
+
                             </Grid>
                         </Grid>
 
@@ -388,7 +419,7 @@ class SingleTrackView extends Component {
                                                                 debounceDurationMs={5}
                                                                 placeholder={({ imageProps, ref }) => (<img ref={ref} src={`/assets/albumx150.jpg`} alt={imageProps.alt} style={{ width: "100%" }} />)}
                                                                 actual={({ imageProps }) => (<img {...imageProps} style={{ width: "100%" }} alt={data.Name} />)} />
-                                                            <i aria-hidden="true" class="pause circular icon"></i>
+                                                            <i aria-hidden="true" className="pause circular icon"></i>
                                                         </div>
                                                         :
 
@@ -399,7 +430,7 @@ class SingleTrackView extends Component {
                                                                 debounceDurationMs={5}
                                                                 placeholder={({ imageProps, ref }) => (<img ref={ref} src={`/assets/albumx150.jpg`} alt={imageProps.alt} style={{ width: "100%" }} />)}
                                                                 actual={({ imageProps }) => (<img {...imageProps} style={{ width: "100%" }} alt={data.Name} />)} />
-                                                            <i aria-hidden="true" class="play circular icon" onClick={() => this.clickOnTrack(index, data.Name.split("-").join(" "))}></i>
+                                                            <i aria-hidden="true" className="play circular icon" onClick={() => this.clickOnTrack(index, data.Name.split("-").join(" "))}></i>
                                                         </div>
 
 
@@ -481,20 +512,20 @@ class SingleTrackView extends Component {
                                                     >
                                                         <Dropdown.Menu>
                                                             {/* <Dropdown.Header icon='tags' content='Filter by tag' /> */}
-                                                            <Dropdown.Item> <i aria-hidden="true" class="like outline icon" ></i> Like
+                                                            <Dropdown.Item> <i aria-hidden="true" className="like outline icon" ></i> Like
                                                                 <TrackLikeOption
                                                                     albumImage={data.ThumbnailImageWeb}
                                                                     trackName={data.Name.split("-").join(" ")}
                                                                     albumName={data.Name.split("-").join(" ")}
                                                                     artistName={albumData.Artist}
                                                                     pageURL={window.location.href} /></Dropdown.Item>
-                                                            <Dropdown.Item> <i aria-hidden="true" class="share  icon" ></i>  Share <TrackShareOptions
+                                                            <Dropdown.Item> <i aria-hidden="true" className="share  icon" ></i>  Share <TrackShareOptions
                                                                 albumImage={data.ThumbnailImageWeb}
                                                                 trackName={data.Name.split("-").join(" ")}
                                                                 albumName={data.Name.split("-").join(" ")}
                                                                 artistName={albumData.Artist}
                                                                 pageURL={window.location.href} /></Dropdown.Item>
-                                                            <Dropdown.Item> <i aria-hidden="true" class="bell outline icon" ></i> <b onClick={() => this.noRBT()}> Caller Tune </b>
+                                                            <Dropdown.Item> <i aria-hidden="true" className="bell outline icon" ></i> <b onClick={() => this.noRBT()}> Caller Tune </b>
                                                                 {data.TelenorCode > 0 ?
                                                                     <TrackRington
                                                                         albumImage={data.ThumbnailImageWeb}

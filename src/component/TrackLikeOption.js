@@ -43,7 +43,7 @@ export default function TrackLikeOption(props) {
 
       {/* <img src="/assets/heart_like.png" alt="like" onClick={handleClickOpen} /> */}
 
-      <i aria-hidden="true" class="heart outline icon" onClick={handleClickOpen}></i>
+      <i aria-hidden="true" className="heart outline icon" onClick={handleClickOpen}></i>
      
 
       <Dialog className="like_dialogue"

@@ -7,6 +7,7 @@ import DialogTitle from "@material-ui/core/DialogTitle";
 import { makeStyles } from "@material-ui/core/styles";
 import { Grid } from "@material-ui/core";
 import axios from 'axios'
+import RbtAlerts from "./RbtAlerts";
 
 
 const useStyles = makeStyles(theme => ({
@@ -88,6 +89,8 @@ const useStyles = makeStyles(theme => ({
 
 export default function TrackRington(props) {
   const [open, setOpen] = React.useState(false);
+  const [openModal2, setOpenModal2] = React.useState(false);
+  const [openModal22, setOpenModal22] = React.useState(false);
 
   function handleClickOpen() {
 
@@ -99,78 +102,20 @@ export default function TrackRington(props) {
       Msisdn: localStorage.getItem('msisdn')
     }
 
-
     let msisdn2 = localStorage.getItem('msisdn')
-    // console.log(msisdn2)
+
     if (msisdn2 === null || msisdn2.length === 0) {
 
-      // alert('Local storage Null ')
-
-      axios.get(`https://api.koyal.pk/musicapp/?request=getNumber`)
-        .then(response => {
-          let getNumber = response.data.Response.msisdn
-          let getPremium = response.data.Response.premium
-          //  console.log(response)
-
-          //  alert('Get Number API Response back')
-
-          // alert(`Number is` + getNumber)
-
-          if (getNumber.length === 0) {
-
-            //   alert('No Number Found in Response API')
-
-            setOpen(true)
-
-          } else {
-
-            //   alert('Number is Found in Response API')
-
-            localStorage.setItem('msisdn', JSON.stringify(getNumber));
-
-            if (getPremium === 1 || getPremium === '1') {
-
-              let sendData2 = {
-                UserId: 0,
-                AlbumId: props.Albumid,
-                TrackId: props.TrackId,
-                Action: 'download',
-                Msisdn: getNumber
-              }
-
-
-              //  alert('Premium 1 User')
-            } else {
-              setValues(values => ({
-                ...values,
-                msisdn: getNumber
-              }));
-              //   alert('Auto Text Field Filled.')
-              setOpen(true)
-            }
-
-          }
-
-        })
-        .catch(error => {
-          console.log(error)
-        })
     } else {
-
-      //   alert('This is else case.')
-
 
       let testtt = {
         msisdn: localStorage.getItem('msisdn'),
         operator: "telenor",
         rbtCode: props.RBTCodes[0].code,
-        trackId: "81881",
+        trackId: props.TrackId,
         userId: 0,
         verifyCode: "verified"
       }
-
-
-      // console.log(testtt)
 
       axios.post(`https://api.koyal.pk/musicapp/?request=set-rbt-react`, testtt)
         .then(response => {
@@ -179,8 +124,15 @@ export default function TrackRington(props) {
 
           if (verifyResp) {
 
-            //   alert('New RBT Set')
+            setLoading(values => ({
+              ...values,
+              loader: false,
+              formEnterNumber: false,
+              formConfirmRBT: false,
+              formFinalMsg: true
+            }));
             setOpen(true)
+
           } else {
             alert('RBT Not Set.')
           }
@@ -198,6 +150,61 @@ export default function TrackRington(props) {
 
   function handleClose() {
     setOpen(false);
+  }
+
+  function handleClickOpenModal2() {
+    setOpenModal2(true);
+  }
+
+  function handleCloseModal2() {
+    setOpenModal2(false);
+  }
+
+  function handleClickOpenModal22() {
+    setOpenModal22(true);
+  }
+
+  function handleCloseModal22() {
+    setOpenModal22(false);
+  }
+
+  function newRBTSet() {
+    let testtt = {
+      msisdn: localStorage.getItem('msisdn'),
+      operator: "telenor",
+      rbtCode: props.RBTCodes[0].code,
+      trackId: props.TrackId,
+      userId: 0,
+      verifyCode: "verified"
+    }
+
+    setOpenModal22(false)
+
+    axios.post(`https://api.koyal.pk/musicapp/?request=set-rbt-react`, testtt)
+      .then(response => {
+        console.log(response)
+        let verifyResp = response.data.Response.Success
+
+        if (verifyResp) {
+
+          setLoading(values => ({
+            ...values,
+            loader: false,
+            formEnterNumber: false,
+            formConfirmRBT: false,
+            formFinalMsg: true
+          }));
+          setOpen(true)
+
+        } else {
+          alert('RBT Not Set.')
+        }
+
+      })
+      .catch(error => {
+        console.log(error)
+
+      })
   }
 
   const classes = useStyles();
@@ -421,7 +428,6 @@ export default function TrackRington(props) {
             id="msisdn"
             required
           />
-
           {/* <div>
           <a href="#!"> Resend Code</a>
         </div> */}
@@ -447,20 +453,108 @@ export default function TrackRington(props) {
           <br />
           You will recieve a confirmation message shortly.</p>
       </div>
-      <button className="button_styles">
+      <button className="button_styles" onClick={handleClose}>
         Done
       </button>
     </Grid>
 
   </DialogActions>
 
+  //const urlLink = `http://localhost/koyal-download-new/rbt.php?rbtCode=${props.RBTCodes[0].code}&pageURL=${window.location}&trackId=${props.TrackId}&userId=0&verifyCode=&code=&action=rbt`;
+
+  const urlLink = `http://charge.koyal.pk/koyaldownload/scripts/rbt.php?rbtCode=${props.RBTCodes[0].code}&pageURL=${window.location}&trackId=${props.TrackId}&userId=0&verifyCode=&code=&action=rbt`;
+
+  const checkLocalStorageNum = localStorage.getItem('msisdn');
+
   return (
 
 
     <span>
 
-      {/* <img src='/assets/ringtone_black.png' alt="share" onClick={handleClickOpen} /> */}
-      <i aria-hidden="true" class="bell outline icon" onClick={handleClickOpen}></i>
+      {
+        checkLocalStorageNum === null ?
+          // <a className="triggerClick" href={urlLink}><i aria-hidden="true" className="download icon"> </i></a>
+          <i aria-hidden="true" className="download icon" onClick={handleClickOpenModal2}></i> :
+          <i aria-hidden="true" className="download icon" onClick={handleClickOpenModal22}></i>
+      }
+
+      <Dialog open={openModal22} onClose={handleCloseModal22} aria-labelledby="form-dialog-title">
+        <DialogTitle id="alert-dialog-title">
+          <Grid item xs={12}>
+            <div className="AlignMeCenter share_text congoMainTitle"><b>Koyal - Caller Tune</b></div>
+          </Grid>
+          <Grid container spacing={0}>
+            <Grid item xs={12}>
+              <div className={classes.AlbumImg} className="Album_img_ringtone">
+                <div className={classes.SquareImg}>
+                  <img src={props.albumImage} alt={props.trackName} />
+                </div>
+                <div className="trackName congoTrack">
+                  <p className={classes.TrackName}>{props.trackName}</p>
+                  <div className="artist_name">
+                    <p className={classes.ArtistName}>{props.artistName}</p>
+                  </div>
+                </div>
+              </div>
+            </Grid>
+          </Grid>
+        </DialogTitle>
+        <DialogActions>
+          <Grid item xs={12}>
+            <div className="congs_text congo_text2">
+              <p> <span className="Line1Congo">Now you can set caller tune for just Rs 1.5+T/Day and content charges of Rs 3+T/track</span>
+              </p>
+            </div>
+            <button className="button_styles">
+              <a className="triggerClick activeLinkBtn" onClick={newRBTSet}>Activate</a>
+            </button>
+          </Grid>
+
+        </DialogActions>
+        <div className="LineBreak"></div>
+      </Dialog>
+
+
+
+
+      <Dialog open={openModal2} onClose={handleCloseModal2} aria-labelledby="form-dialog-title">
+        <DialogTitle id="alert-dialog-title">
+          <Grid item xs={12}>
+            <div className="AlignMeCenter share_text congoMainTitle"><b>Koyal - Caller Tune</b></div>
+          </Grid>
+          <Grid container spacing={0}>
+            <Grid item xs={12}>
+              <div className={classes.AlbumImg} className="Album_img_ringtone">
+                <div className={classes.SquareImg}>
+                  <img src={props.albumImage} alt={props.trackName} />
+                </div>
+                <div className="trackName congoTrack">
+                  <p className={classes.TrackName}>{props.trackName}</p>
+                  <div className="artist_name">
+                    <p className={classes.ArtistName}>{props.artistName}</p>
+                  </div>
+                </div>
+              </div>
+            </Grid>
+          </Grid>
+        </DialogTitle>
+        <DialogActions>
+          <Grid item xs={12}>
+            <div className="congs_text congo_text2">
+              <p> <span className="Line1Congo">Now you can set caller tune for just Rs 1.5+T/Day and content charges of Rs 3+T/track</span>
+                {/* <br />
+                <br />
+                <span className="Line2Congo"> (for each additional track you will be charged Rs 0.2 per track after 5 tracks) </span> */}
+              </p>
+            </div>
+            <button className="button_styles">
+              <a className="triggerClick activeLinkBtn" href={urlLink}>Activate</a>
+            </button>
+          </Grid>
+
+        </DialogActions>
+        <div className="LineBreak"></div>
+      </Dialog>
 
 
       <Dialog className="dialoge_Ringtone"

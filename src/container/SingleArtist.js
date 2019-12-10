@@ -53,7 +53,7 @@ export default class SingleArtist extends Component {
             'album_id': AlbumId
         }
 
-        axios.post(`http://35.156.24.14/koyaldownload/download.php`, trackInfo)
+        axios.post(`http://charge.koyal.pk/koyaldownload/download.php`, trackInfo)
             .then(response => {
 
                 if (response.data.SearchResult.Success === 'Charged') {
@@ -155,9 +155,7 @@ export default class SingleArtist extends Component {
                                         Writer <span>{artistInfo.Artist}</span>
                                         Composer <span>{artistInfo.Artist}</span>
                                     </p> */}
-                                <ul className="counterList">
-                                    {/* <li className="artistAlbumCounter">{artistInfo.NoOfAlbums} Albums</li>
-                                    <li className="artistSongsCounter">{artistInfo.NoOfTracks} Tracks</li> */}
+                                <ul className="counterList hide_mobile">
                                     <li className="">
                                         <Button as='div' labelPosition='right'>
                                             <Button color=''>
@@ -182,6 +180,23 @@ export default class SingleArtist extends Component {
                                     </li>
                                 </ul>
 
+                                <ul className="counterList hide_desk">
+                                    <li className="albumLikes22">
+                                        <Button as='div' labelPosition='left'>
+                                                <Icon name='heart' />
+                                                <span> {artistInfo.NoOfAlbums < 1 ? <> 1.3 K </> : <> {artistInfo.NoOfAlbums} </>}</span>
+                                        </Button>
+
+                                    </li>
+                                    <li className="albumShare22">
+                                    <Button as='div' labelPosition='left'>
+                                                <Icon name='heart' />
+                                                <span> {artistInfo.NoOfTracks < 1 ? <> 1.95 K </> : <> {artistInfo.NoOfTracks} </>}</span>
+                                        </Button>
+
+                                    </li>
+                                    
+                                </ul>
                             </Grid>
                         </Grid>
                         <Grid container spacing={1} className="trackGridMain2 ">

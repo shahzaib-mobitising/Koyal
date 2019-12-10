@@ -273,7 +273,7 @@ class Queue extends Component {
                                                             placeholder={({ imageProps, ref }) => (<img ref={ref} src={`/assets/albumx150.jpg`} alt={imageProps.alt} style={{ width: "100%" }} />)}
                                                             actual={({ imageProps }) => (<img {...imageProps} style={{ width: "100%" }} alt={val.trackName} />)} />
 
-                                                        {/* <i aria-hidden="true" class="pause circular icon"></i> */}
+                                                        {/* <i aria-hidden="true" className="pause circular icon"></i> */}
 
                                                     </div>
 

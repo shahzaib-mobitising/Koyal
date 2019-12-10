@@ -104,7 +104,6 @@ class Player extends Component {
 
         }
 
-        // console.log(this.props.globalState)
 
 
         return (
@@ -132,6 +131,7 @@ class Player extends Component {
                                         {/* {this.props.TrackAlbumsName} */}
                                         <Link to={`/track/` + trackIdforLike + `/` + trackNameforlike}>
                                             {this.props.globalState.trackAlbumName}
+
                                         </Link>
                                     </li>
                                 </ul>
@@ -143,9 +143,10 @@ class Player extends Component {
                                 playerId='MyPlayer'
                                 playerScript='https://cdn.jwplayer.com/libraries/PYG4ZTcd.js'
                                 playlist={this.props.TrackData}
-                                isMuted={false}
+                                isMuted={true}
                                 aspectRatio='inherit'
                                 onVideoLoad={this.onVideoLoad}
+                                allowFullscreen= {false}
                             />
                         </Grid>
                         <Grid item xs={6} sm={2} className="playerGrid3 startRadio">
