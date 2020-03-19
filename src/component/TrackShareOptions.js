@@ -5,7 +5,7 @@ import DialogContent from "@material-ui/core/DialogContent";
 import DialogContentText from "@material-ui/core/DialogContentText";
 import DialogTitle from "@material-ui/core/DialogTitle";
 import { makeStyles } from "@material-ui/core/styles";
-
+import { Button, Icon, Label } from 'semantic-ui-react'
 import {
   Grid
 } from "@material-ui/core";
@@ -103,9 +103,15 @@ export default function TrackShareOptions(props) {
   return (
     <span>
 
-      {/* <img src='/assets/share_black.png' alt="share" onClick={handleClickOpen} /> */}
-
-      <i aria-hidden="true" className="share icon" onClick={handleClickOpen}></i>
+      {
+        props.forTop === 1 ?
+          <Button as='div' onClick={handleClickOpen} labelPosition='right'> <Button color=''> <Icon name='share' /> <span> Share </span> </Button> <Label as='a' basic color='red' pointing='left'> {props.NoOfShares < 1 ? <> 1K </> : <> {props.NoOfShares} </>} </Label> </Button>
+          :
+          props.forTop === 11 ?
+            <Button as='div' onClick={handleClickOpen} labelPosition='left'> <Icon name='share' /> <span> {props.NoOfShares < 1 ? <> 1.95 K </> : <> {props.NoOfShares} K </>}</span> </Button>
+            :
+            <i aria-hidden="true" className="share icon" onClick={handleClickOpen}></i>
+      }
 
       {/* Share Screen start */}
       <Dialog className="dialog_share"
@@ -118,11 +124,14 @@ export default function TrackShareOptions(props) {
           <Grid container spacing={0}>
             {/* <Grid item xs={2}></Grid> */}
             <Grid item xs={12}>
-              <div className="AlignMeCenter share_text"><b>Share</b></div>
+              <div className="AlignMeCenter share_text"><b>Share</b>
+                <Icon name='close' onClick={handleClose} />
+              </div>
+
             </Grid>
             {/* <Grid item xs={2}>
               <div className="SearchMaterialIcon">
-                <Button color="secondary" onClick={handleClose}>
+               
 
                 </Button>
               </div>
@@ -210,6 +219,6 @@ export default function TrackShareOptions(props) {
       </Dialog>
 
 
-    </span>
+    </span >
   );
 }

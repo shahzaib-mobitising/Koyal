@@ -5,7 +5,6 @@ import { Link } from "react-router-dom";
 import SearchView from './SearchView';
 import Container from '@material-ui/core/Container';
 import Box from '@material-ui/core/Box';
-
 import { makeStyles } from '@material-ui/core/styles';
 import Drawer from '@material-ui/core/Drawer';
 import Button from '@material-ui/core/Button';
@@ -37,6 +36,10 @@ const useStyles = makeStyles({
 });
 
 
+function testAlert() {
+  alert('123')
+}
+
 const Header = props => {
 
   const classes = useStyles();
@@ -66,11 +69,14 @@ const Header = props => {
       <Grid container spacing={0}>
         <Grid item xs={12} className="menu_custom_css">
           <List>
-            <ListItem button  to="/"><Link to="/"><img src="https://d3tzxv3uykrqm6.cloudfront.net/assets/koyal-logo.png" alt="koyal-logo" className="logo" /></Link></ListItem>
-            <ListItem button  to="/"><ListItemText>Home</ListItemText></ListItem>
-            <ListItem button  to="/"><ListItemText>About Us</ListItemText></ListItem>
-            <ListItem button  to="/"><ListItemText>Contact Us</ListItemText></ListItem>
-            <ListItem button  to="/"><ListItemText>DMCA</ListItemText></ListItem>
+            <ListItem button to="/"><Link to="/"><img src="/assets/site-logo.png" alt="koyal-logo" className="logo" /></Link></ListItem>
+            <ListItem button to="/"><ListItemText>My Account</ListItemText></ListItem>
+            <ListItem button to="/"><ListItemText>Home</ListItemText></ListItem>
+            <ListItem button to="/"><ListItemText>About Us</ListItemText></ListItem>
+            <ListItem button to="/"><ListItemText>Contact Us</ListItemText></ListItem>
+            <ListItem button to="/"><ListItemText>DMCA</ListItemText></ListItem>
+            <ListItem button to="/"><a className="linkToCls" href="https://rbt.koyal.pk/">Caller Tune</a></ListItem>
+
           </List>
         </Grid>
         {/* <Grid item xs={12} className={classes.alignRight}>
@@ -90,6 +96,7 @@ const Header = props => {
             <Grid container spacing={0} className="align_item_center">
               <Grid item xs={4} sm={4}  >
                 <Button className={classes.menuIcon} onClick={toggleDrawer('left', true)} ><i className="material-icons md-36">menu</i></Button>
+                {/* <Button className={classes.menuIcon} href="/MTA"><i className="material-icons md-36">menu</i></Button> */}
                 <Drawer classes={{ paper: classes.drawerPaper, }} open={state.left} onClose={toggleDrawer('left', false)}>
                   {sideList('left')}
                 </Drawer>
@@ -107,7 +114,7 @@ const Header = props => {
                       rel="noopener noreferrer"
                       href="https://play.google.com/store/apps/details?id=com.mobitising.koyeel"
                     >
-                  </a>
+                    </a>
                   </h5>
 
                   {/* https://play.google.com/store/apps/details?id=com.mobitising.koyeel */}
@@ -132,7 +139,8 @@ const Header = props => {
                     <Link to="/about-us">About Us</Link></div>
                   <div className="desktop-menu-item"> <Link to="/privacy-policy">Policy</Link></div>
                   <div className="desktop-menu-item"> <Link to="/terms">Terms</Link></div>
-                  <div className="desktop-menu-item"> <Link to="/dmca">DMCA</Link></div>
+                  <div className="desktop-menu-item">  <a target="_blank" href="https://rbt.koyal.pk/">Caller Tune</a></div>
+                  <div className="desktop-menu-item"> <Link to="/">DMCA</Link></div>
                 </div>
               </Grid>
               <Grid item md={5}>
@@ -145,7 +153,7 @@ const Header = props => {
                       href="https://play.google.com/store/apps/details?id=com.mobitising.koyeel"
                     >
                       App Download <i className="material-icons android_icon">android</i>
-                  </a>
+                    </a>
                   </h5>
 
                   {/* https://play.google.com/store/apps/details?id=com.mobitising.koyeel */}

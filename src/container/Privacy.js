@@ -86,9 +86,7 @@ const Privacy = () => {
                 <h3>Updates / Changes</h3>
                 <p>The internet is a regularly developing medium as stated earlier. We may modify our privacy policy every once in a while to consolidate essential changes in technology, relevant law or some other variation; Regardless of this, we keep the authority to change  (any point of time) the terms of this Privacy Policy or the Terms of Use. Any progressions we make will be effective immediately on notice which we may give by posting the new policy on the Site. Your constant use of the koyal.pk after such notice will be considered acknowledgement of such changes.</p>
                 <h3>Contacting Us</h3>
-                <p>If there are any questions regarding this privacy policy, you may contact us using the information below. www.koyal.pk and send an email to feedback@koyal.pk
-
-Office Address: Suite No 505, 5th Floor, Progressive Center, Sharah-e-Faisal, Karachi</p>
+                <p>If there are any questions regarding this privacy policy, you may contact us using the information below. www.koyal.pk and send an email to <a href="mailto:feedback@koyal.pk?Subject=Feedback%20Team" target="_top"> feedback@koyal.pk </a> Office Address: Suite No 505, 5th Floor, Progressive Center, Sharah-e-Faisal, Karachi</p>
             </p>
         </div>
     )

@@ -8,9 +8,8 @@ import { makeStyles } from "@material-ui/core/styles";
 import { Grid } from "@material-ui/core";
 import axios from 'axios'
 import { Loader } from 'semantic-ui-react'
-
 import Button from '@material-ui/core/Button';
-
+import ReactGA from 'react-ga';
 
 
 const useStyles = makeStyles(theme => ({
@@ -92,9 +91,20 @@ const useStyles = makeStyles(theme => ({
 export default function DownloadTrack(props) {
     const [open, setOpen] = React.useState(false);
     const [openModal2, setOpenModal2] = React.useState(false);
+    const [NoBalanceMsg, NoBalanceMsgF] = React.useState(false);
+    const [trackDownloadMsg, trackDownloadMsgF] = React.useState(false);
+
 
 
     function handleClickOpen() {
+
+        // ReactGA.event({
+        //     category: `${props.componentName}`,
+        //     action: 'Download Click',
+        //     transport: 'beacon',
+        //     label: `${props.trackName}`
+        // });
+
 
         let sendData = {
             UserId: 0,
@@ -104,7 +114,6 @@ export default function DownloadTrack(props) {
             Msisdn: localStorage.getItem('msisdn')
         }
 
-
         let msisdn2 = localStorage.getItem('msisdn')
 
         if (msisdn2 === null || msisdn2.length === 0) {
@@ -113,6 +122,25 @@ export default function DownloadTrack(props) {
             downloadTrack(sendData)
         }
 
+    }
+
+    function NoBalanceOpen() {
+
+        NoBalanceMsgF(true)
+    }
+
+    function NoBalanceClose() {
+        NoBalanceMsgF(false)
+    }
+
+    function trackDownloadOpen() {
+
+        trackDownloadMsgF(true)
+
+    }
+
+    function trackDownloadClose() {
+        trackDownloadMsgF(false)
     }
 
 
@@ -126,16 +154,24 @@ export default function DownloadTrack(props) {
                 const method = 'GET';
 
                 let checkResp = response.data.Response.response
-                
+
                 if (checkResp === 'numbererror') {
-                    
+
                 } else {
 
                     let checkResp2 = response.data.Response.response
 
                     if (checkResp2 === 'notcharged') {
-                        alert('Sorry Sir ! you have insufficient balance.')
+                        NoBalanceMsgF(true)
+
                     } else {
+
+                        ReactGA.event({
+                            category: 'Download Success',
+                            action: 'Download Completed',
+                            transport: 'beacon',
+                            label: `${nameT}`
+                        });
 
                         axios.request({
                             url,
@@ -151,8 +187,8 @@ export default function DownloadTrack(props) {
                             link.click();
                             link.remove();
                         });
-
-                        alert('Song will be downloaded in a moment')
+                        //alert('Download Complete')
+                        trackDownloadMsgF(true)
                     }
                 }
 
@@ -168,6 +204,13 @@ export default function DownloadTrack(props) {
 
     function handleClickOpenModal2() {
         setOpenModal2(true);
+        ReactGA.event({
+            category: `${props.componentName}`,
+            action: 'Download Click',
+            transport: 'beacon',
+            label: `${props.trackName}`
+        });
+
     }
 
     function handleCloseModal2() {
@@ -176,254 +219,12 @@ export default function DownloadTrack(props) {
 
     const classes = useStyles();
 
-    const [values, setValues] = React.useState({
-        rbtCode: "",
-        msisdn: "",
-        trackId: props.TrackId,
-        userId: 0,
-        verifyCode: "",
-        operator: 'telenor',
-        code: ''
-    });
-
     const [loading, setLoading] = React.useState({
         loader: false,
         formEnterNumber: true,
         formConfirmRBT: false,
         formFinalMsg: false
     });
-
-
-    function selectOperator(event) {
-
-        event.persist()
-
-        setValues(values => ({
-            ...values,
-            [event.target.name]: event.target.value
-        }));
-
-    }
-
-    function phoneNumber(event) {
-
-        event.persist()
-
-        setValues(values => ({
-            ...values,
-            [event.target.name]: event.target.value
-        }));
-        console.log(event.target.value)
-
-    }
-
-    function submitRBT(event) {
-
-        event.preventDefault();
-
-        // Breaking Number
-
-        setLoading(values => ({
-            ...values,
-            loader: true,
-        }));
-
-        let numberCount = values.msisdn.length
-
-        if (numberCount === 12) {
-
-            var numberArray = values.msisdn.split('')
-
-            var mergeStartTwoNumber = numberArray[0].concat(numberArray[1])
-
-            if (mergeStartTwoNumber === '92') {
-                //console.log(values.msisdn)
-                axios.post(`https://api.koyal.pk/musicapp/?request=send-verify-download-react`, values)
-                    .then(response => {
-                        //console.log(response)
-
-                        setLoading(values => ({
-                            ...values,
-                            loader: false,
-                            formEnterNumber: false,
-                            formConfirmRBT: true,
-                            formFinalMsg: false
-                        }));
-
-                        setValues(values => ({
-                            ...values,
-                            code: response.data.Response.code
-                        }));
-
-                    })
-                    .catch(error => {
-                        console.log(error)
-
-                    })
-            }
-            else {
-                alert('Number will start from 92');
-            }
-        }
-        else {
-            alert('Incorrect length of mobile number.')
-        }
-
-
-    }
-
-    function verifysCode(event) {
-
-        event.persist()
-
-        setValues(values => ({
-            ...values,
-            [event.target.name]: event.target.value
-        }));
-
-    }
-
-
-    function confirmBtnRBT(event) {
-
-        event.preventDefault();
-
-        let confirmCodeLength = values.verifyCode.length
-        let confirmCode = 'download-'.concat(values.verifyCode)
-
-        setLoading(values => ({
-            ...values,
-            loader: true,
-        }));
-
-        console.log(values.code)
-
-        if (confirmCodeLength === 4 && confirmCode === values.code) {
-
-            localStorage.setItem('msisdn', JSON.stringify(values.msisdn));
-
-            axios.post(`https://api.koyal.pk/musicapp/?request=set-download-react`, values)
-                .then(response => {
-
-                    let verifyResp = response.data.Response.Success
-
-                    let sendData = {
-                        UserId: 0,
-                        AlbumId: props.Albumid,
-                        TrackId: props.TrackId,
-                        Action: 'download',
-                        Msisdn: values.msisdn
-                    }
-
-                    downloadTrack(sendData)
-
-                    if (verifyResp) {
-
-                        setLoading(values => ({
-                            ...values,
-                            loader: false,
-                            formEnterNumber: false,
-                            formConfirmRBT: false,
-                            formFinalMsg: true
-                        }));
-
-                        setTimeout(() => setOpen(false), 5000)
-                    } else {
-                        alert('There is some error.')
-                    }
-
-                })
-                .catch(error => {
-                    console.log(error)
-
-                })
-
-        } else {
-
-            alert('Incorrect Code.')
-        }
-
-    }
-
-    const enterNumberBox = <DialogContent>
-        <DialogContentText id="alert-dialog-description">
-            <div className="DialogContent ">
-                <div className="setCallerTune">
-                    <p className="setTune">Subscribe Now</p>
-                    <p>Download unlimited songs, you will be charged Rs. 1+Tax/Day</p>
-                </div>
-            </div>
-            <div className="formtune">
-                <form onSubmit={submitRBT}>
-                    <select
-                        value={values.rbtCode}
-                        onChange={selectOperator}
-                        name="rbtCode"
-                        required
-                    >
-                        {/* <option value="">Select</option> */}
-                        {props.RBTCodes.map((data, index) => {
-                            if (data.code !== "0") {
-                                return (
-                                    <option key={index} value={data.code}>
-                                        {data.name}
-                                    </option>
-                                );
-                            }
-                        })}
-                    </select>
-                    <input
-                        type="text"
-                        placeholder="923xx xxxxxxx"
-                        value={values.msisdn}
-                        name="msisdn"
-                        onChange={phoneNumber}
-                        id="msisdn"
-                        required
-                    />
-                    <button type="submit">
-                        Submit
-          </button>
-                </form>
-            </div>
-        </DialogContentText>
-    </DialogContent>
-
-
-    const confirmNumberBox = <DialogActions>
-        <Grid item xs={12}>
-            <div className="DialogContent ">
-                <div className="setCallerTune">
-                    <p className="setTunesub">Subscribe Now</p>
-                    <p className="download_text">Download Unlimited Songs</p>
-                </div>
-            </div>
-            <div className="">
-                <p className="setTunesub">Enter Verification Code</p>
-            </div>
-            <form onSubmit={confirmBtnRBT}>
-                <div className="verification_code">
-
-                    <input
-                        placeholder="XXXX"
-                        type="text"
-                        value={values.verifyCode}
-                        name="verifyCode"
-                        onChange={verifysCode}
-                        id="msisdn"
-                        required
-                    />
-
-                    {/* <div>
-          <a href="#!"> Resend Code</a>
-        </div> */}
-                </div>
-                <button type="submit" className="button_styles">
-                    Verify
-    </button>
-            </form>
-        </Grid>
-    </DialogActions>
 
 
     const finalBox = <DialogActions>
@@ -451,8 +252,8 @@ export default function DownloadTrack(props) {
 
     const urlLink = `http://charge.koyal.pk/koyaldownload/scripts/download.php?pageURL=${window.location}&trackId=${props.TrackId}&userId=0&verifyCode=&code=&action=download&AlbumId=${props.Albumid}&trackURL=${url2}&trackName=${nameT2}`;
     //const urlLink = `http://localhost/koyal-download-new/download.php?pageURL=${window.location}&trackId=${props.TrackId}&userId=0&verifyCode=&code=&action=download&AlbumId=${props.Albumid}&trackURL=${url2}&trackName=${nameT2}`;
-
     const checkLocalStorageNum = localStorage.getItem('msisdn');
+
 
     return (
 
@@ -463,6 +264,37 @@ export default function DownloadTrack(props) {
                     <i aria-hidden="true" className="download icon" onClick={handleClickOpenModal2}></i> :
                     <i aria-hidden="true" className="download icon" onClick={handleClickOpen}></i>
             }
+
+
+            <div className="congoTrackBox">
+                <Dialog open={trackDownloadMsg} onClose={trackDownloadClose} aria-labelledby="form-dialog-title">
+                    <DialogTitle id="form-dialog-title">Thankyou !!!</DialogTitle>
+                    <DialogContent>
+                        <DialogContentText>
+                            Song will be downloaded in a moment
+                        </DialogContentText>
+                    </DialogContent>
+                    <DialogActions>
+                        <Button onClick={trackDownloadClose} color="primary"> OK </Button>
+                    </DialogActions>
+                </Dialog>
+            </div>
+
+
+            <div className="noBalanceBox">
+                <Dialog open={NoBalanceMsg} onClose={NoBalanceClose} aria-labelledby="form-dialog-title">
+                    <DialogTitle id="form-dialog-title">Alert !!!</DialogTitle>
+                    <DialogContent>
+                        <DialogContentText>
+                            Sorry !!! you have insufficient balance. Thank You
+                        </DialogContentText>
+                    </DialogContent>
+                    <DialogActions>
+                        <Button onClick={NoBalanceClose} color="primary"> OK </Button>
+                    </DialogActions>
+                </Dialog>
+            </div>
+
 
             <Dialog open={openModal2} onClose={handleCloseModal2} aria-labelledby="form-dialog-title">
                 <DialogTitle id="alert-dialog-title">
@@ -531,10 +363,6 @@ export default function DownloadTrack(props) {
                 </DialogTitle>
 
                 {loading.loader ? <Loader active inline='centered' /> : <></>}
-
-                {loading.formEnterNumber ? enterNumberBox : <></>}
-
-                {loading.formConfirmRBT ? confirmNumberBox : <></>}
 
                 {loading.formFinalMsg ? finalBox : <></>}
 

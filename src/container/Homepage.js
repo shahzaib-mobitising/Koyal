@@ -8,16 +8,21 @@ import homeDataDummy from '../dummy/home.json'
 import { withGlobalState } from 'react-globally'
 import { LazyImage } from "react-lazy-images";
 import LanguageBarCustom from '../component/LanguageBarCustom';
-import { Card, Placeholder } from 'semantic-ui-react'
+import { Card, Placeholder, Button, Modal, Image } from 'semantic-ui-react'
 import { isMobile } from 'react-device-detect';
 import { Helmet } from "react-helmet";
+import queryString from 'query-string';
+import ReactGA from 'react-ga';
 
 
 
 class Homepage extends Component {
     constructor(props) {
         super(props)
+        
         this.playTracksDirectly = this.playTracksDirectly.bind(this);
+        this.congoSubscribeOpen = this.congoSubscribeOpen.bind(this)
+        
         this.state = {
             loading: true,
             sliderSection: homeDataDummy.Response.HomePageContent[0]['Data'],
@@ -28,13 +33,27 @@ class Homepage extends Component {
             artistSection: homeDataDummy.Response.HomePageContent[1]['Data'],
             albumSection: homeDataDummy.Response.HomePageContent[2]['Data'],
             islamicSection: homeDataDummy.Response.HomePageContent[2]['Data'],
+            modalSize: 'mini',
+            openSubsInfo: false,
+            infoHeadingSubs: '',
+            infoTextSubs: ''
         }
 
     }
 
-    playTracksDirectly = (id) => {
+
+
+    playTracksDirectly = (id, albumName) => {
 
         //   console.log(id)
+
+        ReactGA.event({
+            category: 'Button Play Song Default',
+            action: 'Direct Play',
+            transport: 'beacon',
+            label: albumName
+        });
+
 
         axios.get(`https://api.koyal.pk/musicapp/?request=get-tracks-react-button&id=${id}`)
             .then(response => {
@@ -95,13 +114,28 @@ class Homepage extends Component {
             })
     }
 
+
+
     componentDidMount() {
+
+        this.checkSubscribeNumber()
+
+        this.unSubsMsisdn();
+
+        let apiName = ''
+
+        let localStorageMsisdn = localStorage.getItem('msisdn')
+        if (localStorageMsisdn === null || localStorageMsisdn === '' || localStorageMsisdn.length < 14) {
+            apiName = 'home.json'
+        } else {
+            apiName = 'home.json?msisdn=' + localStorageMsisdn.replace(/["']/g, "")
+        }
 
         setTimeout(() =>
 
-            axios.get('https://api.koyal.pk/app_files/web/new/home.json')
+            axios.get(`https://api.koyal.pk/app_files/web/new/${apiName}`)
                 .then(response => {
-//                    console.log(homeDataDummy)
+                    // console.log(response)
                     this.setState({
                         loading: false,
                         sliderSection: response.data.Response.HomePageContent[0]['Data'],
@@ -167,7 +201,7 @@ class Homepage extends Component {
                         }
 
                     } else {
-                      //  console.log('From Homepage')
+                        //  console.log('From Homepage')
                     }
 
                 })
@@ -176,8 +210,102 @@ class Homepage extends Component {
                     this.setState({ errMsg: 'Error Data' })
                 })
 
-            , 50)
+            , 1000)
     }
+
+    unSubsMsisdn = () => {
+
+        const para = queryString.parse(window.location.search)
+
+        if (para.msisdn !== undefined) {
+            console.log(window.atob(para.msisdn))
+            this.congoUnSubscribeOpen()
+        }
+
+
+    }
+
+    checkSubscribeNumber = () => {
+
+        const para = queryString.parse(window.location.search)
+
+        //  For Subscribe
+        if (para.msisdnv !== undefined && para.statusSubs !== undefined) {
+            let localMsisdn = localStorage.getItem('msisdn');
+            if (localMsisdn === null) {
+                localStorage.setItem('msisdn', JSON.stringify(window.atob(para.msisdnv)));
+                this.congoSubscribeOpen()
+            }
+        }
+
+    }
+
+    // Open Info Box
+    closeInfoBox = () => this.setState({ openSubsInfo: false })
+
+    congoSubscribeOpen = () => {
+        this.numberChargeProcess()
+    }
+
+
+    numberChargeProcess = () => {
+
+        let sendData = {
+            UserId: 0,
+            AlbumId: 77777,
+            TrackId: 77777,
+            Action: 'download',
+            Msisdn: localStorage.getItem('msisdn')
+        }
+
+        axios.post(`https://api.koyal.pk/musicapp/charge-download-web.php`, sendData)
+            .then(response => {
+
+                let checkResp = response.data.Response.response
+
+                if (checkResp === 'numbererror') {
+
+                    this.setState({
+                        openSubsInfo: true,
+                        infoHeadingSubs: 'Ooops!!',
+                        infoTextSubs: 'Sorry !!! There is an Error in Number.'
+                    })
+
+                    setTimeout(() => {window.location.replace("http://localhost:3000/"); }, 2500)
+
+                } else {
+
+                    let checkResp2 = response.data.Response.response
+
+                    if (checkResp2 === 'notcharged') {
+
+                        this.setState({
+                            openSubsInfo: true,
+                            infoHeadingSubs: 'Ooops!!',
+                            infoTextSubs: 'Sorry !!! you have insufficient balance.'
+                        })
+
+                        setTimeout(() => {window.location.replace("http://localhost:3000/"); }, 2500)
+
+                    } else {
+
+                        this.setState({
+                            openSubsInfo: true,
+                            infoHeadingSubs: 'Congratulations !!!',
+                            infoTextSubs: 'Your subscription to Koyal has been successful.'
+                        })
+
+                        setTimeout(() => {window.location.replace("http://localhost:3000/"); }, 3000)
+
+                    }
+                }
+
+            })
+            .catch(error => {
+                console.log(error)
+            })
+    }
+
 
     responsiveSlider = {
         0: { items: 2 },
@@ -232,7 +360,7 @@ class Homepage extends Component {
 
     render() {
 
-        const { loading, sliderSection, genreSection, newSection, popularSection, collectionsSection, artistSection, albumSection, islamicSection } = this.state
+        const { modalSize, openSubsInfo, infoHeadingSubs, infoTextSubs,  loading, sliderSection, genreSection, newSection, popularSection, collectionsSection, artistSection, albumSection, islamicSection } = this.state
 
         const LoaderMobile = isMobile ?
             <Card.Group className="sliderItemMobile" itemsPerRow={2}>
@@ -286,21 +414,21 @@ class Homepage extends Component {
 
         const forSlider = sliderSection.map(data => <div className="sliderImageBox">
             <Link to={`/album/` + data.Id + `/` + this.ToSeoUrl(data.Name)}>
-                <LazyImage src={data.SliderImageWeb} alt={data.Id} debounceDurationMs={1} placeholder={({ imageProps, ref }) => (<img ref={ref} src={`assets/slider.jpg`} alt={imageProps.alt} style={{ width: "100%" }} />)} actual={({ imageProps }) => (<img {...imageProps} style={{ width: "100%" }} alt={data.Id} />)} /></Link><div className="play-icon-2"><i aria-hidden="true" className="play circular icon" onClick={() => this.playTracksDirectly(data.Id)}></i></div></div>)
+                <LazyImage src={data.SliderImageWeb} alt={data.Id} debounceDurationMs={1} placeholder={({ imageProps, ref }) => (<img ref={ref} src={`assets/slider.jpg`} alt={imageProps.alt} style={{ width: "100%" }} />)} actual={({ imageProps }) => (<img {...imageProps} style={{ width: "100%" }} alt={data.Id} />)} /></Link><div className="play-icon-2"><i aria-hidden="true" className="play circular icon" onClick={() => this.playTracksDirectly(data.Id, data.Name)}></i></div></div>)
 
         const forGenre = genreSection.map(data => <><div className="new-1 new_hover"><Link to={`/album/genre/` + this.ToSeoUrl(data.Name)}> <LazyImage src={data.ThumbnailImageWeb} className="genre-image" alt={data.Id} debounceDurationMs={1} style={{ width: "100%", height: "100%" }} placeholder={({ imageProps, ref }) => (<img ref={ref} src={`assets/artist.png`} alt={imageProps.alt} style={{ width: "100%" }} />)} actual={({ imageProps }) => (<img {...imageProps} style={{ width: "100%" }} alt={data.Id} />)} /><h6 className="genre-name">{data.Name}</h6> </Link></div></>)
 
-        const forNew = newSection.map((data, index) => <><div className="new-1 new_hover"><Link to={`/album/` + data.Id + `/` + this.ToSeoUrl(data.Name)}><LazyImage src={data.ThumbnailImageWeb} alt={data.Id} debounceDurationMs={1} className="new1-image" style={{ width: "100%", height: "100%" }} placeholder={({ imageProps, ref }) => (<img ref={ref} src={`assets/album.jpg`} alt={imageProps.alt} style={{ width: "100%" }} />)} actual={({ imageProps }) => (<img {...imageProps} style={{ width: "100%" }} alt={data.Id} />)} /><h6>{data.Name}</h6></Link><div className="play-icon-3"><i aria-hidden="true" className="play circular icon" onClick={() => this.playTracksDirectly(data.Id)}></i></div></div> </>)
+        const forNew = newSection.map((data, index) => <><div className="new-1 new_hover"><Link to={`/album/` + data.Id + `/` + this.ToSeoUrl(data.Name)}><LazyImage src={data.ThumbnailImageWeb} alt={data.Id} debounceDurationMs={1} className="new1-image" style={{ width: "100%", height: "100%" }} placeholder={({ imageProps, ref }) => (<img ref={ref} src={`assets/album.jpg`} alt={imageProps.alt} style={{ width: "100%" }} />)} actual={({ imageProps }) => (<img {...imageProps} style={{ width: "100%" }} alt={data.Id} />)} /><h6>{data.Name}</h6></Link><div className="play-icon-3"><i aria-hidden="true" className="play circular icon" onClick={() => this.playTracksDirectly(data.Id, data.Name)}></i></div></div> </>)
 
-        const forPopular = popularSection.map(data => <><div className="new-1 new_hover"><Link to={`/album/` + data.Id + `/` + this.ToSeoUrl(data.Name)}><LazyImage src={data.ThumbnailImageWeb} alt={data.Id} debounceDurationMs={1} className="popular-image" style={{ width: "100%", height: "100%" }} placeholder={({ imageProps, ref }) => (<img ref={ref} src={`assets/album.jpg`} alt={imageProps.alt} style={{ width: "100%" }} />)} actual={({ imageProps }) => (<img {...imageProps} style={{ width: "100%" }} alt={data.Id} />)} /><h6>{data.Name}</h6></Link><div className="play-icon-3"><i aria-hidden="true" className="play circular icon" onClick={() => this.playTracksDirectly(data.Id)}></i></div> </div></>)
+        const forPopular = popularSection.map(data => <><div className="new-1 new_hover"><Link to={`/album/` + data.Id + `/` + this.ToSeoUrl(data.Name)}><LazyImage src={data.ThumbnailImageWeb} alt={data.Id} debounceDurationMs={1} className="popular-image" style={{ width: "100%", height: "100%" }} placeholder={({ imageProps, ref }) => (<img ref={ref} src={`assets/album.jpg`} alt={imageProps.alt} style={{ width: "100%" }} />)} actual={({ imageProps }) => (<img {...imageProps} style={{ width: "100%" }} alt={data.Id} />)} /><h6>{data.Name}</h6></Link><div className="play-icon-3"><i aria-hidden="true" className="play circular icon" onClick={() => this.playTracksDirectly(data.Id, data.Name)}></i></div> </div></>)
 
         const forArtist = artistSection.map(data => <><div className="new-1 new_hover"><Link to={`/artist/` + data.Id + `/` + this.ToSeoUrl(data.Name)}><LazyImage src={data.ThumbnailImageWeb} style={{ width: "100%", height: "100%" }} alt={data.Id} debounceDurationMs={1} placeholder={({ imageProps, ref }) => (<img ref={ref} src={`assets/album.jpg`} alt={imageProps.alt} style={{ width: "100%" }} />)} actual={({ imageProps }) => (<img {...imageProps} style={{ width: "100%" }} alt={data.Id} />)} /><p>{data.Name}</p> </Link> </div> </>)
 
-        const forAlbum = albumSection.map(data => <><div className="new-1 new_hover"><Link to={`/album/` + data.Id + `/` + this.ToSeoUrl(data.Name)}> <LazyImage src={data.ThumbnailImageWeb} alt={data.Id} debounceDurationMs={1} className="album-image" style={{ width: "100%", height: "100%" }} placeholder={({ imageProps, ref }) => (<img ref={ref} src={`assets/album.jpg`} alt={imageProps.alt} style={{ width: "100%" }} />)} actual={({ imageProps }) => (<img {...imageProps} style={{ width: "100%" }} alt={data.Id} />)} /> <h6>{data.Name}</h6></Link><div className="play-icon-3"><i aria-hidden="true" className="play circular icon" onClick={() => this.playTracksDirectly(data.Id)}></i></div></div></>)
+        const forAlbum = albumSection.map(data => <><div className="new-1 new_hover"><Link to={`/album/` + data.Id + `/` + this.ToSeoUrl(data.Name)}> <LazyImage src={data.ThumbnailImageWeb} alt={data.Id} debounceDurationMs={1} className="album-image" style={{ width: "100%", height: "100%" }} placeholder={({ imageProps, ref }) => (<img ref={ref} src={`assets/album.jpg`} alt={imageProps.alt} style={{ width: "100%" }} />)} actual={({ imageProps }) => (<img {...imageProps} style={{ width: "100%" }} alt={data.Id} />)} /> <h6>{data.Name}</h6></Link><div className="play-icon-3"><i aria-hidden="true" className="play circular icon" onClick={() => this.playTracksDirectly(data.Id, data.Name)}></i></div></div></>)
 
-        const forIslamic = islamicSection.map(data => <><div className="new-1 new_hover"><Link to={`/album/` + data.Id + `/` + this.ToSeoUrl(data.Name)}> <LazyImage src={data.ThumbnailImageWeb} alt={data.Id} debounceDurationMs={1} className="islamic-image" style={{ width: "100%", height: "100%" }} placeholder={({ imageProps, ref }) => (<img ref={ref} src={`assets/album.jpg`} alt={imageProps.alt} style={{ width: "100%" }} />)} actual={({ imageProps }) => (<img {...imageProps} style={{ width: "100%" }} alt={data.Id} />)} /> <h6>{data.Name}</h6> </Link><div className="play-icon-3"><i aria-hidden="true" className="play circular icon" onClick={() => this.playTracksDirectly(data.Id)}></i></div></div></>)
+        const forIslamic = islamicSection.map(data => <><div className="new-1 new_hover"><Link to={`/album/` + data.Id + `/` + this.ToSeoUrl(data.Name)}> <LazyImage src={data.ThumbnailImageWeb} alt={data.Id} debounceDurationMs={1} className="islamic-image" style={{ width: "100%", height: "100%" }} placeholder={({ imageProps, ref }) => (<img ref={ref} src={`assets/album.jpg`} alt={imageProps.alt} style={{ width: "100%" }} />)} actual={({ imageProps }) => (<img {...imageProps} style={{ width: "100%" }} alt={data.Id} />)} /> <h6>{data.Name}</h6> </Link><div className="play-icon-3"><i aria-hidden="true" className="play circular icon" onClick={() => this.playTracksDirectly(data.Id, data.Name)}></i></div></div></>)
 
-        const forCollection = collectionsSection.map(data => <><div className="new-1 new_hover"><Link to={`/collection/` + data.Id + `/` + this.ToSeoUrl(data.Name)}> <LazyImage src={data.ThumbnailImageWeb} alt={data.Id} debounceDurationMs={1} className="collection-image" style={{ width: "100%", height: "100%" }} placeholder={({ imageProps, ref }) => (<img ref={ref} src={`assets/album.jpg`} alt={imageProps.alt} style={{ width: "100%" }} />)} actual={({ imageProps }) => (<img {...imageProps} style={{ width: "100%" }} alt={data.Id} />)} /> <h6>{data.Name}</h6> </Link><div className="play-icon-3"><i aria-hidden="true" className="play circular icon" onClick={() => this.playTracksDirectly(data.Id)}></i></div></div></>)
+        const forCollection = collectionsSection.map(data => <><div className="new-1 new_hover"><Link to={`/collection/` + data.Id + `/` + this.ToSeoUrl(data.Name)}> <LazyImage src={data.ThumbnailImageWeb} alt={data.Id} debounceDurationMs={1} className="collection-image" style={{ width: "100%", height: "100%" }} placeholder={({ imageProps, ref }) => (<img ref={ref} src={`assets/album.jpg`} alt={imageProps.alt} style={{ width: "100%" }} />)} actual={({ imageProps }) => (<img {...imageProps} style={{ width: "100%" }} alt={data.Id} />)} /> <h6>{data.Name}</h6> </Link><div className="play-icon-3"><i aria-hidden="true" className="play circular icon" onClick={() => this.playTracksDirectly(data.Id, data.Name)}></i></div></div></>)
 
         return (
             <div className="homeMainClass">
@@ -311,6 +439,37 @@ class Homepage extends Component {
                     </Helmet>
                 </>
                 <LanguageBarCustom />
+
+
+                {/* Activate Deactivate */}
+
+                <Modal
+                    size={modalSize}
+                    open={openSubsInfo}
+                    onClose={this.closeInfoBox}
+                    dimmer={'blurring'}
+                    className='newPopupBox'
+                    centered={true}
+                    trigger={<Button className="dn">Show Modal</Button>} closeIcon
+                >
+                    <Modal.Content>
+                        <Image
+                            src={`/assets/popupBg.png`}
+                            fluid
+                            centered
+                            className="bgPopup infoBgPopup"
+                            size='huge'
+                            alt={'Background'} />
+                    </Modal.Content>
+                    <Modal.Description>
+                        <p className="infoHeading">{infoHeadingSubs}</p>
+                        <p className="infoText">{infoTextSubs}</p>
+                        <Button color="blue" className="btnAction" onClick={() => this.closeInfoBox()}>Done</Button>
+                    </Modal.Description>
+                </Modal>
+
+                {/* Activate Deactivate */}
+
 
                 <div className="sliderBox">
 
@@ -387,7 +546,15 @@ class Homepage extends Component {
                     }
                 </div>
                 <hr className="divider2" />
+
+                <div className="homeBanner">
+                    <a target="_blank" href="https://rbt.koyal.pk/"> <img src='assets/bannerGif.gif' alt='Banner' className='bannerImg' />
+                    </a>
+                </div>
+
                 <div className="sliderSection_1 new_hover2">
+
+
 
                     <Grid container spacing={3} className="slider-header"> <Grid item xs={6} className="slider-side1"><h2 className="slider_heading">Collection</h2></Grid>  </Grid>
 
@@ -485,6 +652,13 @@ class Homepage extends Component {
                     />
 
                 </div>
+
+
+                <div className="homeBanner">
+                    <a target="_blank" href="https://rbt.koyal.pk/">                        <img src='assets/bannerGif.gif' alt='Banner' className='bannerImg' />
+                    </a>
+                </div>
+
             </div>
         )
     }

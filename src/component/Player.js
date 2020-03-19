@@ -6,6 +6,12 @@ import PlayerMenu from './PlayerMenu';
 import DownloadTrack from './DownloadTrack';
 import { Link } from "react-router-dom";
 import Radio from './Radio';
+import ReactGA from 'react-ga';
+import MusicPlayer from 'react-responsive-music-player';
+
+
+
+
 
 
 class Player extends Component {
@@ -104,6 +110,61 @@ class Player extends Component {
 
         }
 
+        // const playlist = [
+        //     {
+        //         url: 'https://d1f02uz5w0egdz.cloudfront.net/252_17-10-18/Inky-Pinky_Asrar%2C_Javed_Bashir.mp3',
+        //         cover: 'https://scontent.fkhi10-1.fna.fbcdn.net/v/t1.0-9/67673414_858251111216908_9002488435826491392_n.jpg?_nc_cat=102&_nc_ohc=YjXBJBtdYcoAQlhCAHx2gfCBb8aRjEyQ5Vn3sAwZ3PGYGbOiEgdfLKLOw&_nc_ht=scontent.fkhi10-1.fna&oh=a11bade7dc10f1036575b41eee4289ed&oe=5EACBBA0',
+        //         title: 'Despacito',
+        //         artist: [
+        //             'Luis Fonsi',
+        //             'Daddy Yankee'
+        //         ]
+        //     },
+        //     {
+        //         url: 'https://nov-2018-frankfurt.s3.eu-central-1.amazonaws.com/276_03-12-18/Dhadkane_Rahat_Fateh_Ali_Khan/encoded-1544204228/encoded-1544204228.m3u8',
+        //         cover: 'https://scontent.fkhi10-1.fna.fbcdn.net/v/t1.0-9/67673414_858251111216908_9002488435826491392_n.jpg?_nc_cat=102&_nc_ohc=YjXBJBtdYcoAQlhCAHx2gfCBb8aRjEyQ5Vn3sAwZ3PGYGbOiEgdfLKLOw&_nc_ht=scontent.fkhi10-1.fna&oh=a11bade7dc10f1036575b41eee4289ed&oe=5EACBBA0',
+        //         title: 'Bedtime Stories',
+        //         artist: [
+        //             'Jay Chou'
+        //         ]
+        //     }
+        // ]
+
+        let testTrackData = []
+
+        this.props.TrackData.forEach(data => {
+            //console.log(data)
+            testTrackData.push(
+                {
+                    'url': data.file,
+                    //  'track_id': data['TrackId'],
+                    'title': data.trackName,
+                    //  'albumId': data['AlbumId'],
+                    //  'albumName': data['Album'],
+                    'cover': data.thumbnailImage,
+                    //  'rbtTelenor': data['TelenorCode'],
+                    //  'albumArtist': data['AlbumArtist'],
+                    'artist': [
+                        'Jay Chou'
+                    ],
+                    // 'trackURL': data['OrgTrackUrl'],
+                    // 'MobilinkCode': data['MobilinkCode'],
+                    // 'ZongCode': data['ZongCode'],
+                    // 'UfoneCode': data['UfoneCode'],
+                    // 'TelenorCode': data['TelenorCode']
+                })
+        });
+
+        if (testTrackData.length !== 0) {
+            // console.log()
+
+            ReactGA.event({
+                category: 'Play Song',
+                action: 'Play Song',
+                transport: 'beacon',
+                label: testTrackData[0].title
+            });
+        }
 
 
         return (
@@ -114,6 +175,9 @@ class Player extends Component {
                     <></>
                     :
                     <Grid container spacing={0} className="playerGrid1">
+
+
+
                         <Grid item xs={6} sm={2}>
                             <div className="audioPlayerImage">
                                 <Link to={`/track/` + trackIdforLike + `/` + trackNameforlike}>
@@ -139,21 +203,28 @@ class Player extends Component {
                             </div>
                         </Grid>
                         <Grid item xs={12} sm={8} className="playerGrid2">
-                            <ReactJWPlayer
+
+                            <div className="newPlayer">
+                                <MusicPlayer playlist={testTrackData} autoplay={false} />
+                            </div>
+
+                            {/* <ReactJWPlayer
                                 playerId='MyPlayer'
-                                playerScript='https://cdn.jwplayer.com/libraries/PYG4ZTcd.js'
+                                playerScript='https://content.jwplatform.com/libraries/DbXZPMBQ.js'
+                                //  playerScript='https://cdn.jwplayer.com/libraries/PYG4ZTcd.js'
                                 playlist={this.props.TrackData}
-                                isMuted={true}
+                                isMuted={false}
                                 aspectRatio='inherit'
                                 onVideoLoad={this.onVideoLoad}
-                                allowFullscreen= {false}
-                            />
+                                allowFullscreen={false}
+                            />  */}
                         </Grid>
                         <Grid item xs={6} sm={2} className="playerGrid3 startRadio">
                             <div className="playerOptions bottom_layer downloadPlayeroption">
                                 <ul>
                                     <li className="downloadImagePlayer">
                                         <DownloadTrack
+                                            componentName={'From Player'}
                                             trackURL={trackURL}
                                             albumImage={imageForShare}
                                             trackName={trackNameforlike}
@@ -186,6 +257,7 @@ class Player extends Component {
                                     </li>
                                     <li className="menuIconPlayer">
                                         <PlayerMenu
+                                            componentName={'RBT From Player Menu'}
                                             albumImage={imageForShare}
                                             trackName={trackNameforlike}
                                             albumName={albumNameforLike}

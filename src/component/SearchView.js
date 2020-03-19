@@ -1,6 +1,5 @@
 import React from "react";
-//import Button from "@material-ui/core/Button";
-import { Button, Header, Segment, TransitionablePortal } from 'semantic-ui-react'
+import { Button, Modal, Image } from 'semantic-ui-react'
 import Dialog from "@material-ui/core/Dialog";
 import ListItemText from "@material-ui/core/ListItemText";
 import ListItem from "@material-ui/core/ListItem";
@@ -24,10 +23,8 @@ import CardMedia from "@material-ui/core/CardMedia";
 import axios from "axios";
 import { Link } from "react-router-dom";
 import Grid from "@material-ui/core/Grid";
-import DialogActions from '@material-ui/core/DialogActions';
-import DialogContent from '@material-ui/core/DialogContent';
-import DialogContentText from '@material-ui/core/DialogContentText';
-import DialogTitle from '@material-ui/core/DialogTitle';
+import ReactGA from 'react-ga';
+
 
 
 const Transition = React.forwardRef(function Transition(props, ref) {
@@ -49,8 +46,12 @@ TabContainer.propTypes = {
 
 function SearchView() {
   const [open, setOpen] = React.useState(false);
-  const [openActiveUser, openActiveUserOpen] = React.useState(false);
-  const [openDeleteUser, openDeleteUserOpen] = React.useState(false);
+
+  const [userModal, setUserModal] = React.useState(false);
+  const [userHeading, setUserHeading] = React.useState();
+  const [userInfo, setUserInfo] = React.useState();
+  const [userBtn, setUserBtn] = React.useState();
+
 
   const [searchData, setSearchDataupdate] = React.useState({
     searchDataTrack: searchDummyJson.Response.SearchResult.Tracks,
@@ -58,13 +59,18 @@ function SearchView() {
     searchDataArtist: searchDummyJson.Response.SearchResult.Artists
   });
 
-  function handleClickOpen() {
-    setOpen(true);
+  function redirectURL() {
+
+    window.location.assign("http://localhost/koyal-download/subscribe.php?pageURL=http://localhost:3000/");
+
+  }
+
+
+  function userModalClose() {
+    setUserModal(false)
   }
 
   function handleOpenActiveUser() {
-    //openDeleteUserOpen(true);
-    //openActiveUserOpen(true);
 
     let localStorageNum = localStorage.getItem('msisdn')
 
@@ -73,17 +79,24 @@ function SearchView() {
     }
 
     if (localStorageNum != null) {
-      console.log('Number Hai')
+
       axios.post(`https://api.koyal.pk/musicapp/checksubscriber.php`, testtt)
         .then(response => {
           let RespApi = response.data.Response.response;
 
           if (RespApi === false || RespApi === 'false') {
-            //console.log('fase')
-            openDeleteUserOpen(true)
+
+            setUserModal(true)
+            setUserHeading("Sorry !!!")
+            setUserInfo("You are not Subscribed Koyal.pk")
+            setUserBtn('active')
+
           } else {
-            //  console.log('trree')
-            openActiveUserOpen(true)
+
+            setUserModal(true)
+            setUserHeading("Confirmation !!!")
+            setUserInfo("Do you want to Deactivate Koyal Subscription?")
+            setUserBtn('deactive')
           }
 
         })
@@ -91,25 +104,80 @@ function SearchView() {
           console.log(error)
         })
     } else {
-      //console.log('Number Nahi Hai')
-      openDeleteUserOpen(true)
+      setUserModal(true)
+      userHeading("Sorry !!!")
+      userInfo("You are not Subscribed Koyal.pk")
+      setUserBtn('active')
     }
+
   }
 
-  function handleCloseActiveUser() {
-    openActiveUserOpen(false);
-  }
-
-  function handleOpenActiveUser2() {
-    openDeleteUserOpen(true);
-  }
-
-  function handleCloseActiveUser2() {
-    openDeleteUserOpen(false);
-  }
 
   function handleClickOpen() {
+
     setOpen(true);
+
+    ReactGA.event({
+      category: 'Search',
+      action: 'Search Click',
+      transport: 'beacon',
+      label: 'Search Click'
+    });
+
+  }
+
+  function activeSubsCheck() {
+
+    let sendData = {
+      UserId: 0,
+      AlbumId: 77777,
+      TrackId: 77777,
+      Action: 'download',
+      Msisdn: localStorage.getItem('msisdn')
+    }
+
+    axios.post(`https://api.koyal.pk/musicapp/charge-download-web.php`, sendData)
+      .then(response => {
+
+        let checkResp = response.data.Response.response
+
+        if (checkResp === 'numbererror') {
+
+          setUserModal(true)
+          setUserHeading("Ooops!!")
+          setUserInfo('Sorry !!! There is an Error in Number.')
+          setUserBtn('active')
+
+        } else {
+
+          let checkResp2 = response.data.Response.response
+
+          if (checkResp2 === 'notcharged') {
+
+            setUserModal(true)
+            setUserHeading("Ooops!!")
+            setUserInfo('Sorry !!! you have insufficient balance.')
+            setUserBtn('active')
+
+            // setTimeout(() => { window.location.replace("http://localhost:3000/"); }, 2500)
+
+          } else {
+
+            setUserModal(true)
+            setUserHeading('Congratulations !!!')
+            setUserInfo('Your subscription to Koyal has been successful.')
+            setUserBtn('active')
+
+            setTimeout(() => { window.location.replace("http://localhost:3000/"); }, 3000)
+
+          }
+        }
+
+      })
+      .catch(error => {
+        console.log(error)
+      })
+
   }
 
   function deactiveUser() {
@@ -121,16 +189,19 @@ function SearchView() {
     axios.post(`https://api.koyal.pk/musicapp/?request=delete-charged-download-react`, testtt)
       .then(response => {
         let ApiResp = response.data.Response.Success
-        console.log(ApiResp)
 
         if (ApiResp === true) {
-          openActiveUserOpen(false)
-          alert('Your Subscription for Koyal has now been Deactivated. Thank you for using www.koyal.pk')
+
+          setUserModal(true)
+          setUserHeading("Thank you !!!")
+          setUserInfo("Your Subscription for Koyal has now been Deactivated. Thank you for using www.koyal.pk")
+          setUserBtn('active')
           localStorage.clear();
-          window.location = 'http://' + window.location.hostname + window.location.pathname;
+
+          setTimeout(() => { window.location.replace("http://localhost:3000/") }, 2500)
+          
+
         }
-
-
 
       })
       .catch(error => {
@@ -156,6 +227,15 @@ function SearchView() {
 
   function handleInputChange(event) {
     if (event.target.value.length > 2) {
+
+
+      // ReactGA.event({
+      //   category: 'Search Values',
+      //   action: 'Search Values',
+      //   transport: 'beacon',
+      //   label: event.target.value
+      // });
+
       getInfo(event.target.value);
     }
   }
@@ -166,7 +246,14 @@ function SearchView() {
         `https://api.koyal.pk/musicapp/?request=search-react&keyword=${param}&limit=20`
       )
       .then(response => {
-        console.log(response);
+        // console.log(response);
+
+        ReactGA.event({
+          category: 'Search',
+          action: 'Search Values',
+          transport: 'beacon',
+          label: param
+        });
 
         setSearchDataupdate(values => ({
           ...values,
@@ -338,65 +425,53 @@ function SearchView() {
     </Grid>
   );
 
-  const deactiveBtn = localStorage.getItem('msisdn') === null ? <></> : <Button color='red' onClick={deactiveUser}>Deactive</Button>
-
-
-
 
   return (
     <div className="searchMainBox">
-      {/* <div className="SearchMaterialIcon header_icons">
-        <Button variant="contained" color="secondary" onClick={handleClickOpen}>
-          <i className="material-icons">search</i>
-        </Button>
-      </div>
-      <div className="SearchMaterialIcon header_icons">
-        <Button variant="contained" color="secondary" onClick={handleClickOpen}>
-          <i className="material-icons">watch</i>
-        </Button>
-      </div> */}
+
       <div className="topHeadButton">
-        <Button onClick={handleClickOpen} circular icon='search' color='pink' />
-        <Button circular icon='user' color='pink' onClick={handleOpenActiveUser} />
-        {/* {deactiveBtn} */}
+
+        <img src="/assets/header-search.png" alt="search" onClick={handleClickOpen} className="header-icons-custom serchIcon" />
+        {
+          localStorage.getItem('msisdn') !== null ? <img src="/assets/header-search.png" alt="search" onClick={handleOpenActiveUser} className="header-icons-custom userIcon" /> : <img src="/assets/header-search.png" alt="search" onClick={redirectURL} className="header-icons-custom userIcon" />
+        }
+
 
       </div>
 
 
-      <Dialog open={openDeleteUser} onClose={handleCloseActiveUser2} aria-labelledby="form-dialog-title">
-        <DialogTitle id="form-dialog-title" className="cnfirmPoppTitle">Alert</DialogTitle>
-        <DialogContent>
-          <DialogContentText id="confirmMessagesPopup">
-            You are not Subscribed for Koyal.pk
-          </DialogContentText>
+      {/* Activate Deactivate */}
 
-        </DialogContent>
-        <DialogActions className="cnfirmpopupFooter">
-          <Button onClick={handleCloseActiveUser2} color="primary">
-            Cancel
-          </Button>
-        </DialogActions>
-      </Dialog>
-
-
-      <Dialog open={openActiveUser} onClose={handleCloseActiveUser} aria-labelledby="form-dialog-title">
-        <DialogTitle id="form-dialog-title" className="cnfirmPoppTitle">Confirmation</DialogTitle>
-        <DialogContent>
-          <DialogContentText id="confirmMessagesPopup">
-            Are you sure you want to Deactivate Koyal Subscription.
-            You will not be able to Download songs for FREE anymore
-          </DialogContentText>
-
-        </DialogContent>
-        <DialogActions className="cnfirmpopupFooter">
-          <Button onClick={handleCloseActiveUser} color="primary">
-            Cancel
-          </Button>
-          <Button color='red' onClick={deactiveUser}>Deactive</Button>
-        </DialogActions>
-      </Dialog>
+      <Modal
+        size={`mini`}
+        open={userModal}
+        onClose={userModalClose}
+        dimmer={'blurring'}
+        className='newPopupBox'
+        centered={true}
+        trigger={<Button className="dn">Show Modal</Button>} closeIcon
+      >
+        <Modal.Content>
+          <Image
+            src={`/assets/popupBg.png`}
+            fluid
+            centered
+            className="bgPopup infoBgPopup"
+            size='huge'
+            alt={'Background'} />
+        </Modal.Content>
+        <Modal.Description>
+          <p className="infoHeading">{userHeading}</p>
+          <p className="infoText">{userInfo}</p>
+          {userBtn === 'active' ?
+            <Button color="blue" className="btnAction" onClick={activeSubsCheck}>Activate</Button>
+            :
+            <Button color="blue" className="btnAction" onClick={deactiveUser}>Deactivate </Button>
+          }
 
 
+        </Modal.Description>
+      </Modal>
 
       <Dialog
         fullScreen
@@ -415,9 +490,6 @@ function SearchView() {
                 "aria-label": "Search"
               }}
             />
-            {/* <Button color="secondary" onClick={handleClose}>
-              <i className="material-icons">close</i>
-            </Button> */}
             <Button onClick={handleClose} circular icon='close' color='black' />
           </Toolbar>
         </AppBar>

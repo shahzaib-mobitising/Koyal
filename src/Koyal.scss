@@ -1,14 +1,32 @@
 @import url("https://fonts.googleapis.com/css?family=Ubuntu&display=swap");
-div, button, ul, span, a {
+div,
+button,
+ul,
+span,
+a {
   -webkit-user-select: none; /* Safari 3.1+ */
   -moz-user-select: none; /* Firefox 2+ */
   -ms-user-select: none; /* IE 10+ */
   user-select: none; /* Standard syntax */
   outline: none;
-  -webkit-tap-highlight-color: rgba(0,0,0,0);
+  -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
 }
 .example-appear {
   opacity: 0.01;
+}
+
+img.header-icons-custom {
+  width: 22px !important;
+  height: 22px !important;
+}
+
+img.header-icons-custom.backbtn {
+  left: -7px;
+  position: relative;
+}
+
+.serchIcon {
+  cursor: pointer;
 }
 
 .example-appear.example-appear-active {
@@ -47,42 +65,14 @@ div, button, ul, span, a {
     }
   }
 }
-// .active {
-//    background-color: gold;
-//    color:Black ;
-//    font-weight:bold;
-// }
-// img.adsLeft {
-//   position: fixed;
-//   right: 0px;
-//   top: 55px;
-//   z-index: 1;
-//   width: 22%;
-// }
+
 .ad-container {
   position: relative;
-  // .adsSide {
-  //   //position: fixed;
-  //   //height: 100%;
-  //   //top: 60px;
-  //  // width: 316px;
-  // //  right: 0px;
-  // }
-  // .adsSide img {
-  //   // display: block;
-  //   //width: 100%;
-  // }
 }
 
-// .bodyWrapper {
-//   width: 90%;
-// }
-
-// .bodyWrapper {
-//   padding-right: 300px;
-//   position: relative;
-//   z-index: 100;
-// }
+.dn {
+  display: none !important;
+}
 
 // Globals
 
@@ -133,16 +123,25 @@ body {
 }
 
 .header-spacer {
-  margin-bottom: 50px;
+  margin-bottom: 80px;
 }
 
-.socialIconsShare img {
-  // display: inline-block;
-  // width: 13%;
+.socialIconsShare {
+  button {
+    font-size: 14px;
+    text-transform: capitalize;
+    padding: 5px 10px;
+    border-radius: 3px !important;
+    font-weight: normal;
+    margin-top: 10px;
+    margin-bottom: 10px;
+  }
 
-  display: inline-block;
-  width: 10%;
-  margin-right: 10px;
+  img {
+    display: inline-block;
+    width: 10%;
+    margin-right: 10px;
+  }
 }
 
 .MuiListItemText-root {
@@ -1046,7 +1045,55 @@ body {
   }
 }
 
-// Header
+// Header v2
+
+.webHeader {
+  .desktopHeader {
+    .logo {
+      width: 75%;
+    }
+    .desktopMenu {
+      .menuList a p {
+        font-size: 1.1rem;
+        color: #000;
+        margin-right: 10px;
+        position: relative;
+        font-weight: 500;
+      }
+    }
+  }
+
+  .mobileHeader {
+    .logo {
+      width: 90%;
+      position: relative;
+      top: 5px;
+      left: 10px;
+    }
+    .notificationBox {
+      .menu.transition.visible {
+        left: -180px !important;
+      }
+      .menu .item span {
+        opacity: 1;
+      }
+    }
+  }
+}
+
+.SideMenuListOpen {
+  img {
+    width: 60%;
+    box-sizing: border-box;
+    padding-left: 15px;
+    margin-bottom: 10px;
+  }
+  a {
+    color: #1b1b1b;
+  }
+}
+
+// Header OLD
 
 .header-parent {
   header {
@@ -1266,117 +1313,7 @@ body {
   .menuIconPlayer svg {
     color: white;
   }
-
-  .jw-related-btn,
-  .jw-icon-settings,
-  .jw-icon-fullscreen,
-  .jw-icon.jw-icon-inline.jw-text.jw-reset.jw-text-duration {
-    display: none;
-  }
-
-  .jw-controlbar.jw-reset {
-    flex-flow: row-reverse !important;
-  }
-
-  .jw-reset.jw-button-container {
-    width: 20%;
-  }
-  .jwplayer.jw-reset.jw-state-error.jw-stretch-uniform.jw-flag-aspect-mode.jw-breakpoint-6.jw-floating-dismissible.jw-flag-user-inactive {
-    display: none !important;
-  }
-  .jw-error-msg.jw-info-overlay.jw-reset,
-  .jwplayer video,
-  .jw-media.jw-reset {
-    display: none !important;
-  }
-  .jw-aspect.jw-reset {
-    padding: 0px !important;
-  }
 }
-.jw-reset {
-  background-color: rgb(39, 61, 147);
-}
-// .myAudioPlayer {
-//   position: relative;
-
-//   div#MyPlayer .jw-reset.jw-button-container {
-//     padding: 0 48px 0px;
-//   }
-
-//   div#MyPlayer {
-//     position: fixed;
-//     bottom: 0;
-//     z-index: 9999;
-//   }
-//   div#MyPlayer .jw-aspect.jw-reset {
-//     padding: 84px 0px 0px 0px !important;
-//   }
-//   .jw-error.jw-reset {
-//     display: none;
-//   }
-//   .jw-breakpoint-7 .jw-controlbar .jw-button-container .jw-icon-volume .jw-overlay {
-//     padding-bottom: 0px;
-//     left: 60px;
-//     bottom: -10px;
-//   }
-//   .jw-volume-tip {
-//     padding: 0px;
-//   }
-//   .jw-breakpoint-7 .jw-nextup-container,
-//   .jw-media.jw-reset,
-//   .jw-top.jw-reset {
-//     display: none;
-//   }
-//   .jw-controlbar.jw-reset {
-//     box-sizing: border-box;
-//     padding-left: 14%;
-//   }
-//   .jw-breakpoint-7 .jw-controlbar .jw-button-container .jw-icon-inline,
-//   .jw-breakpoint-7 .jw-controlbar .jw-button-container .jw-icon-volume {
-//     height: 50px;
-//     width: 50px;
-//   }
-
-//   .audioPlayerImage {
-//     color: white;
-//   }
-
-//   .audioPlayerImage {
-//     position: fixed;
-//     bottom: 0px;
-//     width: 16%;
-//     height: 80px;
-//     z-index: 9999;
-//     display: flex;
-//     font-size: 11px;
-//   }
-// .audioPlayerImage img {
-//   width: 75px;
-//   box-sizing: border-box;
-//   padding: 5px;
-// }
-
-// .audioPlayerImage p {
-//   margin: 0px;
-//   font-size: 11.5px;
-// }
-
-// .audioPlayerImage ul {
-//   padding: 0px;
-// }
-
-// .audioPlayerImage ul li {
-//   list-style: none;
-//   box-sizing: border-box;
-//   padding-left: 10px;
-// }
-
-// .jw-related-btn,
-// .jw-icon-settings,
-// .jw-icon-fullscreen {
-//   display: none;
-// }
-// }
 
 // Ringtone Screen
 .ringtoneScreen {
@@ -1525,28 +1462,6 @@ body {
   .trackMeta:hover .cancel_button_css {
     visibility: visible;
   }
-  // span.hoverPlayIcon {
-  //   background: blue;
-  //   height: 12px;
-  //   left: 50%;
-  //   opacity: 0;
-  //   margin: -6px 0 0 -3px;
-  //   position: absolute;
-  //   top: 50%;
-  //   width: 9px;
-  //   z-index: 300;
-  // }
-
-  // span.hoverPlayIcon ::after {
-  //   border-radius: 68px;
-  //   box-shadow: inset #fff 0 0 0 2px;
-  //   height: 34px;
-  //   left: 50%;
-  //   margin: -17px 0 0 -17px;
-  //   top: 50%;
-  //   width: 34px;
-  //   z-index: 200;
-  //}
 
   .trackMeta {
     min-height: 58px;
@@ -1715,13 +1630,6 @@ body {
     overflow-x: hidden;
   }
 
-  // .queueMiddleBar ul {
-  //   padding: 0px;
-  //   overflow-x: hidden;
-  //   overflow-y: scroll;
-  //   min-height: 600px;
-  // }
-
   ::-webkit-scrollbar {
     width: 7px;
     height: 7px;
@@ -1756,27 +1664,6 @@ body {
     background: transparent;
   }
 }
-
-// @media (min-width: 1280px) {
-//   .main-container {
-//     max-width: 1400px !important;
-//   }
-// }
-
-/* Desktops and laptops ----------- */
-// @media only screen and (min-width: 1224px) {
-//   .homeMainClass {
-//     background: brown;
-//   }
-// }
-
-/* Large screens ----------- */
-// @media only screen and (min-width: 1824px) {
-//   .homeMainClass {
-//     display: red;
-//   }
-// }
-
 .md-18 {
   font-size: 18px;
 }
@@ -2174,3 +2061,152 @@ body {
     }
   }
 }
+
+.UnSubscribeBox {
+  .setCallerTune img {
+    width: 100%;
+  }
+  .setTunec {
+    margin: 0px;
+  }
+  .congs_text p {
+    margin: 20px 0px 30px 0px;
+    font-weight: 400;
+    font-size: 1rem;
+  }
+  .btnBox {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 20px;
+  }
+  button {
+    width: 30% !important;
+    margin: 0px 5px;
+    padding: 8px 0px;
+    box-sizing: border-box;
+    font-size: 13px;
+    text-transform: capitalize;
+  }
+}
+
+.notificationBox {
+  .segmentRowRBT {
+    // background-color: red;
+
+    .twelve.column {
+      padding-left: 0px !important;
+      // padding-right: 0px !important;
+      position: relative;
+      left: 0px;
+    }
+
+    .segImg img {
+      width: 50px;
+      border-radius: 5px;
+    }
+    .segBtn {
+      text-align: right;
+
+      button {
+        background-color: $primaryColor;
+        color: #fff;
+        padding: 10px 11px;
+        margin: 0px;
+      }
+    }
+
+    .segDesc {
+      h4 {
+        white-space: nowrap;
+        width: 100%;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        font-size: 14px;
+        margin-bottom: 2px;
+      }
+
+      p {
+        font-size: 11px;
+        color: #2d2c2c;
+        margin: 0px;
+        // white-space: nowrap;
+        // width: 100%;
+        // overflow: hidden;
+        // text-overflow: ellipsis;
+      }
+      p.timerText {
+        position: absolute;
+        top: -2px;
+        right: 7px;
+        // color: black !important;
+        font-size: 11px;
+        font-weight: bold;
+      }
+      p.timerText2 {
+        top: 6px !important;
+      }
+    }
+  }
+}
+
+.newPopupBox {
+  .description,
+  .header {
+    text-align: center;
+    color: $artistName !important;
+    position: relative;
+  }
+  .description {
+    padding: 0rem 1.5rem 1.25rem 1.5rem;
+  }
+  .btnAction {
+    background-color: $primaryColor !important;
+    margin: 15px 0px 10px 0px;
+    border-radius: 50px;
+    text-transform: uppercase;
+    font-size: 1rem;
+    padding: 10px 30px !important;
+    font-weight: 400;
+  }
+
+  .bgPopup {
+    position: absolute;
+    top: 75px;
+    z-index: 0;
+    width: 100%;
+    left: -5px;
+  }
+  .infoBgPopup {
+    top: 10px;
+  }
+  .infoHeading {
+    font-size: 2rem;
+    font-weight: bold;
+    margin-top: 60px;
+    margin-bottom: 15px;
+  }
+  .infoText {
+    font-size: 1.3rem;
+    font-weight: 500;
+  }
+  .mainImg {
+    position: relative;
+    z-index: 5;
+    img {
+      width: 70%;
+      margin: 0 auto !important;
+    }
+  }
+}
+
+// .ui.raised.segment.segmentRowRBT:hover {
+//   background-image: url("/assets/noti_bg.png");
+//   background-size: cover;
+//   background-repeat: no-repeat;
+
+//   .segDesc h4,
+//   .segDesc p {
+//     color: #fff;
+//   }
+// }

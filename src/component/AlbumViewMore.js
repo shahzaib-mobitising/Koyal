@@ -85,8 +85,6 @@ export default class AlbumViewMore extends Component {
 
         }
 
-        //console.log(this.props.match.params)
-
         this.getData()
     }
 
@@ -197,7 +195,6 @@ export default class AlbumViewMore extends Component {
             <Grid key={index} item xs={4} md={2}>
                 <Card className="viewMoreBox">
                     <Link to={`/album/` + i.Id + `/` + this.ToSeoUrl(i.Name)}>
-
                         <LazyImage
                             src={i.ThumbnailImageWeb}
                             alt={i.Name}

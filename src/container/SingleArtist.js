@@ -27,7 +27,16 @@ export default class SingleArtist extends Component {
 
     getData = () => {
 
-        axios.get(`https://api.koyal.pk/app_files/web/artist/artist-${this.props.match.params.artistid}.json`)
+
+        let apiName = ''
+        let localStorageMsisdn = localStorage.getItem('msisdn')
+        if (localStorageMsisdn === null || localStorageMsisdn === '' || localStorageMsisdn.length < 14) {
+            apiName = this.props.match.params.artistid + '.json'
+        } else {
+            apiName = this.props.match.params.artistid + '.json?msisdn=' + localStorageMsisdn.replace(/["']/g, "")
+        }
+
+        axios.get(`https://api.koyal.pk/app_files/web/artist/artist-${apiName}`)
             .then(response => {
                 //  console.log(response)
                 this.setState({
@@ -183,19 +192,19 @@ export default class SingleArtist extends Component {
                                 <ul className="counterList hide_desk">
                                     <li className="albumLikes22">
                                         <Button as='div' labelPosition='left'>
-                                                <Icon name='heart' />
-                                                <span> {artistInfo.NoOfAlbums < 1 ? <> 1.3 K </> : <> {artistInfo.NoOfAlbums} </>}</span>
+                                            <Icon name='heart' />
+                                            <span> {artistInfo.NoOfAlbums < 1 ? <> 1.3 K </> : <> {artistInfo.NoOfAlbums} </>}</span>
                                         </Button>
 
                                     </li>
                                     <li className="albumShare22">
-                                    <Button as='div' labelPosition='left'>
-                                                <Icon name='heart' />
-                                                <span> {artistInfo.NoOfTracks < 1 ? <> 1.95 K </> : <> {artistInfo.NoOfTracks} </>}</span>
+                                        <Button as='div' labelPosition='left'>
+                                            <Icon name='heart' />
+                                            <span> {artistInfo.NoOfTracks < 1 ? <> 1.95 K </> : <> {artistInfo.NoOfTracks} </>}</span>
                                         </Button>
 
                                     </li>
-                                    
+
                                 </ul>
                             </Grid>
                         </Grid>

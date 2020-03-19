@@ -4,16 +4,17 @@ import { withGlobalState } from 'react-globally'
 import { Link } from "react-router-dom";
 import Grid from '@material-ui/core/Grid';
 import ArtistLoader from '../component/ArtistLoader';
-import Dialog from '@material-ui/core/Dialog';
-import DialogActions from '@material-ui/core/DialogActions';
 import TrackShareOptions from '../component/TrackShareOptions';
 import TrackLikeOption from '../component/TrackLikeOption';
-import TrackRington from '../component/TrackRington';
+import TrackRington from '../component/TrackRingtonV2';
 import { LazyImage } from "react-lazy-images";
-import DownloadTrack from '../component/DownloadTrack';
+import DownloadTrack from '../component/DownloadTrackV2';
 import { Dropdown } from 'semantic-ui-react'
-import { Button, Icon, Label } from 'semantic-ui-react'
+import { Button, Icon, Label, Modal, Image } from 'semantic-ui-react'
 import { Helmet } from "react-helmet";
+import queryString from 'query-string'
+import ReactGA from 'react-ga';
+
 
 
 class SingleTrackView extends Component {
@@ -28,19 +29,34 @@ class SingleTrackView extends Component {
             recommendSlider: [],
             trackIndex: null,
             loadingData: true,
-            noRBTModal: false,
+            modalSize: 'mini',
+            openDownloadInfo: false,
+            infoHeading: '',
+            infoText: '',
+            btnClose: ''
         }
 
         this.clickOnTrack = this.clickOnTrack.bind(this)
-        this.RBTModalClose = this.RBTModalClose.bind(this)
-        this.RBTModalOpen = this.RBTModalOpen.bind(this)
+
+        this.downloadBoxInfo = this.downloadBoxInfo.bind(this)
+        this.closeInfoBox = this.closeInfoBox.bind(this)
+
+        this.subscribeProcess = this.subscribeProcess.bind(this)
         this.noRBT = this.noRBT.bind(this)
 
     }
 
     getData = () => {
 
-        let url = `https://api.koyal.pk/musicapp/?request=get-tracks-react-tracks&id=${this.props.match.params.trackId}`
+        let apiName = ''
+        let localStorageMsisdn = localStorage.getItem('msisdn')
+        if (localStorageMsisdn === null || localStorageMsisdn === '' || localStorageMsisdn.length < 14) {
+            apiName = 'id=' + this.props.match.params.trackId
+        } else {
+            apiName = 'id=' + this.props.match.params.trackId + '&msisdn=' + localStorageMsisdn.replace(/["']/g, "")
+        }
+
+        let url = `https://api.koyal.pk/musicapp/?request=get-tracks-react-tracks&${apiName}`
 
         axios.get(url)
 
@@ -54,7 +70,7 @@ class SingleTrackView extends Component {
                     loadingData: false
                 },
                     () => {
-                        //console.log('did mount')
+                        //                        console.log(this.state.trackData)
 
                         this.getDataTracks()
 
@@ -79,7 +95,7 @@ class SingleTrackView extends Component {
             UserId: 0
         })
             .then(response => {
-                console.log(response)
+                // console.log(response)
             })
             .catch(error => {
                 console.log(error)
@@ -191,20 +207,182 @@ class SingleTrackView extends Component {
     }
 
     noRBT = () => {
-        this.RBTModalOpen();
-    }
-
-    RBTModalOpen = () => {
-        this.setState({ noRBTModal: true })
-    }
-
-    RBTModalClose = () => {
-        this.setState({ noRBTModal: false })
+        this.setState({
+            openDownloadInfo: true,
+            infoHeading: 'Oopps !!!',
+            infoText: 'Soryy !! RBT Not Found.',
+            btnClose: 0
+        })
     }
 
     componentDidMount() {
 
         this.getData()
+
+        const para = queryString.parse(window.location.search)
+
+        //  For RBT
+        if (para.msisdnv !== undefined && para.statusRbt !== undefined) {
+            let localMsisdn = localStorage.getItem('msisdn');
+            // if (localMsisdn === null) {
+            localStorage.setItem('msisdn', JSON.stringify(window.atob(para.msisdnv)));
+
+            let sendData = {
+                msisdn: localStorage.getItem('msisdn'),
+                operator: "telenor",
+                rbtCode: para.rbtCode,
+                trackId: para.trackId,
+                userId: 0,
+                verifyCode: "verified"
+            }
+
+            this.congoRBTOpen(sendData)
+            //  }
+        }
+
+        // For Download
+        if (para.status !== undefined) {
+            // Save num in Local Storage
+            localStorage.setItem('msisdn', JSON.stringify(window.atob(para.msisdnv)));
+            //   alert(JSON.stringify(window.atob(para.msisdnv)))
+            this.downloadBoxInfo()
+        }
+    }
+
+    // Download Info Box
+
+    downloadBoxInfo = () => {
+        this.setState({
+            openDownloadInfo: true,
+            infoHeading: 'Confirmation',
+            infoText: 'Dear Customer, your mobile number has been verified. Thank You'
+        })
+    }
+
+    closeInfoBox = () => {
+        this.state.btnClose === '' ? this.subscribeProcess() : this.setState({ openDownloadInfo: false })
+    }
+
+
+    congoRBTOpen = (sendData) => {
+
+        axios.post(`https://api.koyal.pk/musicapp/?request=set-rbt-react`, sendData)
+            .then(response => {
+
+                let verifyResp = response.data.Response.Success
+
+                if (verifyResp) {
+
+                    this.setState({
+                        openDownloadInfo: true,
+                        infoHeading: 'Congratulations',
+                        infoText: 'You will recieve a confirmation message shortly',
+                        btnClose: 0
+                    })
+
+                    ReactGA.event({
+                        category: 'RBT Completed',
+                        action: 'RBT Success',
+                        transport: 'beacon',
+                        label: this.props.trackName
+                    });
+
+                } else {
+                    this.setState({
+                        openDownloadInfo: true,
+                        infoHeading: 'Ooopss !!!',
+                        infoText: 'Sorry !!! Caller Tune did not set on this number',
+                        btnClose: 0
+                    })
+                }
+
+            })
+            .catch(error => {
+                console.log(error)
+
+            })
+    }
+
+
+    subscribeProcess = () => {
+        const para = queryString.parse(window.location.search)
+
+        if (para.msisdnv !== undefined && para.trackURL !== undefined && para.trackid !== undefined) {
+
+            // Charge Download Web
+            let url = window.atob(para.trackURL);
+            let msisdn = window.atob(para.msisdnv);
+            let trackId = window.atob(para.trackid);
+            let localMsisdn = localStorage.getItem('msisdn');
+            let nameT = window.atob(para.trackName);
+            const method = 'GET';
+
+            let sendData = {
+                UserId: 0,
+                AlbumId: this.props.match.params.albumId,
+                TrackId: trackId,
+                Action: 'download',
+                Msisdn: msisdn
+            }
+
+            axios.post(`https://api.koyal.pk/musicapp/charge-download-web.php`, sendData)
+                .then(response => {
+                    let checkResp = response.data.Response.response
+                    console.log(checkResp)
+                    if (checkResp === 'numbererror') {
+
+                        this.setState({
+                            openDownloadInfo: true,
+                            infoHeading: 'Ooops!!',
+                            infoText: 'Sorry !!! There is an Error in Number.',
+                            btnClose: 0
+                        })
+
+                    } else {
+
+                        let checkResp2 = response.data.Response.response
+
+                        if (checkResp2 === 'notcharged') {
+
+                            this.setState({
+                                openDownloadInfo: true,
+                                infoHeading: 'Ooops!!',
+                                infoText: 'Sorry !!! you have insufficient balance.',
+                                btnClose: 0
+                            })
+
+                        } else {
+
+                            axios.request({
+                                url,
+                                method,
+                                responseType: 'blob', //important
+                            }).then(({ data }) => {
+                                //console.log(data)
+                                const downloadUrl = window.URL.createObjectURL(new Blob([data]));
+                                const link = document.createElement('a');
+                                link.href = downloadUrl;
+                                link.setAttribute('download', nameT); //any other extension
+                                document.body.appendChild(link);
+                                link.click();
+                                link.remove();
+                            });
+
+                            this.setState({
+                                openDownloadInfo: true,
+                                infoHeading: 'Thank You !!!',
+                                infoText: 'Your Download Will Begin Shortly',
+                                btnClose: 0
+                            })
+                        }
+                    }
+
+                })
+                .catch(error => {
+                    console.log(error)
+                })
+        }
+
     }
 
     componentDidUpdate(prevState) {
@@ -242,13 +420,8 @@ class SingleTrackView extends Component {
 
     render() {
 
-        const { noRBTModal, albumData, trackData, recommendSlider, loadingData } = this.state
-
-        // var bgImage = {
-        //     backgroundImage: 'url(' + albumData.ThumbnailImageWeb + ')',
-        //     WebkitTransition: 'all', // note the capital 'W' here
-        //     msTransition: 'all' // 'ms' is the only lowercase vendor prefix
-        // };
+        //const { noRBTModal, albumData, trackData, recommendSlider, loadingData } = this.state
+        const { modalSize, openDownloadInfo, infoHeading, infoText, albumData, trackData, recommendSlider, loadingData } = this.state
 
         let breakArtist = []
 
@@ -266,27 +439,30 @@ class SingleTrackView extends Component {
 
             <div className="allTracksContainer">
 
-                {/* NO RBT */}
-                <div className="firstTimeRBTPopup">
-                    <Dialog open={noRBTModal} onClose={this.RBTModalClose} aria-labelledby="form-dialog-title">
-                        <DialogActions>
-                            <Grid item xs={12}>
-                                <div className="DialogContent ">
-                                    <div className="setCallerTune">
-                                        <p className="setTunec">Sorry !!!!</p>
-                                    </div>
-                                </div>
-                                <div className="congs_text rbt_text">
-                                    <p>Is song ki RBT Mojood Nahi hai.</p>
-                                </div>
-                                <button className="button_styles" onClick={this.RBTModalClose}>
-                                    Close
-      </button>
-                            </Grid>
-                        </DialogActions>
-                    </Dialog>
-                </div>
-                {/* NO RBT */}
+                {/* RBT */}
+
+                <Modal
+                    size={modalSize}
+                    open={openDownloadInfo}
+                    onClose={this.closeDownloadBox}
+                    dimmer={'blurring'}
+                    className='newPopupBox'
+                    centered={true}>
+                    <Modal.Content>
+                        <Image
+                            src={`/assets/popupBg.png`}
+                            fluid
+                            centered
+                            className="bgPopup infoBgPopup"
+                            size='huge'
+                            alt={'Background'} />
+                    </Modal.Content>
+                    <Modal.Description>
+                        <p className="infoHeading">{infoHeading}</p>
+                        <p className="infoText">{infoText}</p>
+                        <Button color="blue" className="btnAction" onClick={() => this.closeInfoBox()}>Done</Button>
+                    </Modal.Description>
+                </Modal>
 
                 {loadingData ? <ArtistLoader /> :
 
@@ -333,11 +509,7 @@ class SingleTrackView extends Component {
                                 <p className="short-desc">
                                     {albumData.Description}
                                 </p>
-                                {/* <ul className="byDetails">
-                                        <li>By : {albumData.Name}</li>
-                                        <li>Writer : {albumData.Name}</li>
-                                        <li>Composer : {albumData.Name}</li>
-                                    </ul> */}
+
                                 <div className="viewAlbumBtn show_mobile">
                                     <Link to={`/album/` + trackData[0].AlbumId + `/` + this.ToSeoUrl(trackData[0].Album)}>
 
@@ -347,28 +519,26 @@ class SingleTrackView extends Component {
                                 </div>
                                 <ul className="counterList hide_mobile">
                                     <li className="albumLikes22">
-                                        <Button as='div' labelPosition='right'>
-                                            <Button color=''>
-                                                <Icon name='heart' />
-                                                Like
-      </Button>
-                                            <Label as='a' basic color='red' pointing='left'>
-                                                {albumData.NoOfLikes < 1 ? <> 1K </> : <> {albumData.NoOfLikes} </>}
-                                            </Label>
-                                        </Button>
-
+                                        <TrackLikeOption
+                                            albumImage={trackData[0].ThumbnailImageWeb}
+                                            trackName={albumData.Name}
+                                            albumName={albumData.Name}
+                                            artistName={albumData.Artist}
+                                            pageURL={window.location.href}
+                                            forTop={1}
+                                            NoOfShares={albumData.NoOfLikes}
+                                        />
                                     </li>
                                     <li className="albumShare22">
-
-                                        <Button as='div' labelPosition='right'>
-                                            <Button color=''>
-                                                <Icon name='share' />
-                                                Share
-      </Button>
-                                            <Label as='a' basic color='red' pointing='left'>
-                                                {albumData.NoOfShares < 1 ? <> 1K </> : <> {albumData.NoOfShares} </>}
-                                            </Label>
-                                        </Button>
+                                        <TrackShareOptions
+                                            albumImage={trackData[0].ThumbnailImageWeb}
+                                            trackName={albumData.Name}
+                                            albumName={albumData.Name}
+                                            artistName={albumData.Artist}
+                                            pageURL={window.location.href}
+                                            forTop={1}
+                                            NoOfShares={albumData.NoOfShares}
+                                        />
                                     </li>
                                     <li className="albumPlay22">
 
@@ -456,21 +626,13 @@ class SingleTrackView extends Component {
                                                 <li className="trackCol5 trackDuration">
                                                     {data.TrackDuration}
                                                 </li>
-                                                {/* <div className="trackCol6 trackRating">
 
-                                                    <Rating
-                                                        value={`${data.TrackRanking}`}
-                                                        readOnly
-                                                        icon={<FavoriteIcon fontSize="inherit" />}
-                                                        className="ratingTrack"
-                                                        max={3}
-                                                    />
-                                                </div> */}
                                                 <li className="trackCol2 downloadImg">
 
                                                     <DownloadTrack
+                                                        componentName={'Download From Single Track'}
                                                         trackURL={data.OrgTrackUrl}
-                                                        albumImage={data.ThumbnailImageWeb}
+                                                        albumImage={albumData.ThumbnailImageWeb}
                                                         trackName={data.Name.split("-").join(" ")}
                                                         albumName={data.Name.split("-").join(" ")}
                                                         artistName={albumData.Artist}
@@ -525,10 +687,11 @@ class SingleTrackView extends Component {
                                                                 albumName={data.Name.split("-").join(" ")}
                                                                 artistName={albumData.Artist}
                                                                 pageURL={window.location.href} /></Dropdown.Item>
-                                                            <Dropdown.Item> <i aria-hidden="true" className="bell outline icon" ></i> <b onClick={() => this.noRBT()}> Caller Tune </b>
+                                                            <Dropdown.Item>
                                                                 {data.TelenorCode > 0 ?
                                                                     <TrackRington
-                                                                        albumImage={data.ThumbnailImageWeb}
+                                                                        componentName={`RBT From Single Track`}
+                                                                        albumImage={albumData.ThumbnailImageWeb}
                                                                         trackName={data.Name.split("-").join(" ")}
                                                                         albumName={data.Name.split("-").join(" ")}
                                                                         artistName={albumData.Artist}
@@ -555,7 +718,11 @@ class SingleTrackView extends Component {
                                                                             ]
                                                                         }
                                                                     />
-                                                                    : " "}
+                                                                    :
+                                                                    <p onClick={() => this.noRBT()}>
+                                                                        <i aria-hidden="true" className="bell outline icon"></i> Caller Tune
+                                                                            </p>
+                                                                }
                                                             </Dropdown.Item>
                                                         </Dropdown.Menu>
                                                     </Dropdown>

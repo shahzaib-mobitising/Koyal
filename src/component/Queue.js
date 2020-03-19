@@ -114,7 +114,7 @@ class Queue extends Component {
             oldArray: JSON.parse(localStorage.getItem('queuelist'))
         })
 
-        console.log(this.state.oldArray)
+     //   console.log(this.state.oldArray)
 
     }
 
@@ -291,6 +291,7 @@ class Queue extends Component {
                                                                         className="material-icons cancel_button_css"> cancel </i>
                                                             }
                                                             <PlayerMenuQueue
+                                                                componentName={'RBT From Queue'}
                                                                 albumImage={val.thumbnailImage}
                                                                 trackName={val.trackName}
                                                                 albumName={val.albumName}

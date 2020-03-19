@@ -12,6 +12,7 @@ import LanguageBarCustom from '../component/LanguageBarCustom';
 import { Card, Placeholder } from 'semantic-ui-react'
 import { isMobile } from 'react-device-detect';
 import { Helmet } from "react-helmet";
+import ReactGA from 'react-ga';
 
 class Urdu extends Component {
     constructor(props) {
@@ -31,9 +32,14 @@ class Urdu extends Component {
         }
     }
 
-    playTracksDirectly = (id) => {
+    playTracksDirectly = (id, albumName) => {
 
-        //   console.log(id)
+        ReactGA.event({
+            category: `Button Play Song ${this.props.match.params.language}`,
+            action: 'Direct Play',
+            transport: 'beacon',
+            label: albumName
+        });
 
         axios.get(`https://api.koyal.pk/musicapp/?request=get-tracks-react-button&id=${id}`)
             .then(response => {
@@ -96,7 +102,15 @@ class Urdu extends Component {
 
     getData = () => {
 
-        axios.get(`https://api.koyal.pk/app_files/web/new/${this.props.match.params.language}.json`)
+        let apiName = ''
+        let localStorageMsisdn = localStorage.getItem('msisdn')
+        if (localStorageMsisdn === null || localStorageMsisdn === '' || localStorageMsisdn.length < 14) {
+            apiName = this.props.match.params.language + '.json'
+        } else {
+            apiName = this.props.match.params.language + '.json?msisdn=' + localStorageMsisdn.replace(/["']/g, "")
+        }
+
+        axios.get(`https://api.koyal.pk/app_files/web/new/${apiName}`)
             .then(response => {
 
                 this.setState({
@@ -301,21 +315,21 @@ class Urdu extends Component {
                 }
             </Card.Group>
 
-        const forSlider = sliderSection.map(data => <div className="sliderImageBox"><Link to={`/album/` + data.Id + `/` + this.ToSeoUrl(data.Name)}><LazyImage src={data.SliderImageWeb} alt={data.Id} debounceDurationMs={1} placeholder={({ imageProps, ref }) => (<img ref={ref} src={`assets/slider.jpg`} alt={imageProps.alt} style={{ width: "100%" }} />)} actual={({ imageProps }) => (<img {...imageProps} style={{ width: "100%" }} alt={data.Id} />)} /></Link><div className="play-icon-2"><i aria-hidden="true" className="play circular icon" onClick={() => this.playTracksDirectly(data.Id)}></i></div></div>)
+        const forSlider = sliderSection.map(data => <div className="sliderImageBox"><Link to={`/album/` + data.Id + `/` + this.ToSeoUrl(data.Name)}><LazyImage src={data.SliderImageWeb} alt={data.Id} debounceDurationMs={1} placeholder={({ imageProps, ref }) => (<img ref={ref} src={`assets/slider.jpg`} alt={imageProps.alt} style={{ width: "100%" }} />)} actual={({ imageProps }) => (<img {...imageProps} style={{ width: "100%" }} alt={data.Id} />)} /></Link><div className="play-icon-2"><i aria-hidden="true" className="play circular icon" onClick={() => this.playTracksDirectly(data.Id, data.Name)}></i></div></div>)
 
         const forGenre = genreSection.map(data => <><div className="new-1 new_hover"><Link to={`/album/genre/` + this.ToSeoUrl(data.Name)}> <LazyImage src={data.ThumbnailImageWeb} className="genre-image" alt={data.Id} debounceDurationMs={1} style={{ width: "100%", height: "100%" }} placeholder={({ imageProps, ref }) => (<img ref={ref} src={`assets/artist.png`} alt={imageProps.alt} style={{ width: "100%" }} />)} actual={({ imageProps }) => (<img {...imageProps} style={{ width: "100%" }} alt={data.Id} />)} /><h6 className="genre-name">{data.Name}</h6> </Link></div></>)
 
-        const forNew = newSection.map((data, index) => <><div className="new-1 new_hover"><Link to={`/album/` + data.Id + `/` + this.ToSeoUrl(data.Name)}><LazyImage src={data.ThumbnailImageWeb} alt={data.Id} debounceDurationMs={1} className="new1-image" style={{ width: "100%", height: "100%" }} placeholder={({ imageProps, ref }) => (<img ref={ref} src={`assets/album.jpg`} alt={imageProps.alt} style={{ width: "100%" }} />)} actual={({ imageProps }) => (<img {...imageProps} style={{ width: "100%" }} alt={data.Id} />)} /><h6>{data.Name}</h6></Link><div className="play-icon-3"><i aria-hidden="true" className="play circular icon" onClick={() => this.playTracksDirectly(data.Id)}></i></div></div> </>)
+        const forNew = newSection.map((data, index) => <><div className="new-1 new_hover"><Link to={`/album/` + data.Id + `/` + this.ToSeoUrl(data.Name)}><LazyImage src={data.ThumbnailImageWeb} alt={data.Id} debounceDurationMs={1} className="new1-image" style={{ width: "100%", height: "100%" }} placeholder={({ imageProps, ref }) => (<img ref={ref} src={`assets/album.jpg`} alt={imageProps.alt} style={{ width: "100%" }} />)} actual={({ imageProps }) => (<img {...imageProps} style={{ width: "100%" }} alt={data.Id} />)} /><h6>{data.Name}</h6></Link><div className="play-icon-3"><i aria-hidden="true" className="play circular icon" onClick={() => this.playTracksDirectly(data.Id, data.Name)}></i></div></div> </>)
 
-        const forPopular = popularSection.map(data => <><div className="new-1 new_hover"><Link to={`/album/` + data.Id + `/` + this.ToSeoUrl(data.Name)}><LazyImage src={data.ThumbnailImageWeb} alt={data.Id} debounceDurationMs={1} className="popular-image" style={{ width: "100%", height: "100%" }} placeholder={({ imageProps, ref }) => (<img ref={ref} src={`assets/album.jpg`} alt={imageProps.alt} style={{ width: "100%" }} />)} actual={({ imageProps }) => (<img {...imageProps} style={{ width: "100%" }} alt={data.Id} />)} /><h6>{data.Name}</h6></Link><div className="play-icon-3"><i aria-hidden="true" className="play circular icon" onClick={() => this.playTracksDirectly(data.Id)}></i></div> </div></>)
+        const forPopular = popularSection.map(data => <><div className="new-1 new_hover"><Link to={`/album/` + data.Id + `/` + this.ToSeoUrl(data.Name)}><LazyImage src={data.ThumbnailImageWeb} alt={data.Id} debounceDurationMs={1} className="popular-image" style={{ width: "100%", height: "100%" }} placeholder={({ imageProps, ref }) => (<img ref={ref} src={`assets/album.jpg`} alt={imageProps.alt} style={{ width: "100%" }} />)} actual={({ imageProps }) => (<img {...imageProps} style={{ width: "100%" }} alt={data.Id} />)} /><h6>{data.Name}</h6></Link><div className="play-icon-3"><i aria-hidden="true" className="play circular icon" onClick={() => this.playTracksDirectly(data.Id, data.Name)}></i></div> </div></>)
 
         const forArtist = artistSection.map(data => <><div className="new-1 new_hover"><Link to={`/artist/` + data.Id + `/` + this.ToSeoUrl(data.Name)}><LazyImage src={data.ThumbnailImageWeb} style={{ width: "100%", height: "100%" }} alt={data.Id} debounceDurationMs={1} placeholder={({ imageProps, ref }) => (<img ref={ref} src={`assets/album.jpg`} alt={imageProps.alt} style={{ width: "100%" }} />)} actual={({ imageProps }) => (<img {...imageProps} style={{ width: "100%" }} alt={data.Id} />)} /><p>{data.Name}</p> </Link> </div> </>)
 
-        const forAlbum = albumSection.map(data => <><div className="new-1 new_hover"><Link to={`/album/` + data.Id + `/` + this.ToSeoUrl(data.Name)}> <LazyImage src={data.ThumbnailImageWeb} alt={data.Id} debounceDurationMs={1} className="album-image" style={{ width: "100%", height: "100%" }} placeholder={({ imageProps, ref }) => (<img ref={ref} src={`assets/album.jpg`} alt={imageProps.alt} style={{ width: "100%" }} />)} actual={({ imageProps }) => (<img {...imageProps} style={{ width: "100%" }} alt={data.Id} />)} /> <h6>{data.Name}</h6></Link><div className="play-icon-3"><i aria-hidden="true" className="play circular icon" onClick={() => this.playTracksDirectly(data.Id)}></i></div></div></>)
+        const forAlbum = albumSection.map(data => <><div className="new-1 new_hover"><Link to={`/album/` + data.Id + `/` + this.ToSeoUrl(data.Name)}> <LazyImage src={data.ThumbnailImageWeb} alt={data.Id} debounceDurationMs={1} className="album-image" style={{ width: "100%", height: "100%" }} placeholder={({ imageProps, ref }) => (<img ref={ref} src={`assets/album.jpg`} alt={imageProps.alt} style={{ width: "100%" }} />)} actual={({ imageProps }) => (<img {...imageProps} style={{ width: "100%" }} alt={data.Id} />)} /> <h6>{data.Name}</h6></Link><div className="play-icon-3"><i aria-hidden="true" className="play circular icon" onClick={() => this.playTracksDirectly(data.Id, data.Name)}></i></div></div></>)
 
-        const forIslamic = islamicSection.map(data => <><div className="new-1 new_hover"><Link to={`/album/` + data.Id + `/` + this.ToSeoUrl(data.Name)}> <LazyImage src={data.ThumbnailImageWeb} alt={data.Id} debounceDurationMs={1} className="islamic-image" style={{ width: "100%", height: "100%" }} placeholder={({ imageProps, ref }) => (<img ref={ref} src={`assets/album.jpg`} alt={imageProps.alt} style={{ width: "100%" }} />)} actual={({ imageProps }) => (<img {...imageProps} style={{ width: "100%" }} alt={data.Id} />)} /> <h6>{data.Name}</h6> </Link><div className="play-icon-3"><i aria-hidden="true" className="play circular icon" onClick={() => this.playTracksDirectly(data.Id)}></i></div></div></>)
+        const forIslamic = islamicSection.map(data => <><div className="new-1 new_hover"><Link to={`/album/` + data.Id + `/` + this.ToSeoUrl(data.Name)}> <LazyImage src={data.ThumbnailImageWeb} alt={data.Id} debounceDurationMs={1} className="islamic-image" style={{ width: "100%", height: "100%" }} placeholder={({ imageProps, ref }) => (<img ref={ref} src={`assets/album.jpg`} alt={imageProps.alt} style={{ width: "100%" }} />)} actual={({ imageProps }) => (<img {...imageProps} style={{ width: "100%" }} alt={data.Id} />)} /> <h6>{data.Name}</h6> </Link><div className="play-icon-3"><i aria-hidden="true" className="play circular icon" onClick={() => this.playTracksDirectly(data.Id, data.Name)}></i></div></div></>)
 
-        const forCollection = collectionsSection.map(data => <><div className="new-1 new_hover"><Link to={`/collection/` + data.Id + `/` + this.ToSeoUrl(data.Name)}> <LazyImage src={data.ThumbnailImageWeb} alt={data.Id} debounceDurationMs={1} className="collection-image" style={{ width: "100%", height: "100%" }} placeholder={({ imageProps, ref }) => (<img ref={ref} src={`assets/album.jpg`} alt={imageProps.alt} style={{ width: "100%" }} />)} actual={({ imageProps }) => (<img {...imageProps} style={{ width: "100%" }} alt={data.Id} />)} /> <h6>{data.Name}</h6> </Link><div className="play-icon-3"><i aria-hidden="true" className="play circular icon" onClick={() => this.playTracksDirectly(data.Id)}></i></div></div></>)
+        const forCollection = collectionsSection.map(data => <><div className="new-1 new_hover"><Link to={`/collection/` + data.Id + `/` + this.ToSeoUrl(data.Name)}> <LazyImage src={data.ThumbnailImageWeb} alt={data.Id} debounceDurationMs={1} className="collection-image" style={{ width: "100%", height: "100%" }} placeholder={({ imageProps, ref }) => (<img ref={ref} src={`assets/album.jpg`} alt={imageProps.alt} style={{ width: "100%" }} />)} actual={({ imageProps }) => (<img {...imageProps} style={{ width: "100%" }} alt={data.Id} />)} /> <h6>{data.Name}</h6> </Link><div className="play-icon-3"><i aria-hidden="true" className="play circular icon" onClick={() => this.playTracksDirectly(data.Id, data.Name)}></i></div></div></>)
 
         //let pageName = this.props.match.params.language.split("-", 1);
         let pageName = this.props.match.params.language;
@@ -331,7 +345,7 @@ class Urdu extends Component {
 
             <div className="homeMainClass">
 
-                
+
 
 
                 <LanguageBarCustom />

@@ -1,3 +1,58 @@
+.homeBanner img{
+  width: 100%;
+  /* margin-bottom: 15px; */
+}
+
+.linkToCls{
+  color: #000;
+}
+
+/* New Player */
+.player-cover,
+.music-info,
+.newPlayer .player .player-control .controls button:first-child,
+.newPlayer .player .player-control .controls button:nth-child(2),
+.newPlayer .player .player-control .controls button:nth-child(4) {
+  display: none !important;
+}
+
+.newPlayer .progress {
+  width: 55%;
+  position: absolute;
+  bottom: 30px;
+  left: 330px;
+  z-index: 999;
+  height: 3px !important;
+}
+
+.newPlayer .player .player-control .controls {
+  display: block !important;
+  text-align: left;
+  position: relative;
+  top: -10px;
+}
+
+.newPlayer .time-remaining,
+.newPlayer .volume-control {
+  visibility: hidden !important;
+}
+.newPlayer .player {
+  width: 100%;
+  max-width: 100%;
+}
+.newPlayer .controls {
+  margin: 10px 0px 6px 0px !important;
+}
+
+.newPlayer .controls button {
+  color: white !important;
+}
+.newPlayer .time-and-volume {
+  font-size: 14px !important;
+  color: white !important;
+}
+/* New Player */
+
 .trackActive,
 .trackNotActive {
   position: relative;
@@ -125,6 +180,13 @@
   text-transform: uppercase;
   font-size: 16px;
   text-align: center;
+}
+
+.share_text i {
+  position: absolute;
+  right: 20px;
+  font-size: 16px;
+  cursor: pointer;
 }
 
 .contect_center {
@@ -415,7 +477,10 @@ select:focus,
 input:focus {
   outline: none;
 }
-
+.congoSubscribetext {
+  font-size: 15px;
+  margin-top: 20px;
+}
 .formtune button {
   background: #3f51b5;
   color: white;
@@ -444,6 +509,12 @@ input:focus {
   margin-top: 20px;
   font-size: 15px;
 }
+#confirmMessagesPopup p {
+  text-align: center;
+  margin-top: 14px;
+  font-size: 14px;
+}
+
 .congo_text2 {
   width: 95% !important;
 }
@@ -488,6 +559,10 @@ input:focus {
 }
 .verification_code a:hover {
   color: #7e7d7d;
+}
+
+.cnfirmpopupFooter a {
+  color: white;
 }
 
 .homeMainClass p.alice-carousel__prev-btn-item.__inactive {
@@ -967,7 +1042,7 @@ i.ellipsis.horizontal.icon {
     padding-top: 0px;
   }
   .menu_custom_css .MuiList-padding a:first-child {
-    background: #3a52bc;
+    /* background: #3a52bc; */
     border-bottom: 0px solid #ccc;
   }
   .menu_custom_css .MuiList-padding a:first-child img {
@@ -1066,7 +1141,7 @@ i.ellipsis.horizontal.icon {
     padding: 1em;
   }
   .header-spacer {
-    margin-bottom: 45px;
+    margin-bottom: 60px;
   }
   /* Artist Page CSS */
   .allTracksContainer .trackGridMain2 .custom_track_css .trackListHeader .trackCol6 {
@@ -1248,11 +1323,12 @@ i.ellipsis.horizontal.icon {
   }
   .playerOptions.bottom_layer.downloadPlayeroption {
     position: absolute;
-    top: 10px;
     right: 0px;
+    bottom: 0px;
   }
   .myAudioPlayer .audioPlayerImage {
     padding-left: 10px;
+    padding-top: 15px;
   }
   .myAudioPlayer.playerresponsive .downloadImagePlayer img {
     filter: invert(0);
@@ -1306,9 +1382,9 @@ i.ellipsis.horizontal.icon {
   .jw-icon.jw-icon-inline.jw-text.jw-reset.jw-text-elapsed {
     display: none;
   }
-  .jw-flag-touch .jw-controlbar .jw-icon-volume {
+  /* .jw-flag-touch .jw-controlbar .jw-icon-volume {
     display: none !important;
-  }
+  } */
   /* span.jw-text.jw-reset.jw-text-alt,
   .jw-icon.jw-icon-inline.jw-button-color.jw-reset.jw-icon-rewind,
   .jw-icon.jw-icon-inline.jw-button-color.jw-reset.jw-icon-next {
@@ -1332,6 +1408,39 @@ i.ellipsis.horizontal.icon {
   }
   .myAudioPlayer.playerresponsive .MuiGrid-container {
     flex-direction: column-reverse;
+  }
+  .jw-state-idle .jw-controls {
+    background: transparent !important;
+  }
+
+  /* New player */
+
+  .player .player-control .controls {
+    text-align: right;
+  }
+
+  .newPlayer .progress {
+    width: 100%;
+    position: relative;
+    bottom: 30px;
+    left: 0px;
+  }
+
+  .progress {
+    position: relative;
+    top: -18px;
+    left: 30px;
+  }
+
+  .newPlayer .player .player-control .controls {
+    text-align: right;
+    position: relative;
+    top: -1px;
+    right: 30px;
+  }
+
+  .newPlayer .player {
+    position: absolute;
   }
 }
 @media only screen and (max-width: 320px) {

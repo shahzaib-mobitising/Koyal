@@ -2,15 +2,13 @@ import React from 'react';
 
 import Dialog from '@material-ui/core/Dialog';
 import { Grid } from '@material-ui/core';
-
+import { Button, Icon, Label } from 'semantic-ui-react'
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
+import FacebookLogin from 'react-facebook-login';
 
-
-//import ReactFBLike from 'react-fb-like';
-//import ReactFBLike from 'react-fb-like';
 
 
 
@@ -33,18 +31,19 @@ export default function TrackLikeOption(props) {
   return (
     <span>
 
-      {/* <FacebookLogin
-        appId="168997670356490"
-        autoLoad={false}
-        fields="name,email,picture"
-        //onClick={componentClicked}
-        callback={responseFacebook} /> */}
+      {
+        props.forTop === 1 ?
+          <Button as='div' onClick={handleClickOpen} labelPosition='right'> <Button color=''>
+            <Icon name='heart' /> <span> Like </span> </Button> <Label as='a' basic color='red' pointing='left'>
+              {props.NoOfShares < 1 ? <> 1K </> : <> {props.NoOfShares} </>}
+            </Label> </Button>
+          :
+          props.forTop === 11 ?
+            <Button as='div' onClick={handleClickOpen} labelPosition='left'><Icon name='heart' /><span> {props.NoOfShares < 1 ? <> 1.3 K </> : <> {props.NoOfShares} K </>}</span></Button>
+            :
+            <i aria-hidden="true" className="heart icon" onClick={handleClickOpen}></i>
+      }
 
-
-      {/* <img src="/assets/heart_like.png" alt="like" onClick={handleClickOpen} /> */}
-
-      <i aria-hidden="true" className="heart outline icon" onClick={handleClickOpen}></i>
-     
 
       <Dialog className="like_dialogue"
         open={open}
@@ -53,7 +52,7 @@ export default function TrackLikeOption(props) {
         aria-describedby="alert-dialog-description"
       >
         <DialogTitle id="alert-dialog-title">
-          <div className="AlignMeCenter share_text"><strong>Like</strong></div>
+          <div className="AlignMeCenter share_text"><strong>Like</strong> <Icon name='close' onClick={handleClose} /></div>
         </DialogTitle>
 
         <div className="LineBreak"></div>
@@ -90,26 +89,11 @@ export default function TrackLikeOption(props) {
           <div className="DialogFooterCustome logindiv">
             <p className="share_on">Login via </p>
             <div className="socialIconsShare">
-              <a
-                target="_blank" rel="noopener noreferrer"
-                href={`https://twitter.com/intent/tweet/?text=${props.trackName}`}
-              >
-                <img src="/assets/twitter.svg" alt="twitter" />
-              </a>
-
-              {/* <a target="_blank" rel="noopener noreferrer" href={`https://www.instagram.com/?hl=en`}>
-                <img src="/assets/insta.svg" alt="instagram" />
-              </a> */}
-
-              <a
-                target="_blank" rel="noopener noreferrer"
-                href={`http://www.facebook.com/sharer/sharer.php?u=https://www.koyal.pk/`}
-              >
-                <img src="/assets/fb.svg" alt="facebook" />
-              </a>
-              {/* 
-              <ReactFBLike /> */}
-
+              <FacebookLogin
+                appId="168997670356490"
+                autoLoad={false}
+                fields="name,email,picture"
+                callback={responseFacebook} />
             </div>
           </div>
 
