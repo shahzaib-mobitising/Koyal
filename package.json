@@ -8,7 +8,7 @@
     "@material-ui/lab": "^4.0.0-alpha.46",
     "axios": "^0.19.2",
     "history": "^4.10.1",
-    "node-sass": "^4.13.1",
+    "node-sass": "^7.0.0",
     "npm": "^6.14.2",
     "query-string": "^6.11.1",
     "react": "^16.13.0",
